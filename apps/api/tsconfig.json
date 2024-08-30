@@ -1,6 +1,6 @@
 {
-  "extends": "@repo/typescript-config/expressjs.json",
-  "compilerOptions": {},
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+    "extends": "@repo/typescript-config/expressjs.json",
+    "compilerOptions": {},
+    "include": ["**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
 }
