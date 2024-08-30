@@ -6,11 +6,13 @@ if (!MONGODB_URI) {
     throw new Error('MONGODB_URI not set in environment variables');
 }
 
-mongoose
-    .connect(MONGODB_URI)
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+export const setupDB = (): void => {
+    mongoose
+        .connect(MONGODB_URI)
+        .then(() => {
+            console.log('MongoDB connected');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};

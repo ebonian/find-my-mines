@@ -2,12 +2,13 @@
     "name": "find-my-mines",
     "private": true,
     "scripts": {
-        "build": "turbo build",
-        "dev": "turbo dev",
+        "build": "dotenv -- turbo build",
+        "dev": "dotenv -- turbo dev",
         "lint": "turbo lint",
         "format": "prettier --write \"**/*.{ts,tsx,md,js,mjs,json,yml}\""
     },
     "devDependencies": {
+        "dotenv-cli": "^7.4.2",
         "prettier": "^3.2.5",
         "prettier-plugin-tailwindcss": "^0.6.6",
         "turbo": "^2.1.0",
