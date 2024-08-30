@@ -1,81 +1,67 @@
-# Turborepo starter
+# Find My Mines
 
-This is an official starter Turborepo.
+Netcentric Architecture's Term Project
 
-## Using this example
+## Getting Start
 
-Run the following command:
+### Prerequisites
 
-```sh
-npx create-turbo@latest
-```
+-   JavaScript Runtime: [Nodejs](https://nodejs.org/) or [NVM](https://github.com/nvm-sh/nvm)
+-   Package Manager: [pnpm](https://pnpm.io/)
+-   IDE: [VSCode](https://code.visualstudio.com/) with [ESLint Extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-## What's inside?
+### Local Development
 
-This Turborepo includes the following packages/apps:
+> [!NOTE]
+> Duplicate `.env.example` file and rename it to `.env`, remember to config any necessary environment variables
 
-### Apps and Packages
+```bash
+# Install dependencies
+pnpm install
 
--   `docs`: a [Next.js](https://nextjs.org/) app
--   `web`: another [Next.js](https://nextjs.org/) app
--   `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
--   `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
--   `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
--   [TypeScript](https://www.typescriptlang.org/) for static type checking
--   [ESLint](https://eslint.org/) for code linting
--   [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
+# Start development server for all apps (web & api)
 pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd my-turborepo
-npx turbo login
+
+To run a specific app
+
+```bash
+# Start frontend server
+pnpm dev --filter web
+
+# Start backend server
+pnpm dev --filter api
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### Workspaces List
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+To access each application locally use `http://localhost:<network-port>`
 
+| Workspace Name | Description                   | Network Port |
+| -------------- | ----------------------------- | ------------ |
+| `web`          | React Frontend with Nextjs    | 3000         |
+| `api`          | Nodejs Backend with Expressjs | 3001         |
+
+### Package Installation
+
+```bash
+# Install a package in a workspace
+pnpm add <package> --filter <workspace>
+
+# Remove a package from a workspace
+pnpm uninstall <package> --filter <workspace>
+
+# Upgrade a package in a workspace
+pnpm update <package> --filter <workspace>
 ```
-npx turbo link
-```
 
-## Useful Links
+## Learn More
 
-Learn more about the power of Turborepo:
+### Quick Tutorials
 
--   [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
--   [Caching](https://turbo.build/repo/docs/core-concepts/caching)
--   [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
--   [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
--   [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
--   [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+-   [React Foundation](https://nextjs.org/learn/react-foundations)
+-   [Express.js w/ MongoDB Foundation](https://www.youtube.com/watch?v=fgTGADljAeg)
+-   Tailwind CSS
+    -   [https://www.youtube.com/watch?v=pfaSUYaSgRo](https://www.youtube.com/watch?v=pfaSUYaSgRo)
+    -   [https://www.youtube.com/watch?v=Ksn1tThNTjI](https://www.youtube.com/watch?v=Ksn1tThNTjI)
