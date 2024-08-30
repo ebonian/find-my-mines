@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "globalEnv": ["API_PORT", "API_MONGODB_URI"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
