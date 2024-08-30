@@ -1,6 +1,8 @@
 # Find My Mines
 
-Netcentric Architecture's Term Project
+Netcentric Architecture's Term Project.
+
+This repository is monorepo which include both Frontend and Backend with the power of [Turborepo](https://turbo.build/repo/docs)!
 
 ## Getting Start
 
