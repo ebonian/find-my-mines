@@ -1,3 +1,3 @@
 # Users Model
 
-- Declarative of MongoDB model
+-   Declarative of MongoDB model
