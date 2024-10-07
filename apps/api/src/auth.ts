@@ -4,7 +4,7 @@ import {
     VerifyCallback,
 } from 'passport-google-oauth2'; // Use named imports for strategy and types
 import { Request } from 'express'; // For type annotations of `request` parameter
-import { User } from './models/users'; // Import User model if you have it in a separate file
+import { User } from './shared/models/users'; // Import User model if you have it in a separate file
 
 passport.use(
     new GoogleStrategy(
