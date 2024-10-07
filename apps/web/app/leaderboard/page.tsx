@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
+import BackHomeButton from "../components/backHomeButton/backHomeButton";
 
 export default function leaderboard() {
     type returnMyData = {
@@ -12,7 +13,7 @@ export default function leaderboard() {
 
     type Players = {
         [key: string]: number;
-      };
+    };
 
     const divRowStyle = {
         fontSize: "20px", 
@@ -25,7 +26,7 @@ export default function leaderboard() {
         width: "60%", 
         gap: "10px", 
         backgroundColor: "#252525", 
-        color: "white", 
+        color: "#FFEDDF", 
         borderRadius: "36px", 
         borderBottom: "5px solid #4a4646",
     }
@@ -148,7 +149,8 @@ export default function leaderboard() {
     return (<>
     <div className = "flex items-center justify-center flex-grow min-h-screen" style={{ backgroundColor: "#0D1321" }}>
         <div className="container mx-auto py-5" style={{ marginBottom: "96px" }}>
-            <p className='text-center text-6xl mt-12 mb-14 text-white font-bold'>Leaderboard</p>
+            <BackHomeButton/>
+            <p className='text-center text-6xl mt-12 mb-14 font-bold' style={{ color: "#FFEDDF" }}>Leaderboard</p>
             <div className="flex flex-col items-center w-full overflow-visible">
                 <div style={divHeaderStyle}>
                     {populateTableByRow({
