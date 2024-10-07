@@ -62,7 +62,7 @@ export default function leaderboard() {
  
     // Mock Data
     const myData:Players = {
-        "Player-2": 5,
+        "Player-2": 30,
     }
 
     // Mock Data
@@ -85,12 +85,23 @@ export default function leaderboard() {
     const [currentPlayerOnTop, setcurrentPlayerOnTop] = useState<Boolean>(false);
     const [playerKey, setplayerKey] = useState<string>("None...");
 
+    // Will change once fetch data function is completed
     useEffect(() => {
         const sorted = Object.fromEntries(
             Object.entries(players).sort(([, a], [, b]) => b - a)
         );
         setSortedPlayers(sorted);
     }, []);
+
+    // Wait for schema
+    const fetchAllPlayers = () => {
+
+    }
+
+    // Wait for schema
+    const fetchThisPlayer = () => {
+
+    }
 
     const getTopTenPlayers = () => {
         const arrayTopTen = Object.entries(sortedPlayers).slice(0, 10);
