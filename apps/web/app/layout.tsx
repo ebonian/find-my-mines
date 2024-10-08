@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { Montserrat } from 'next/font/google';
 import './globals.css';
 
-const geistSans = localFont({
-    src: './_fonts/GeistVF.woff',
-    variable: '--font-geist-sans',
-});
-const geistMono = localFont({
-    src: './_fonts/GeistMonoVF.woff',
-    variable: '--font-geist-mono',
+const monserrat = Montserrat({
+    variable: '--font-montserrat',
+    display: 'swap',
+    weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +20,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            <body className={`${monserrat.className} bg-gray text-white`}>
                 {children}
             </body>
         </html>
