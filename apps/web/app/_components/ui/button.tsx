@@ -59,17 +59,17 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'white',
-                class: 'bg-white text-gray',
+                class: 'bg-white text-gray outline-none',
             },
             {
                 variant: 'outline',
                 color: 'white',
-                class: 'border-gray text-gray',
+                class: 'border-white text-white',
             },
             {
                 variant: 'default',
                 color: 'brown',
-                class: 'bg-brown text-white',
+                class: 'bg-brown text-white outline-none',
             },
             {
                 variant: 'outline',
@@ -79,7 +79,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'gray',
-                class: 'bg-gray text-white',
+                class: 'bg-gray text-white outline-none',
             },
             {
                 variant: 'outline',
@@ -89,7 +89,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'black',
-                class: 'bg-black text-white',
+                class: 'bg-black text-white outline-none',
             },
             {
                 variant: 'outline',
@@ -99,7 +99,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'cyan',
-                class: 'bg-cyan text-gray',
+                class: 'bg-cyan text-gray outline-none',
             },
             {
                 variant: 'outline',
@@ -109,7 +109,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'green',
-                class: 'bg-green text-gray',
+                class: 'bg-green text-gray outline-none',
             },
             {
                 variant: 'outline',
@@ -119,7 +119,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'orange',
-                class: 'bg-orange text-gray',
+                class: 'bg-orange text-gray outline-none',
             },
             {
                 variant: 'outline',
@@ -129,7 +129,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'purple',
-                class: 'bg-purple text-gray',
+                class: 'bg-purple text-gray outline-none',
             },
             {
                 variant: 'outline',
@@ -139,7 +139,7 @@ const buttonVariants = cva(
             {
                 variant: 'default',
                 color: 'red',
-                class: 'bg-red text-gray',
+                class: 'bg-red text-gray outline-none',
             },
             {
                 variant: 'outline',
