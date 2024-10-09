@@ -1,8 +1,21 @@
-import mongooose, { Schema } from 'mongoose';
+import type { Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+
+export interface UserInterface extends Document {
+    _id: string;
+    username: string;
+    balance: Number;
+    score: Number;
+    skin: Object;
+}
 
 const UserSchema = new Schema({
-    User: { type: String, required: true, unique: true },
-    Balance: { type: Number, required: true },
-    Score: { type: Number, required: true },
-    Skin: { type: Object, required: false }, // type arai wa
+    username: { type: String, required: true, unique: true },
+    balance: { type: Number, required: true },
+    score: { type: Number, required: true },
+    skin: { type: Object, required: false }, // type arai wa
 });
+
+const User = mongoose.model<UserInterface>('User', UserSchema);
+
+export default User;
