@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 // import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 
 const BackButton = () => {
@@ -17,16 +17,22 @@ const BackButton = () => {
 
     const handleClick = () => {
         // navigate("/");
-        window.location.href = "/";
-    }
+        window.location.href = '/';
+    };
 
-    return (<>
-        <button className={`border-0 rounded-[3px] px-9 py-4 relative top-0 left-0 ${ isHovered ? "text-[#0D1321] bg-[#FFEDDF]" : "text-[#FFEDDF] bg-[#252525]" }`}
-        // style={buttonStyle} 
-        onMouseEnter={() => setisHovered(true)}
-        onMouseLeave={() => setisHovered(false)}
-        onClick={handleClick}><i className="fas fa-arrow-left fa-xl"></i></button>
-    </>);
-}
+    return (
+        <>
+            <button
+                className={`relative left-0 top-0 rounded-[3px] border-0 px-9 py-4 ${isHovered ? 'bg-[#FFEDDF] text-[#0D1321]' : 'bg-[#252525] text-[#FFEDDF]'}`}
+                // style={buttonStyle}
+                onMouseEnter={() => setisHovered(true)}
+                onMouseLeave={() => setisHovered(false)}
+                onClick={handleClick}
+            >
+                <i className='fas fa-arrow-left fa-xl'></i>
+            </button>
+        </>
+    );
+};
 
-export default BackButton
+export default BackButton;
