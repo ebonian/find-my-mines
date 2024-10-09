@@ -13,7 +13,7 @@ export default function Home() {
                         variant='default'
                         color='gray'
                         size='lg'
-                        className='absolute left-20 text-left'
+                        className='absolute left-20 px-4 text-left'
                     >
                         <img src='shop.svg' className='h-12 w-12 pr-4'></img>
                         Shop
@@ -24,7 +24,7 @@ export default function Home() {
                         variant='default'
                         color='gray'
                         size='lg'
-                        className='absolute right-20 text-right'
+                        className='absolute right-20 px-4 text-right'
                     >
                         <img
                             src='scoreboard.svg'
@@ -49,7 +49,7 @@ export default function Home() {
                     className='absolute left-0 h-20 w-20'
                 ></img>
                 <div className='flex flex-none'>
-                    <Button variant='default' size='lg'>
+                    <Button variant='default' size='lg' className='px-4'>
                         Log in with{' '}
                         <img
                             src='https://techdocs.akamai.com/identity-cloud/img/social-login/identity-providers/iconfinder-new-google-favicon-682665.png'
@@ -82,7 +82,7 @@ export default function Home() {
                         variant='default'
                         color='gray'
                         size='lg'
-                        className='absolute left-20 text-left'
+                        className='absolute left-20 px-8 text-left'
                     >
                         <img src='skin.svg' className='h-16 w-16 pr-4'></img>
                         My Skins
@@ -93,7 +93,7 @@ export default function Home() {
                         variant='default'
                         color='gray'
                         size='lg'
-                        className='text-center'
+                        className='px-4 text-center'
                     >
                         <img src='circle-help.svg' className='pr-4'></img>
                         Help
@@ -104,7 +104,7 @@ export default function Home() {
                         variant='default'
                         color='gray'
                         size='lg'
-                        className='absolute right-20 text-right'
+                        className='absolute right-20 px-8 text-right'
                     >
                         <img src='earth.svg' className='h-12 w-12 pr-4'></img>
                         ENG
