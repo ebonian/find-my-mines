@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import BackHomeButton from "../components/backHomeButton/backHomeButton";
+import BackButton from "../components/ui/BackButton";
 
 export default function leaderboard() {
     type returnMyData = {
@@ -15,51 +15,51 @@ export default function leaderboard() {
         [key: string]: number;
     };
 
-    const divRowStyle = {
-        fontSize: "20px", 
-        fontWeight: "bold", 
-        padding: "12px 10px 12px 10px",
-    };
+    // const divRowStyle = {
+    //     fontSize: "20px", 
+    //     fontWeight: "bold", 
+    //     padding: "12px 10px 12px 10px",
+    // };
 
-    const divHeaderStyle = { 
-        display: "flex", 
-        width: "60%", 
-        gap: "10px", 
-        backgroundColor: "#252525", 
-        color: "#FFEDDF", 
-        borderRadius: "36px", 
-        borderBottom: "5px solid #4a4646",
-    }
+    // const divHeaderStyle = { 
+    //     display: "flex", 
+    //     width: "60%", 
+    //     gap: "10px", 
+    //     backgroundColor: "#252525", 
+    //     color: "#FFEDDF", 
+    //     borderRadius: "36px", 
+    //     borderBottom: "5px solid #4a4646",
+    // }
 
-    const divGlobalDataStyle = { 
-        display: "flex", 
-        width: "60%", 
-        gap: "10px", 
-        backgroundColor: "#EE964B", 
-        color: "black", 
-        borderRadius: "36px",
-        marginTop: "20px",
-    }
+    // const divGlobalDataStyle = { 
+    //     display: "flex", 
+    //     width: "60%", 
+    //     gap: "10px", 
+    //     backgroundColor: "#EE964B", 
+    //     color: "black", 
+    //     borderRadius: "36px",
+    //     marginTop: "20px",
+    // }
 
-    const divPlayerDataStyle = { 
-        display: "flex", 
-        width: "60%", 
-        gap: "10px", 
-        backgroundColor: "#C5D86D", 
-        color: "black", 
-        borderRadius: "36px",
-        marginTop: "20px",
-    }
+    // const divPlayerDataStyle = { 
+    //     display: "flex", 
+    //     width: "60%", 
+    //     gap: "10px", 
+    //     backgroundColor: "#C5D86D", 
+    //     color: "black", 
+    //     borderRadius: "36px",
+    //     marginTop: "20px",
+    // }
 
-    const rankColumnStyle = {
-        flex: 3,
-        textAlign: "center",
-    }
+    // const rankColumnStyle = {
+    //     flex: 3,
+    //     textAlign: "center",
+    // }
 
-    const nameAndScoreColumnStyle = {
-        flex: 4,
-        textAlign: "left",
-    }
+    // const nameAndScoreColumnStyle = {
+    //     flex: 4,
+    //     textAlign: "left",
+    // }
  
     // Mock Data
     const myData:Players = {
@@ -134,14 +134,14 @@ export default function leaderboard() {
         }
 
         return (<>
-            <div style={rankColumnStyle}>
-                <p style={divRowStyle}>{rank}</p>
+            <div className="flex-[3] text-center">
+                <p className="text-[20px] font-bold px-[10px] py-[12px]">{rank}</p>
             </div>
-            <div style={nameAndScoreColumnStyle}>
-                <p style={divRowStyle}>{playerName}</p>
+            <div className="flex-[4] text-left">
+                <p className="text-[20px] font-bold px-[10px] py-[12px]">{playerName}</p>
             </div>
-            <div style={nameAndScoreColumnStyle}>
-                <p style={divRowStyle}>{score}</p>
+            <div className="flex-[4] text-left">
+                <p className="text-[20px] font-bold px-[10px] py-[12px]">{score}</p>
             </div>
         </>);
     }
@@ -149,10 +149,10 @@ export default function leaderboard() {
     return (<>
     <div className = "flex items-center justify-center flex-grow min-h-screen" style={{ backgroundColor: "#0D1321" }}>
         <div className="container mx-auto py-5" style={{ marginBottom: "96px" }}>
-            <BackHomeButton/>
+            <BackButton/>
             <p className='text-center text-6xl mt-12 mb-14 font-bold' style={{ color: "#FFEDDF" }}>Leaderboard</p>
             <div className="flex flex-col items-center w-full overflow-visible">
-                <div style={divHeaderStyle}>
+                <div className="flex w-[60%] gap-[10px] bg-[#252525] text-[#FFEDDF] rounded-[36px] border-b-[5px] border-b-[#4a4646]">
                     {populateTableByRow({
                         rank: "Rank", 
                         playerName: "Name", 
@@ -162,7 +162,7 @@ export default function leaderboard() {
                 </div>
                 {Object.keys(getTopTenPlayers()).map((player, index) => {
                     return (
-                        <div style={player == playerKey ? divPlayerDataStyle : divGlobalDataStyle}>
+                        <div className={ player == playerKey ? "flex w-[60%] gap-[10px] bg-[#C5D86D] text-black rounded-[36px] mt-[20px]" : "flex w-[60%] gap-[10px] bg-[#EE964B] text-black rounded-[36px] mt-[20px]" }>
                             {populateTableByRow({
                                 rank: `# ${ index + 1 }`, 
                                 playerName: player, 
@@ -173,7 +173,7 @@ export default function leaderboard() {
                     );
                 })}
                 {!currentPlayerOnTop && (
-                    <div style={divPlayerDataStyle}>
+                    <div className="flex w-[60%] gap-[10px] bg-[#C5D86D] text-black rounded-[36px] mt-[20px]">
                         {populateTableByRow(getMyData())}
                     </div>
                 )}
