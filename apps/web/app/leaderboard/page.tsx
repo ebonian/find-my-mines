@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import BackButton from "../components/ui/BackButton";
+import BackButton from "../_components/ui/BackButton";
 
 export default function leaderboard() {
     type returnMyData = {
