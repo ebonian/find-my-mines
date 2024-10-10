@@ -16,10 +16,12 @@
         "mongoose": "^8.6.0",
         "morgan": "^1.10.0",
         "passport": "^0.7.0",
-        "passport-google-oidc": "^0.1.0"
+        "passport-google-oidc": "^0.1.0",
+        "socket.io": "^4.8.0"
     },
     "devDependencies": {
         "@repo/eslint-config": "workspace:*",
+        "@repo/shared-types": "workspace:*",
         "@repo/typescript-config": "workspace:*",
         "@types/body-parser": "^1.19.5",
         "@types/cors": "^2.8.17",
