@@ -5,13 +5,13 @@ export default function Home() {
     return (
         <div
             className='flex grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
-            style={{ backgroundColor: '#0D1321' }}
+            style={{ backgroundColor: '#252525' }}
         >
             <div className='mb-12'>
                 <div className='items-center'>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute left-20 px-4 text-left'
                     >
@@ -22,7 +22,7 @@ export default function Home() {
                 <div className='items-center'>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute right-20 px-4 text-right'
                     >
@@ -80,7 +80,7 @@ export default function Home() {
                 <div>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute left-20 px-8 text-left'
                     >
@@ -91,7 +91,7 @@ export default function Home() {
                 <div>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='px-4 text-center'
                     >
@@ -102,7 +102,7 @@ export default function Home() {
                 <div>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute right-20 px-8 text-right'
                     >
