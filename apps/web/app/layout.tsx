@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 import './globals.css';
+import SocketContextProvider from './_contexts/socket';
 
 const monserrat = Montserrat({
     variable: '--font-montserrat',
@@ -21,7 +22,7 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body className={`${monserrat.className} bg-gray text-white`}>
-                {children}
+                <SocketContextProvider>{children}</SocketContextProvider>
             </body>
         </html>
     );
