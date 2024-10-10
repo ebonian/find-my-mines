@@ -1,13 +1,8 @@
 import type { Document } from 'mongoose';
 import mongoose, { Schema } from 'mongoose';
+import type { User } from '@repo/shared-types';
 
-export interface UserInterface extends Document {
-    _id: string;
-    username: string;
-    balance: Number;
-    score: Number;
-    skin: Object;
-}
+export type UserInterface = User & Document;
 
 const UserSchema = new Schema({
     username: { type: String, required: true, unique: true },
@@ -16,6 +11,6 @@ const UserSchema = new Schema({
     skin: { type: Object, required: false }, // type arai wa
 });
 
-const User = mongoose.model<UserInterface>('User', UserSchema);
+const UserModel = mongoose.model<UserInterface>('User', UserSchema);
 
-export default User;
+export default UserModel;

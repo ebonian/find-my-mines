@@ -3,6 +3,8 @@
     "globalEnv": [
         "API_PORT",
         "API_MONGODB_URI",
+        "API_CLIENT_URL",
+        "API_SECRET",
         "API_GOOGLE_CLIENT_ID",
         "API_GOOGLE_CLIENT_SECRET",
         "API_GOOGLE_CLIENT_CALLBACKURL"
