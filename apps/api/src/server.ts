@@ -5,8 +5,9 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
 import passport from 'passport';
-import { AuthRouter } from './modules/auth/auth';
 import { googleStrategy } from './utils/auth';
+import { AuthRouter } from './modules/auth/auth';
+import { UserRouter } from './modules/users/users';
 
 export const createServer = (): Application => {
     const app = express();
@@ -34,7 +35,8 @@ export const createServer = (): Application => {
         .get('/', (_, res: Response) => {
             res.json({ message: 'Hello World' });
         })
-        .use(AuthRouter);
+        .use(AuthRouter)
+        .use(UserRouter);
 
     passport.use(googleStrategy);
     passport.serializeUser((user, done) => {
