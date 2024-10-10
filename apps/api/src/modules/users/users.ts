@@ -14,5 +14,17 @@ router.get('/users/leaderboard', async (req, res) => {
     }
 });
 
+// update user score
+router.patch('/users/:id', async (req, res) => {
+    // find user by id and update -> use new:true to be able to update score right awaya after updating
+    User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .then((user) => {
+            res.json(user);
+        })
+        .catch((err) => {
+            res.status(500).json({ message: err });
+        });
+});
+
 // export router
 export const UserRouter = router as Router;
