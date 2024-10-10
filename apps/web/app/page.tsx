@@ -10,7 +10,7 @@ export default function Home() {
                 <div className='items-center'>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute left-20 px-4 text-left'
                     >
@@ -21,7 +21,7 @@ export default function Home() {
                 <div className='items-center'>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute right-20 px-4 text-right'
                     >
@@ -73,7 +73,7 @@ export default function Home() {
                 <div>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute left-20 px-8 text-left'
                     >
@@ -84,7 +84,7 @@ export default function Home() {
                 <div>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='px-4 text-center'
                     >
@@ -95,7 +95,7 @@ export default function Home() {
                 <div>
                     <Button
                         variant='default'
-                        color='gray'
+                        color='brown'
                         size='lg'
                         className='absolute right-20 px-8 text-right'
                     >
