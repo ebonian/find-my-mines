@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import BackButton from '../_components/ui/BackButton';
+import CustomBackButton from './_components/CustomBackButton';
 import { Button } from '../_components/ui/button';
 
 export default function slotmachine() {
@@ -25,6 +26,7 @@ export default function slotmachine() {
         buttonDisable: false,
         imageHidden: true,
     });
+    const [showMotivation, setshowMotivation] = useState(false);
     const [hoverSlot1, sethoverSlot1] = useState(false);
     const [hoverSlot2, sethoverSlot2] = useState(false);
     const [hoverSlot3, sethoverSlot3] = useState(false);
@@ -149,11 +151,19 @@ export default function slotmachine() {
         }, 800);
     }
 
+    const motivationBeforeQuit = () => {
+        setshowMotivation(!showMotivation);
+    }
+
     return (<>
         {/* <main className="flex min-h-screen flex-col items-center justify-between p-2"> */}
             <div className = "flex min-h-screen flex-grow items-center justify-center" style={{ backgroundColor: '#0D1321' }}>
                 <div className="container mx-auto py-5" style={{ marginBottom: '96px' }}>
-                    <BackButton/>
+                    <CustomBackButton
+                    actionBeforeBack={motivationBeforeQuit} 
+                    confirmation={true}
+                    setShow={setshowMotivation}/>
+                    <img id="quiteBeforeWinBig" src="/images/quiteBeforeWinBig.png" className={`absolute w-auto h-full left-1/2 top-0 -translate-x-1/2 ${ showMotivation ? "" : "hidden" }`}></img>
                     <img id="slotsWin" src="/images/slotsWin.jpg" className={`absolute w-auto h-full left-0 top-0 ${(visual["imageHidden"]) ? "hidden" : "animate-ping"}`}></img>
                     <audio id="gong" src="/sounds/gong.mp3" className="hidden"></audio>
                     <h1 className="text-center font-bold text-3xl" style={{ color: '#FFEDDF' }}>Slot machine of Infinite Wealth 🙏</h1>
