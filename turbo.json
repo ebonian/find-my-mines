@@ -7,7 +7,7 @@
         "API_SECRET",
         "API_GOOGLE_CLIENT_ID",
         "API_GOOGLE_CLIENT_SECRET",
-        "API_GOOGLE_CLIENT_CALLBACKURL"
+        "API_GOOGLE_CALLBACK_URL"
     ],
     "tasks": {
         "build": {
