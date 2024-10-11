@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 
-const BackButton = () => {
+type BackButtonProps = {
+    className?: string;
+};
+
+const BackButton: React.FC<BackButtonProps> = ({ className="" }) => {
     // const navigate = useNavigate();
     const [isHovered, setisHovered] = useState(false);
     // const buttonStyle = {
@@ -16,20 +20,19 @@ const BackButton = () => {
     // };
 
     const handleClick = () => {
-        // navigate("/");
-        window.location.href = '/';
+        window.location.href = "/";
     };
 
     return (
         <>
             <button
-                className={`relative left-0 top-0 rounded-[3px] border-0 px-9 py-4 ${isHovered ? 'bg-[#FFEDDF] text-[#0D1321]' : 'bg-[#252525] text-[#FFEDDF]'}`}
+                className={`relative left-0 top-0 rounded-[3px] border-0 px-9 py-4 ${isHovered ? 'bg-[#FFEDDF] text-[#0D1321]' : 'bg-[#252525] text-[#FFEDDF]'} ${ className }`}
                 // style={buttonStyle}
                 onMouseEnter={() => setisHovered(true)}
                 onMouseLeave={() => setisHovered(false)}
                 onClick={handleClick}
             >
-                <i className='fas fa-arrow-left fa-xl'></i>
+            <i className='fas fa-arrow-left fa-xl'></i>
             </button>
         </>
     );
