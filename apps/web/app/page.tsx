@@ -13,7 +13,7 @@ export default function Home() {
                         variant='default'
                         color='brown'
                         size='lg'
-                        className='absolute left-20 px-4 text-left'
+                        className='absolute left-20 bg-opacity-10 px-4 text-left'
                     >
                         <img src='shop.svg' className='h-12 w-12 pr-4'></img>
                         Shop
@@ -24,7 +24,7 @@ export default function Home() {
                         variant='default'
                         color='brown'
                         size='lg'
-                        className='absolute right-20 px-4 text-right'
+                        className='absolute right-20 bg-opacity-10 px-4 text-right'
                     >
                         <img
                             src='scoreboard.svg'
@@ -82,7 +82,7 @@ export default function Home() {
                         variant='default'
                         color='brown'
                         size='lg'
-                        className='absolute left-20 px-8 text-left'
+                        className='absolute left-20 bg-opacity-10 px-4 text-left'
                     >
                         <img src='skin.svg' className='h-16 w-16 pr-4'></img>
                         My Skins
@@ -93,7 +93,7 @@ export default function Home() {
                         variant='default'
                         color='brown'
                         size='lg'
-                        className='px-4 text-center'
+                        className='bg-opacity-10 px-4 text-center'
                     >
                         <img src='circle-help.svg' className='pr-4'></img>
                         Help
@@ -104,7 +104,7 @@ export default function Home() {
                         variant='default'
                         color='brown'
                         size='lg'
-                        className='absolute right-20 px-8 text-right'
+                        className='absolute right-20 bg-opacity-10 px-4 text-right'
                     >
                         <img src='earth.svg' className='h-12 w-12 pr-4'></img>
                         ENG
