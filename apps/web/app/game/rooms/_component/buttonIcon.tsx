@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '../../../../_lib/utils';
+import { cn } from '../../../_lib/utils';
 import Image from 'next/image';
 
 export interface ButtonProps
