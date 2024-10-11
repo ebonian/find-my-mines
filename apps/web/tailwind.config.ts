@@ -15,6 +15,9 @@ const config: Config = {
                 purple: '#C59CC8',
                 red: '#C33432',
             },
+            animation: {
+                'spinFast': 'spin 0.1s linear infinite',
+            }
         },
     },
     plugins: [],

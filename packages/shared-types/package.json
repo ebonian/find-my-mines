@@ -1,0 +1,32 @@
+{
+    "name": "@repo/shared-types",
+    "version": "1.0.0",
+    "description": "",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "require": "./dist/index.js",
+            "import": "./dist/index.mjs",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format cjs,esm --target node18  --dts",
+        "dev": "tsup src/index.ts --format cjs,esm --target node18 --dts --watch",
+        "lint": "eslint \"src/**/*.ts*\"",
+        "typecheck": "tsc --noEmit"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@repo/typescript-config": "workspace:*",
+        "@typescript-eslint/eslint-plugin": "^7.18.0",
+        "tsup": "^7.1.0"
+    },
+    "dependencies": {
+        "zod": "^3.21.4"
+    }
+}
