@@ -9,8 +9,15 @@ export default function shop() {
             style={{ backgroundColor: '#252525' }}
         >
             <div className='absolute left-1 top-12 px-16'>
-                <BackButton></BackButton>
+                <BackButton className='items-center px-5'></BackButton>
             </div>
+            <div className='absolute right-12 top-12 flex h-10 w-32 items-center justify-center rounded-3xl bg-[#86615C] bg-opacity-10'>
+                <img src='coin.svg' className='h-8 w-8 pr-4'></img>
+                <div className='font-Monstserrat text-base font-bold'>
+                    1,000
+                </div>
+            </div>
+
             <div className='inset-x-0 top-2 flex justify-center'>
                 <div className='absolute inset-x-0 top-14 mb-12'>
                     <div className='font-Monstserrat mb-4 place-content-start text-center text-6xl font-bold text-[#FFEDDF]'>
@@ -24,18 +31,40 @@ export default function shop() {
             <div className='mt-16 flex items-center justify-center'>
                 <div className='mr-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'>
                     <div className='flex flex-col items-center justify-center'>
-                        <img src='boardskin.svg' className='mb-4'></img>
+                        <img
+                            src='defaultskin.svg'
+                            className='mt-3 h-72 w-72 rounded-3xl'
+                        ></img>
                         <Button
                             variant='outline'
                             color='orange'
                             size='lg'
-                            className='px-28'
+                            className='mt-4 px-24'
                         >
                             Bought
                         </Button>
                     </div>
                 </div>
-                <div className='ml-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'></div>
+                <div className='ml-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'>
+                    <div className='flex flex-col items-center justify-center'>
+                        <img
+                            src='defaultskin.svg'
+                            className='mt-3 h-72 w-72 rounded-3xl'
+                        ></img>
+                        <Button
+                            variant='default'
+                            color='white'
+                            size='lg'
+                            className='mt-4 px-24'
+                        >
+                            <img
+                                src='coin.svg'
+                                className='h-10 w-10 pr-3'
+                            ></img>
+                            200
+                        </Button>
+                    </div>
+                </div>
             </div>
             <div className='items-center'>
                 {/* <Button variant='default' color='brown'></Button> */}

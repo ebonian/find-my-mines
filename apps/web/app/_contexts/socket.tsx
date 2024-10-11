@@ -32,7 +32,7 @@ export default function SocketContextProvider({
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const socket = io('http://localhost:3001', {
+        const socket = io('https://q2l87clx-3001.asse.devtunnels.ms', {
             autoConnect: false,
         });
         setSocket(socket);
