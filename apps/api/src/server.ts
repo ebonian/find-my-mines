@@ -9,12 +9,22 @@ import { googleStrategy } from './utils/auth';
 import { AuthRouter } from './modules/auth/auth';
 import { UserRouter } from './modules/users/users';
 
+const CLIENT_URL = process.env.API_CLIENT_URL;
+if (!CLIENT_URL) {
+    throw new Error('API_CLIENT_URL environment variable not set');
+}
+
+const SECRET = process.env.API_SECRET;
+if (!SECRET) {
+    throw new Error('API_SECRET environment variable not set');
+}
+
 export const createServer = (): Application => {
     const app = express();
     app.disable('x-powered-by')
         .use(
             cors({
-                origin: process.env.API_CLIENT_URL || 'http://localhost:3000',
+                origin: CLIENT_URL,
                 credentials: true,
             })
         )
@@ -24,7 +34,7 @@ export const createServer = (): Application => {
         .use(json())
         .use(
             session({
-                secret: process.env.API_SECRET || '',
+                secret: SECRET,
                 cookie: {
                     httpOnly: true,
                 },
@@ -33,7 +43,7 @@ export const createServer = (): Application => {
         .use(passport.initialize())
         .use(passport.session())
         .get('/', (_, res: Response) => {
-            res.json({ message: 'Hello World' });
+            res.json({ message: 'Find My Mines API is running' });
         })
         .use(AuthRouter)
         .use(UserRouter);

@@ -5,11 +5,18 @@ import {
 import { Request } from 'express';
 import User from '../shared/models/user';
 
+const CLIENT_ID = process.env.API_GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.API_GOOGLE_CLIENT_SECRET;
+const CALLBACK_URL = process.env.API_GOOGLE_CALLBACK_URL;
+if (!CLIENT_ID || !CLIENT_SECRET || !CALLBACK_URL) {
+    throw new Error('Google OAuth2 environment variables not set');
+}
+
 export const googleStrategy = new GoogleStrategy(
     {
-        clientID: process.env.API_GOOGLE_CLIENT_ID || '', // Handle TypeScript string checks
-        clientSecret: process.env.API_GOOGLE_CLIENT_SECRET || '',
-        callbackURL: process.env.API_GOOGLE_CLIENT_CALLBACKURL || '',
+        clientID: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        callbackURL: CALLBACK_URL,
         passReqToCallback: true,
     },
     function (
