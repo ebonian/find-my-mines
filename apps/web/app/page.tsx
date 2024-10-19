@@ -4,7 +4,7 @@ import { Input } from './_components/ui/input';
 export default function Home() {
     return (
         <div
-            className='flex grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
+            className='grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
             style={{ backgroundColor: '#0D1321' }}
         >
             <div className='mb-12'>
