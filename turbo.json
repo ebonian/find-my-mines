@@ -1,6 +1,9 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "globalEnv": [
+        "CLIENT_URL",
+        "NEXT_PUBLIC_SERVER_URL",
+
         "API_PORT",
         "API_MONGODB_URI",
         "API_CLIENT_URL",
