@@ -12,7 +12,7 @@ router.get('/auth/google', async (req, res, next) => {
 });
 
 router.get('/auth/google/callback', async (req, res, next) => {
-    const clientUrl = process.env.API_CLIENT_URL || 'http://localhost:3000';
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
     passport.authenticate('google', {
         successRedirect: `${clientUrl}`,
