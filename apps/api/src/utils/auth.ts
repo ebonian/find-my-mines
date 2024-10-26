@@ -6,7 +6,7 @@ import { Request } from 'express';
 
 import User from '../shared/models/user';
 
-const CLIENT_URL = process.env.CLIENT_URL;
+const CLIENT_URL = process.env.NEXT_PUBLIC_SERVER_URL;
 const CLIENT_ID = process.env.API_GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.API_GOOGLE_CLIENT_SECRET;
 if (!CLIENT_URL || !CLIENT_ID || !CLIENT_SECRET) {

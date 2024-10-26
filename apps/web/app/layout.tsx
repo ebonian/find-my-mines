@@ -3,6 +3,7 @@ import { Montserrat } from 'next/font/google';
 import './globals.css';
 import SocketContextProvider from './_contexts/socket';
 import GameContextProvider from './_contexts/game';
+import AuthContextProvider from './_contexts/auth';
 
 const monserrat = Montserrat({
     variable: '--font-montserrat',
@@ -23,11 +24,13 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body className={`${monserrat.className} bg-gray text-white`}>
-                <SocketContextProvider>
-                    <GameContextProvider>
-                        <>{children}</>
-                    </GameContextProvider>
-                </SocketContextProvider>
+                <AuthContextProvider>
+                    <SocketContextProvider>
+                        <GameContextProvider>
+                            <>{children}</>
+                        </GameContextProvider>
+                    </SocketContextProvider>
+                </AuthContextProvider>
             </body>
         </html>
     );
