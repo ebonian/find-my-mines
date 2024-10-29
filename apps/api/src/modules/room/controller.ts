@@ -19,6 +19,7 @@ export default async function roomController(socket: Socket) {
         if (room) {
             room.state = state;
             socket.emit('rooms', gameRooms); 
+            socket.broadcast.emit('rooms', gameRooms);
         }
     })
 }
