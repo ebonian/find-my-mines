@@ -31,6 +31,7 @@ export default async function roomController(socket: Socket) {
             }
         }
     );
+
     socket.on('join-room', (roomId: string, userId: string) => {
         const joinRoom = gameRooms.find((r) => r.id === roomId);
 
