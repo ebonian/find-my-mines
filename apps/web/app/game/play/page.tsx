@@ -4,13 +4,10 @@ import { Button } from '../../_components/ui/button';
 import { Minesweeper } from './_components/minesweeper';
 
 export default function Play() {
-    const [chatBox, setChatBox] = useState(false);
-    const handleChatClick = () => {
-        setChatBox((prevState) => !prevState);
-    };
     const [timer, setTimer] = useState(10); // Countdown timer state
     const [minesFounded, setMinesFounded] = useState(0);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // To store interval ID
+    const actions = []
 
     // Timer countdown logic
     useEffect(() => {
@@ -64,7 +61,6 @@ export default function Play() {
                     variant='default'
                     color='brown'
                     className='mr-20 bg-opacity-10 px-8'
-                    onClick={handleChatClick}
                 >
                     <img src='/messages-square.svg' alt='Messages' />
                 </Button>
@@ -72,7 +68,6 @@ export default function Play() {
             <div className='font-Montserrat flex place-content-center items-center justify-center text-center text-xl font-bold text-[#FFEDDF]'>
                 Waiting for player
             </div>
-
             {/* Centering the Minesweeper game board */}
             <div className='mt-4 flex flex-row items-center justify-center'>
                 <div className='flex'>
