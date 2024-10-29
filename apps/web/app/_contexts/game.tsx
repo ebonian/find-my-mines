@@ -28,7 +28,8 @@ export default function GameContextProvider({
     // STATES
     const [gameRooms, setGameRooms] = useState<Room[]>([]);
 
-    async function seed35(seed: string) {
+    // Seed hashing
+    async function seedHash(seed: string, length: number) {
         const encoder = new TextEncoder();
         const data = encoder.encode(seed);
     
@@ -39,35 +40,36 @@ export default function GameContextProvider({
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
     
-        // Return the first 35 characters of the hash
-        return hashHex.slice(0, 35);
+        // Return the first [length] characters of the hash
+        return hashHex.slice(0, length);
     
     }
 
     // Seed Generation
-    const seedGen = async (seed: string = "") => {
+    const seedGen = async ({ seed = "", type }: { seed?: string, type: "normal" | "extreme" }) => {
+        const seedLength = (type === "normal") ? 11 : 35;
+    
         // original seed
-        if (seed.length >= 35) {
-            seed = seed.substring(0, 35);
+        if (seed.length >= seedLength) {
+            seed = seed.substring(0, seedLength);
         } else if (seed.length == 0) {
-            while (seed.length < 35) {
+            while (seed.length < seedLength) {
                 var dec = Math.floor(Math.random() * (126 - 33) + 33);
                 seed = seed.concat(String.fromCharCode(dec));
             }
         } else {
-            seed = await seed35(seed);
+            seed = await seedHash(seed, seedLength);
         }
     
         // btoa seed at each position and get index 0 -> hash
         const positionCode: string[] = [];
         for (let i = 0; i < seed.length; i++) {
-    
             positionCode.push(btoa(seed[i] as string).substring(0, 1));
         }
-        const positionSeedHashed = await seed35(positionCode.join(""));
+        const positionSeedHashed = await seedHash(positionCode.join(""), seedLength);
     
         // btoa the whole seed and reverse -> hash
-        var btoaSeedHashed = await seed35(btoa(seed).substring(0, 35).split("").reverse().join(""));
+        var btoaSeedHashed = await seedHash(btoa(seed).substring(0, seedLength).split("").reverse().join(""), seedLength);
     
         // combine each position of btoaSeed and original seed -> hash
         var combinationSeed = "";
@@ -84,11 +86,11 @@ export default function GameContextProvider({
     
             combinationSeed = combinationSeed.concat(String.fromCharCode(posDec));
         }
-        const combinationSeedHashed = await seed35(combinationSeed);
+        const combinationSeedHashed = await seedHash(combinationSeed, seedLength);
     
         // generate full seed
         var fullSeed = "";
-        for (let i = 0; i < 35; i++) {
+        for (let i = 0; i < seedLength; i++) {
             fullSeed = fullSeed.concat(seed[i] as string).concat(positionSeedHashed[i] as string).concat(btoaSeedHashed[i] as string).concat(combinationSeedHashed[i] as string);
         }
     
@@ -99,7 +101,10 @@ export default function GameContextProvider({
 
     // METHODS
     const createRoom = async (room: Room) => {
-        const seed = await seedGen();
+        const seed = await seedGen({
+            seed: room.seed,
+            type: room.type,
+        });
         const roomWithSeed = {...room, seed};
         send('create-room', roomWithSeed);
     };
