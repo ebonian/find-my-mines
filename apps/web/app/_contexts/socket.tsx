@@ -32,8 +32,15 @@ export default function SocketContextProvider({
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const socket = io('http://localhost:3001', {
-            autoConnect: false,
+        const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+        if (!NEXT_PUBLIC_SERVER_URL) {
+            throw new Error(
+                'NEXT_PUBLIC_SERVER_URL environment variable not set'
+            );
+        }
+
+        const socket = io(NEXT_PUBLIC_SERVER_URL, {
+            autoConnect: true,
         });
         setSocket(socket);
 
@@ -77,6 +84,10 @@ export default function SocketContextProvider({
         socket.emit(channel, data);
     };
 
+    if (!socket) {
+        return <div>Loading...</div>; // TODO: Add a loading screen
+    }
+
     return (
         <SocketContext.Provider
             value={{
@@ -93,7 +104,7 @@ export default function SocketContextProvider({
     );
 }
 
-export const useSocket = (): SocketContextValue => {
+export function useSocket(): SocketContextValue {
     const context = useContext(SocketContext);
     if (!context) {
         throw new Error(
@@ -101,4 +112,4 @@ export const useSocket = (): SocketContextValue => {
         );
     }
     return context;
-};
+}

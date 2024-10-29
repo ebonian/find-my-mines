@@ -1,12 +1,11 @@
+import Link from 'next/link';
 import { Button } from './_components/ui/button';
 import { Input } from './_components/ui/input';
+import GoogleLoginButton from './_components/common/google-login-button';
 
 export default function Home() {
     return (
-        <div
-            className='flex grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
-            style={{ backgroundColor: '#0D1321' }}
-        >
+        <div className='grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'>
             <div className='mb-12'>
                 <div className='items-center'>
                     <Button
@@ -49,13 +48,7 @@ export default function Home() {
                     className='absolute left-0 h-20 w-20'
                 ></img>
                 <div className='flex flex-none'>
-                    <Button variant='default' size='lg' className='px-4'>
-                        Log in with{' '}
-                        <img
-                            src='https://techdocs.akamai.com/identity-cloud/img/social-login/identity-providers/iconfinder-new-google-favicon-682665.png'
-                            className='ml-2 h-8 w-8 items-center'
-                        ></img>
-                    </Button>
+                    <GoogleLoginButton />
                 </div>
                 <img
                     src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX0gHjqyXKg6J-jM7BbSY2f4komfCqs8RQwQ&s'

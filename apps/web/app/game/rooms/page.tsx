@@ -1,14 +1,18 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '../../_components/ui/button';
 import Plus from './_icons/plus.svg';
 import Search from './_icons/search.svg';
-import { ButtonIcon } from './create/_component/buttonIcon';
-import ArrowFatLeft from './create/_icon/arrow-fat-left.svg';
-import CircleHelp from './create/_icon/circle-help.svg';
+import { ButtonIcon } from './_component/buttonIcon';
+import ArrowFatLeft from './_icons/arrow-fat-left.svg';
+import CircleHelp from './_icons/circle-help.svg';
+import X from './_icons/x.svg';
 
 export default function Lobby() {
+    const [showHowToPlay, setShowHowToPlay] = useState(false);
+
     const room = [
         {
             name: 'Room1',
@@ -29,11 +33,23 @@ export default function Lobby() {
         },
     ];
 
+    const howToPlay = [
+        '1. The point of this game is to win go team go',
+        '2. Fight until death',
+        '3. I need a bunch of sample text for this page',
+        '4. How to make Khaow Man Kai',
+        '5. First, You need a Rice Cooker',
+        '6. You put rice in the rice cooker',
+    ];
+
     return (
         <div className='flex min-h-dvh w-full flex-col items-center gap-28'>
             <div className='mx-auto -mb-24 flex w-[80rem] justify-between pt-16'>
                 <ButtonIcon icon={ArrowFatLeft} />
-                <ButtonIcon icon={CircleHelp} />
+                <ButtonIcon
+                    icon={CircleHelp}
+                    onClick={() => setShowHowToPlay(true)}
+                />
             </div>
             <div className='space-y-4 text-center'>
                 <h1 className='mx-auto text-6xl font-bold'>Lobby</h1>
@@ -84,6 +100,34 @@ export default function Lobby() {
                     <Image src={Plus} alt='' />
                 </Button>
             </div>
+
+            {showHowToPlay && (
+                <div className='fixed inset-0 flex items-center justify-center bg-black/50 p-4'>
+                    <div className='relative flex h-[640px] w-[640px] flex-col overflow-clip rounded-3xl'>
+                        <Image
+                            src={X}
+                            onClick={() => setShowHowToPlay(false)}
+                            alt=''
+                            className='absolute right-8 top-8 cursor-pointer'
+                        />
+                        <div className='bg-orange flex w-full justify-center py-8'>
+                            <p className='text-gray text-3xl font-bold'>
+                                How To Play
+                            </p>
+                        </div>
+                        <div className='text-gray flex h-full w-full flex-col overflow-scroll bg-white px-4 py-4'>
+                            {howToPlay.map((text, index) => (
+                                <p
+                                    key={index}
+                                    className='p-4 text-2xl font-semibold'
+                                >
+                                    {text}
+                                </p>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
