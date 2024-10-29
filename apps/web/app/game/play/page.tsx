@@ -7,7 +7,7 @@ export default function Play() {
     const [timer, setTimer] = useState(10); // Countdown timer state
     const [minesFounded, setMinesFounded] = useState(0);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null); // To store interval ID
-    const actions = []
+    const actions = [];
 
     // Timer countdown logic
     useEffect(() => {

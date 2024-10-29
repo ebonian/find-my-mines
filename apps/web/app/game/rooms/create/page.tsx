@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { Button } from '../../../_components/ui/button';
 import { Input } from '../../../_components/ui/input';
-import { Radio } from './_component/radio';
-import { CardCheckbox } from './_component/card';
-import { ButtonIcon } from './_component/buttonIcon';
-import ArrowFatLeft from './_icon/arrow-fat-left.svg';
-import CircleHelp from './_icon/circle-help.svg';
+import { Radio } from '../_component/radio';
+import { CardCheckbox } from '../_component/card';
+import { ButtonIcon } from '../_component/buttonIcon';
+import ArrowFatLeft from '../_icons/arrow-fat-left.svg';
+import CircleHelp from '../_icons/circle-help.svg';
 
 export default function Create() {
     const [selectedType, setSelectedType] = useState('');

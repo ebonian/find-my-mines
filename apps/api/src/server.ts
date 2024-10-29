@@ -1,17 +1,18 @@
 import { json, urlencoded } from 'body-parser';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { type Response, type Application } from 'express';
 import session from 'express-session';
-import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import cors from 'cors';
 import passport from 'passport';
-import { googleStrategy } from './utils/auth';
-import { AuthRouter } from './modules/auth/auth';
-import { UserRouter } from './modules/users/users';
 
-const CLIENT_URL = process.env.API_CLIENT_URL;
+import { googleStrategy } from './utils/auth';
+import { AuthRouter } from './modules/auth/controller';
+import { UserRouter } from './modules/users/controller';
+
+const CLIENT_URL = process.env.CLIENT_URL;
 if (!CLIENT_URL) {
-    throw new Error('API_CLIENT_URL environment variable not set');
+    throw new Error('CLIENT_URL environment variable not set');
 }
 
 const SECRET = process.env.API_SECRET;

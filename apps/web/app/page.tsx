@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import { Button } from './_components/ui/button';
 // import { Input } from './_components/ui/input';
 
@@ -114,8 +115,12 @@
 //         </div>
 //     );
 // }
+=======
+import Link from 'next/link';
+>>>>>>> a6efddb2f5829793e21854af1feb30c7b6c4d3f9
 import { Button } from './_components/ui/button';
 import { Input } from './_components/ui/input';
+import GoogleLoginButton from './_components/common/google-login-button';
 
 export default function Home() {
     return (
