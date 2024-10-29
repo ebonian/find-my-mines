@@ -7,11 +7,13 @@ import { useSocket } from './socket';
 interface GameContextValue {
     gameRooms: Room[];
     createRoom: (room: Room) => void;
+    updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
 }
 
 const GameContext = createContext<GameContextValue>({
     gameRooms: [],
     createRoom: () => {},
+    updateRoomState: () => {}
 });
 
 interface GameContextProviderProps {
@@ -102,6 +104,13 @@ export default function GameContextProvider({
         send('create-room', roomWithSeed);
     };
 
+    const updateRoomState = (room: Room, state: 'waiting' | 'playing' | 'end') => {
+        send('update-room-state', {
+            roomId: room.id,
+            state: state,
+        })
+    }
+
     // EFFECTS
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
@@ -114,6 +123,7 @@ export default function GameContextProvider({
             value={{
                 gameRooms,
                 createRoom,
+                updateRoomState,
             }}
         >
             {children}
