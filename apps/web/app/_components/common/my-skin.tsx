@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { Button } from '../ui/button';
 
-type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type MySkinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function MenuButton({ ...props }: MenuButtonProps) {
+export default function MySkinButton({ ...props }: MySkinButtonProps) {
     return (
         <Button
             {...props}
@@ -12,12 +12,13 @@ export default function MenuButton({ ...props }: MenuButtonProps) {
         >
             <div className='relative aspect-square h-full'>
                 <Image
-                    src='/menu.svg'
-                    alt='menu'
+                    src='/my-skin.svg'
+                    alt='my-skin'
                     fill
                     className='object-contain'
                 />
             </div>
+            <span>My Skin</span>
         </Button>
     );
 }

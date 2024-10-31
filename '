@@ -1,9 +1,12 @@
 import Image from 'next/image';
 import { Button } from '../ui/button';
 
-type MenuButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+interface HelpButtonProps
+    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    isIconOnly?: boolean;
+}
 
-export default function MenuButton({ ...props }: MenuButtonProps) {
+export default function HelpButton({ isIconOnly, ...props }: HelpButtonProps) {
     return (
         <Button
             {...props}
@@ -12,12 +15,13 @@ export default function MenuButton({ ...props }: MenuButtonProps) {
         >
             <div className='relative aspect-square h-full'>
                 <Image
-                    src='/menu.svg'
-                    alt='menu'
+                    src='/help.svg'
+                    alt='help'
                     fill
                     className='object-contain'
                 />
             </div>
+            {isIconOnly ? null : <span>Help</span>}
         </Button>
     );
 }

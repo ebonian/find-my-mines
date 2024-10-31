@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useGameContext } from '../../../_contexts/game';
-import { cn } from '../../../_lib/utils';
+import { useGameContext } from '../../../../_contexts/game';
+import { cn } from '../../../../_lib/utils';
 
 interface HeaderProps {
     userFoundedBombs: number;

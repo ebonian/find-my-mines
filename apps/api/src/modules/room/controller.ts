@@ -1,67 +1,153 @@
 import type { Socket } from 'socket.io';
 import type { Room } from '@repo/shared-types';
+import RoomModel from '../../shared/models/room';
 
 export default async function roomController(socket: Socket) {
-    const gameRooms: Room[] = [];
+    socket.on('create-room', async (room: Room) => {
+        try {
+            const newRoom = new RoomModel(room);
+            await newRoom.save();
 
-    socket.on('create-room', (room: Room) => {
-        gameRooms.push(room);
-        socket.emit('rooms', gameRooms);
+            const gameRooms = await RoomModel.find();
+            socket.emit('rooms', gameRooms);
+        } catch (error) {
+            console.log(error);
+            socket.emit('error', error);
+        }
     });
 
-    socket.on('get-rooms', () => {
-        socket.emit('rooms', gameRooms);
+    socket.on('get-rooms', async () => {
+        try {
+            const gameRooms = await RoomModel.find();
+            socket.emit('rooms', gameRooms);
+        } catch (error) {
+            socket.emit('error', error);
+        }
     });
 
     socket.on(
         'update-room-state',
-        ({
+        async ({
             roomId,
             state,
         }: {
             roomId: string;
             state: 'waiting' | 'playing' | 'end';
         }) => {
-            const room = gameRooms.find((room) => room.id === roomId);
+            try {
+                const room = await RoomModel.findByIdAndUpdate(
+                    roomId,
+                    { state },
+                    { new: true }
+                );
 
-            if (room) {
-                room.state = state;
-                socket.emit('rooms', gameRooms);
-                socket.broadcast.emit('rooms', gameRooms);
+                if (room) {
+                    const gameRooms = await RoomModel.find();
+                    socket.emit('rooms', gameRooms);
+                } else {
+                    socket.emit('error', `Room "${roomId}" not found.`);
+                }
+            } catch (error) {
+                socket.emit('error', error);
             }
         }
     );
 
-    socket.on('join-room', (roomId: string, userId: string) => {
-        const joinRoom = gameRooms.find((r) => r.id === roomId);
+    socket.on(
+        'join-room',
+        async ({ roomId, userId }: { roomId: string; userId: string }) => {
+            try {
+                const gameRoom = await RoomModel.findOne({
+                    players: userId,
+                    state: { $in: ['waiting', 'playing'] },
+                });
 
-        if (!joinRoom) {
-            socket.emit('error', `Room "${roomId}" does not exist.`);
-            return;
-        }
+                if (gameRoom) {
+                    socket.emit(
+                        'error',
+                        `You have already joined other Room "${gameRoom._id}".`
+                    );
+                    return;
+                }
 
-        // add player to the room that is still in the state of waiting
-        if (joinRoom.state === 'waiting') {
-            joinRoom.players.push(userId);
-            socket.join(roomId);
-            socket.emit('room-joined', joinRoom);
-            socket.to(roomId).emit('player-joined', socket.id);
+                const joinRoom = await RoomModel.findById(roomId);
 
-            // change state from "waiting" tp "playing" when there are 2 players in the room
-            if (joinRoom.players.length === 2) {
-                joinRoom.state = 'playing';
-                socket.emit('room-state-changed', joinRoom.state); // notify players
+                if (!joinRoom) {
+                    socket.emit('error', `Room "${roomId}" does not exist.`);
+                    return;
+                }
+
+                if (joinRoom.players.includes(userId)) {
+                    socket.emit(
+                        'error',
+                        `You have already joined Room "${roomId}".`
+                    );
+                    return;
+                }
+
+                if (joinRoom.state === 'waiting') {
+                    joinRoom.players.push(userId);
+                    await joinRoom.save();
+                    socket.emit('room-joined', joinRoom);
+                    // TODO: notify / update game channel that user has joined the room
+
+                    if (joinRoom.players.length === 2) {
+                        joinRoom.state = 'playing';
+                        await joinRoom.save();
+                    }
+
+                    const gameRooms = await RoomModel.find();
+                    socket.broadcast.emit('rooms', gameRooms);
+                } else if (joinRoom.state === 'end') {
+                    socket.emit('error', `Room "${roomId}" is already ended.`);
+                } else {
+                    socket.emit(
+                        'error',
+                        `The game in Room "${roomId}" is ongoing now.`
+                    );
+                }
+            } catch (error) {
+                socket.emit('error', error);
             }
+        }
+    );
 
-            // update all clients
-            socket.broadcast.emit('rooms', gameRooms);
-        } else if (joinRoom.state === 'end') {
-            socket.emit('error', `Room "${roomId}" is already ended.`);
-        } else {
-            socket.emit(
-                'error',
-                `The game in Room "${roomId}" is ongoing now.`
-            );
+    socket.on(
+        'get-user-joined-room',
+        async ({ userId }: { userId: string }) => {
+            try {
+                const gameRoom = await RoomModel.findOne({
+                    players: userId,
+                    state: { $in: ['waiting', 'playing'] },
+                });
+                socket.emit('user-joined-room', gameRoom);
+            } catch (error) {
+                socket.emit('error', error);
+            }
+        }
+    );
+
+    socket.on('leave-user-room', async ({ userId }: { userId: string }) => {
+        try {
+            const gameRoom = await RoomModel.findOne({
+                players: userId,
+                state: { $in: ['waiting', 'playing'] },
+            });
+
+            if (gameRoom) {
+                gameRoom.players = gameRoom.players.filter(
+                    (player) => player !== userId
+                );
+                await gameRoom.save();
+                socket.emit('user-left-room', gameRoom);
+
+                const gameRooms = await RoomModel.find();
+                socket.broadcast.emit('rooms', gameRooms);
+            } else {
+                socket.emit('error', `You have not joined any room yet.`);
+            }
+        } catch (error) {
+            socket.emit('error', error);
         }
     });
 }

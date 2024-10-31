@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '../../_components/ui/button';
+import { Button } from '../../../_components/ui/button';
 
 export default function end() {
     return (
@@ -20,7 +20,7 @@ export default function end() {
                         Shop
                     </Button>
                 </div>
-                
+
                 <div className='items-center'>
                     <Button
                         variant='default'
@@ -28,7 +28,10 @@ export default function end() {
                         size='lg'
                         className='absolute right-20 px-4 text-right'
                     >
-                        <img src='/scoreboard.svg' className='h-12 w-12 pr-4'></img>
+                        <img
+                            src='/scoreboard.svg'
+                            className='h-12 w-12 pr-4'
+                        ></img>
                         Scoreboard
                     </Button>
                 </div>
@@ -36,27 +39,32 @@ export default function end() {
 
             <div className='mb-10 mt-10'>
                 <div className='font-Montserrat text-center text-7xl font-bold'>
-                    <span className='text-[#C5D86D]'>
-                        You Win!
-                    </span>
+                    <span className='text-[#C5D86D]'>You Win!</span>
                 </div>
 
-                <div className='font-Montserrat text-center text-3xl font-bold text-[#FFEDDF] mt-8'>
+                <div className='font-Montserrat mt-8 text-center text-3xl font-bold text-[#FFEDDF]'>
                     You Found X out of 11 Bombs
                 </div>
 
-                <div className='font-Montserrat text-center text-3xl font-bold text-[#C59CC8] mt-8 flex items-center justify-center'>
-                    <img src='/coin.svg' className='h-12 w-12 pr-2' alt='Coin' />
+                <div className='font-Montserrat mt-8 flex items-center justify-center text-center text-3xl font-bold text-[#C59CC8]'>
+                    <img
+                        src='/coin.svg'
+                        className='h-12 w-12 pr-2'
+                        alt='Coin'
+                    />
                     <span>+ 20</span>
                 </div>
             </div>
 
-            <div className='mx-auto flex gap-16 justify-center'>
+            <div className='mx-auto flex justify-center gap-16'>
                 <Button variant='default' size='lg'>
                     Play Again!
                 </Button>
                 <Button variant='default' size='lg'>
-                <img src='/black-left-arrow.svg' className='h-9 w-9 pr-4'></img>
+                    <img
+                        src='/black-left-arrow.svg'
+                        className='h-9 w-9 pr-4'
+                    ></img>
                     Home?
                 </Button>
             </div>

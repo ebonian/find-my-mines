@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Minesweeper } from './_components/minesweeper';
-import Layout from '../../_components/common/layout';
-import MenuButton from '../../_components/common/menu-button';
+import Layout from '../../../_components/common/layout';
+import MenuButton from '../../../_components/common/menu-button';
 import Scoreboard from './_components/scoreboard';
 import Status from './_components/status';
-import { useGameContext } from '../../_contexts/game';
+import { useGameContext } from '../../../_contexts/game';
 
 interface Action {
     actionId: number;

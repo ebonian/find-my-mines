@@ -81,7 +81,5 @@ export const seedGen = async ({
             .concat(combinationSeedHashed[i] as string);
     }
 
-    return {
-        seed: fullSeed,
-    };
+    return fullSeed;
 };

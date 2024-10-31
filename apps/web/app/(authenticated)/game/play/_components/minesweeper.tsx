@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
-import { cn } from '../../../_lib/utils';
+import { cn } from '../../../../_lib/utils';
 import Image from 'next/image';
 
 // Define the cell status type and cell interface
