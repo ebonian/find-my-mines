@@ -1,6 +1,6 @@
 'use client';
 
-import { useGameContext } from '../../../_contexts/game';
+import { useGameContext } from '../../../../_contexts/game';
 
 export default function Status() {
     const { turn, timer } = useGameContext();
