@@ -16,6 +16,13 @@ interface cell {
 interface MinesweeperProps {
     setMinesFounded: Dispatch<SetStateAction<number>>;
     resetTimer: () => void; // Add resetTimer to the props
+    switchTurn: () => void;
+    turn: 'user' | 'opponent' | null;
+    onAction: (
+        userId: string,
+        cellId: string | null,
+        bombFounded: boolean
+    ) => void;
 }
 
 // Board size and number of mines
@@ -50,6 +57,9 @@ const createBoard = (size: number, mines: number): cell[][] => {
 const Minesweeper: React.FC<MinesweeperProps> = ({
     setMinesFounded,
     resetTimer,
+    switchTurn,
+    turn,
+    onAction,
 }) => {
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines)
@@ -69,6 +79,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         rowIndex: number,
         colIndex: number
     ) => {
+        if (turn !== 'user') {
+            return;
+        }
         const newBoard = [...board];
         if (newBoard[rowIndex]![colIndex]!.status === 'revealed') {
             return;
@@ -79,9 +92,15 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
             // If a mine is revealed, increase the revealedMineCount
             if (newBoard[rowIndex]![colIndex]!.hasMine) {
                 setRevealedMineCount((prev) => prev + 1);
+                onAction('user', `${rowIndex}-${colIndex}`, true);
+                switchTurn();
+            } else {
+                onAction('user', `${rowIndex}-${colIndex}`, false);
+                switchTurn();
             }
 
             // Reset the timer when a cell is revealed
+            switchTurn();
             resetTimer();
         } else if (event.button === 2) {
             event.preventDefault();
