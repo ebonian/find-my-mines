@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { Room } from '@repo/shared-types';
 import { useSocket } from './socket';
+import { seedGen } from '../_lib/seed';
 
 interface GameContextValue {
     gameRooms: Room[];
@@ -11,6 +12,7 @@ interface GameContextValue {
     resetTimer: () => void;
     turn: null | 'user' | 'opponent';
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
+    updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -20,6 +22,7 @@ const GameContext = createContext<GameContextValue>({
     resetTimer: () => {},
     turn: 'user',
     setTurn: () => {},
+    updateRoomState: () => {},
 });
 
 interface GameContextProviderProps {
@@ -65,48 +68,24 @@ export default function GameContextProvider({
         }
     }, [turn]);
 
-    // Seed Generation
-    const seedGen = () => {
-        const replaceAt = (
-            oStr: String,
-            index: number,
-            replacement: String
-        ) => {
-            return (
-                oStr.substring(0, index) +
-                replacement +
-                oStr.substring(index + replacement.length)
-            );
-        };
-
-        var numSeq = Math.floor(
-            Math.random() * (999999999 - 100000000) + 100000000
-        ).toString();
-
-        for (let i = 0; i < 5; i++) {
-            var pos = Math.floor(Math.random() * 8);
-            var dec = Math.floor(Math.random() * (126 - 58) + 58);
-
-            while (true) {
-                if (!isNaN(parseInt(numSeq.charAt(pos), 10))) {
-                    numSeq = replaceAt(
-                        numSeq,
-                        pos % 9,
-                        String.fromCharCode(dec)
-                    );
-                    break;
-                }
-                pos += 1;
-            }
-        }
-        return { seed: numSeq };
-    };
-
     // METHODS
-    const createRoom = (room: Room) => {
-        const seed = seedGen();
+    const createRoom = async (room: Room) => {
+        const seed = await seedGen({
+            seed: room.seed,
+            type: room.type,
+        });
         const roomWithSeed = { ...room, seed };
         send('create-room', roomWithSeed);
+    };
+
+    const updateRoomState = (
+        room: Room,
+        state: 'waiting' | 'playing' | 'end'
+    ) => {
+        send('update-room-state', {
+            roomId: room.id,
+            state: state,
+        });
     };
 
     // EFFECTS
@@ -125,6 +104,7 @@ export default function GameContextProvider({
                 resetTimer,
                 turn,
                 setTurn,
+                updateRoomState,
             }}
         >
             {children}
