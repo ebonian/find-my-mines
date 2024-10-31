@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { Room } from '@repo/shared-types';
 import { useSocket } from './socket';
+import { useAuthContext } from './auth';
 import { seedGen } from '../_lib/seed';
 
 interface GameContextValue {
@@ -13,11 +14,13 @@ interface GameContextValue {
     turn: null | 'user' | 'opponent';
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
     updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
+    joinRoom: (roomId: string) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
     gameRooms: [],
     createRoom: () => {},
+    joinRoom: () => {},
     timer: 0,
     resetTimer: () => {},
     turn: 'user',
@@ -32,7 +35,9 @@ interface GameContextProviderProps {
 export default function GameContextProvider({
     children,
 }: GameContextProviderProps): JSX.Element {
+    // CONSUME CONTEXTS
     const { subscribe, send } = useSocket();
+    const { user } = useAuthContext();
 
     // STATES
     const [gameRooms, setGameRooms] = useState<Room[]>([]);
@@ -88,7 +93,19 @@ export default function GameContextProvider({
         });
     };
 
-    // EFFECTS
+    const joinRoom = (roomId: string) => {
+        if (!user) {
+            return;
+        }
+
+        const userId = user.id;
+
+        send('join-room', {
+            roomId,
+            userId,
+        });
+    };
+
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
             setGameRooms(rooms);
@@ -105,6 +122,7 @@ export default function GameContextProvider({
                 turn,
                 setTurn,
                 updateRoomState,
+                joinRoom,
             }}
         >
             {children}
