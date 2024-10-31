@@ -7,11 +7,19 @@ import { useSocket } from './socket';
 interface GameContextValue {
     gameRooms: Room[];
     createRoom: (room: Room) => void;
+    timer: number;
+    resetTimer: () => void;
+    turn: null | 'user' | 'opponent';
+    setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
 }
 
 const GameContext = createContext<GameContextValue>({
     gameRooms: [],
     createRoom: () => {},
+    timer: 0,
+    resetTimer: () => {},
+    turn: 'user',
+    setTurn: () => {},
 });
 
 interface GameContextProviderProps {
@@ -25,14 +33,55 @@ export default function GameContextProvider({
 
     // STATES
     const [gameRooms, setGameRooms] = useState<Room[]>([]);
+    const [timer, setTimer] = useState(0);
+    const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
+
+    const resetTimer = () => {
+        setTimer(10);
+    };
+
+    useEffect(() => {
+        if (timer > 0) {
+            const countdown = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+            return () => clearInterval(countdown);
+        } else {
+            setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
+            resetTimer();
+        }
+    }, [timer, turn]);
+
+    useEffect(() => {
+        switch (turn) {
+            case 'user':
+                resetTimer();
+                break;
+            case 'opponent':
+                resetTimer();
+                break;
+            default:
+                break;
+        }
+    }, [turn]);
 
     // Seed Generation
     const seedGen = () => {
-        const replaceAt = (oStr: String, index: number, replacement: String) => {
-            return oStr.substring(0, index) + replacement + oStr.substring(index + replacement.length);
-        }
+        const replaceAt = (
+            oStr: String,
+            index: number,
+            replacement: String
+        ) => {
+            return (
+                oStr.substring(0, index) +
+                replacement +
+                oStr.substring(index + replacement.length)
+            );
+        };
 
-        var numSeq = Math.floor(Math.random() * (999999999 - 100000000) + 100000000).toString();
+        var numSeq = Math.floor(
+            Math.random() * (999999999 - 100000000) + 100000000
+        ).toString();
 
         for (let i = 0; i < 5; i++) {
             var pos = Math.floor(Math.random() * 8);
@@ -40,19 +89,23 @@ export default function GameContextProvider({
 
             while (true) {
                 if (!isNaN(parseInt(numSeq.charAt(pos), 10))) {
-                    numSeq = replaceAt(numSeq, pos % 9, String.fromCharCode(dec));
+                    numSeq = replaceAt(
+                        numSeq,
+                        pos % 9,
+                        String.fromCharCode(dec)
+                    );
                     break;
                 }
-                pos += 1
+                pos += 1;
             }
         }
-        return { "seed": numSeq };
-    }
+        return { seed: numSeq };
+    };
 
     // METHODS
     const createRoom = (room: Room) => {
         const seed = seedGen();
-        const roomWithSeed = {...room, seed};
+        const roomWithSeed = { ...room, seed };
         send('create-room', roomWithSeed);
     };
 
@@ -68,6 +121,10 @@ export default function GameContextProvider({
             value={{
                 gameRooms,
                 createRoom,
+                timer,
+                resetTimer,
+                turn,
+                setTurn,
             }}
         >
             {children}

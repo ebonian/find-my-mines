@@ -1,5 +1,8 @@
 'use client';
+
 import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import { cn } from '../../../_lib/utils';
+import Image from 'next/image';
 
 // Define the cell status type and cell interface
 type cellStatus = 'hidden' | 'revealed' | 'flagged';
@@ -102,13 +105,14 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
                     {row.map((cell, colIndex) => (
                         <div
                             key={colIndex}
-                            className={`h-20 w-20 ${
+                            className={cn(
+                                'relative h-24 w-24',
                                 cell.status === 'revealed'
                                     ? 'border-rgba(255, 237, 223,0.65) border-opacity-0.2 border-2 bg-[#0D1321] bg-opacity-65'
                                     : (rowIndex + colIndex) % 2 === 0
-                                      ? 'bg-[#0D1321] bg-opacity-65'
-                                      : 'bg-[#0D1321]'
-                            }`}
+                                      ? 'bg-[#191B27]'
+                                      : 'bg-black'
+                            )}
                             onClick={(e) =>
                                 clickHandlerComponent(e, rowIndex, colIndex)
                             }
@@ -118,11 +122,21 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
                         >
                             {/* Reveal the cell status if it is revealed */}
                             {cell.status === 'flagged' ? (
-                                <img src='/Flag.svg'></img>
+                                <Image
+                                    src='/flag.svg'
+                                    alt='flag'
+                                    fill
+                                    className='object-contain'
+                                />
                             ) : null}
                             {cell.status === 'revealed' &&
                                 (cell.hasMine ? (
-                                    <img src='/Bomb.svg'></img>
+                                    <Image
+                                        src='/bomb.svg'
+                                        alt='bomb'
+                                        fill
+                                        className='object-contain'
+                                    />
                                 ) : null)}
                         </div>
                     ))}
