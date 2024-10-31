@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '../../../_contexts/socket';
 import { Button } from '../../../_components/ui/button';
@@ -22,6 +22,7 @@ export default function Create() {
         'normal'
     );
     const [selectedPower, setSelectedPower] = useState<string[]>([]);
+    const customSeed = useRef("");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (value: string) => {
@@ -68,7 +69,7 @@ export default function Create() {
             players: [socket.id],
             type: selectedType,
             state: 'waiting',
-            seed: '',  // Seed will be generated in createRoom
+            seed: customSeed.current.value,  // Seed will be generated in createRoom
             powerUps: selectedPower,
         };
 
@@ -156,6 +157,15 @@ export default function Create() {
                             onChange={() => handleChange('option3')}
                             color='purple'
                             label='Option 3'
+                        />
+                    </div>
+                </div>
+                <div className='flex'>
+                    <div className='my-auto basis-1/4'>Custom Seed (Optional)</div>
+                    <div className='basis-3/4'>
+                        <Input
+                            placeholder='Enter seed...'
+                            ref={customSeed}
                         />
                     </div>
                 </div>
