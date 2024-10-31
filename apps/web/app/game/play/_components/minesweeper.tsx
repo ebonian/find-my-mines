@@ -17,6 +17,7 @@ interface MinesweeperProps {
     setMinesFounded: Dispatch<SetStateAction<number>>;
     resetTimer: () => void; // Add resetTimer to the props
     switchTurn: () => void;
+    turn: 'user' | 'opponent' | null;
 }
 
 // Board size and number of mines
@@ -52,6 +53,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     setMinesFounded,
     resetTimer,
     switchTurn,
+    turn,
 }) => {
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines)
@@ -71,6 +73,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         rowIndex: number,
         colIndex: number
     ) => {
+        if (turn !== 'user') {
+            return;
+        }
         const newBoard = [...board];
         if (newBoard[rowIndex]![colIndex]!.status === 'revealed') {
             return;

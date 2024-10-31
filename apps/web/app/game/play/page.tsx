@@ -34,6 +34,7 @@ export default function Play() {
                 switchTurn={() =>
                     setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'))
                 }
+                turn={turn}
             />
         </Layout>
     );
