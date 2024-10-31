@@ -15,6 +15,7 @@ interface GameContextValue {
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
     updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
     joinRoom: (roomId: string) => void;
+    joinedGameRoom: Room | null;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -26,6 +27,7 @@ const GameContext = createContext<GameContextValue>({
     turn: 'user',
     setTurn: () => {},
     updateRoomState: () => {},
+    joinedGameRoom: null,
 });
 
 interface GameContextProviderProps {
@@ -41,6 +43,7 @@ export default function GameContextProvider({
 
     // STATES
     const [gameRooms, setGameRooms] = useState<Room[]>([]);
+    const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
 
@@ -107,12 +110,19 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
+        if (!user) {
+            return;
+        }
         send('get-rooms', null);
-    }, []);
+        send('get-user-joined-room', { userId: user._id });
+    }, [user]);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
             setGameRooms(rooms);
+        });
+        subscribe('user-joined-room', (room: Room) => {
+            setJoinedGameRoom(room);
         });
     }, [subscribe]);
 
@@ -127,6 +137,7 @@ export default function GameContextProvider({
                 setTurn,
                 updateRoomState,
                 joinRoom,
+                joinedGameRoom,
             }}
         >
             {children}

@@ -12,7 +12,8 @@ import { useAuthContext } from './_contexts/auth';
 import { Button } from './_components/ui/button';
 
 export default function Page() {
-    const { user } = useAuthContext();
+    const { user, logout } = useAuthContext();
+
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <Link href='/shop' className='absolute left-0 top-10'>
@@ -41,15 +42,25 @@ export default function Page() {
                 </div>
                 <div className='flex w-full max-w-md flex-col items-center space-y-2'>
                     {user ? (
-                        <Link href='/game/rooms'>
-                            <Button
-                                color='green'
-                                size='lg'
-                                className='max-w-min px-20'
+                        <>
+                            <Link href='/game/rooms'>
+                                <Button
+                                    color='green'
+                                    size='lg'
+                                    className='max-w-min px-20'
+                                >
+                                    Play
+                                </Button>
+                            </Link>
+                            <button
+                                onClick={() => {
+                                    logout();
+                                }}
+                                className='opacity-50'
                             >
-                                Play
-                            </Button>
-                        </Link>
+                                Logout
+                            </button>
+                        </>
                     ) : (
                         <GoogleLoginButton />
                     )}
