@@ -35,14 +35,14 @@ export default function Page() {
                     {skins.map((skin) => (
                         <div
                             key={skin.id}
-                            className='bg-brown h-96 w-80 rounded-3xl bg-opacity-10'
+                            className='bg-brown rounded-3xl bg-opacity-10'
                         >
-                            <div className='flex flex-col items-center justify-center'>
-                                <div className='relative h-72 w-72'>
+                            <div className='flex flex-col items-center justify-center space-y-4 p-4'>
+                                <div className='relative aspect-square w-72'>
                                     <Image
                                         src={skin.image}
-                                        className='mt-3 rounded-3xl object-contain'
-                                        alt='default skin'
+                                        className='rounded-3xl object-contain'
+                                        alt='skin'
                                         fill
                                     />
                                 </div>
@@ -51,7 +51,7 @@ export default function Page() {
                                         variant='outline'
                                         color='orange'
                                         size='lg'
-                                        className='mt-6 px-24'
+                                        className='w-full'
                                         disabled
                                     >
                                         Bought
@@ -61,7 +61,7 @@ export default function Page() {
                                         variant='default'
                                         color='white'
                                         size='lg'
-                                        className='mt-6 px-24'
+                                        className='w-full'
                                     >
                                         <div className='relative h-10 w-10'>
                                             <Image
