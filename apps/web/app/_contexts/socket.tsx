@@ -84,6 +84,18 @@ export default function SocketContextProvider({
         socket.emit(channel, data);
     };
 
+    useEffect(() => {
+        if (socket) {
+            subscribe('error', (error) => {
+                if (typeof error === 'string') {
+                    alert(error);
+                } else {
+                    console.error(error);
+                }
+            });
+        }
+    }, [socket, subscribe]);
+
     if (!socket) {
         return <div>Loading...</div>; // TODO: Add a loading screen
     }

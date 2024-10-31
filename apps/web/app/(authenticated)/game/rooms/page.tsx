@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../../_components/ui/button';
 import { useGameContext } from '../../../_contexts/game';
 import Layout from '../../../_components/common/layout';
@@ -10,12 +10,21 @@ import HelpButton from '../../../_components/common/help-button';
 import Link from 'next/link';
 import RoomCard from '../../../_components/common/room-card';
 import HowToPlayModal from '../../../_components/common/how-to-play-modal';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-    const { gameRooms } = useGameContext();
+    const router = useRouter();
+    const { gameRooms, joinedGameRoom } = useGameContext();
+
     const rooms = gameRooms.filter((room) => room.state === 'waiting');
 
     const [isShowModal, setIsShowModal] = useState(false);
+
+    useEffect(() => {
+        if (joinedGameRoom) {
+            router.push('/game/play');
+        }
+    }, [joinedGameRoom]);
 
     return (
         <Layout

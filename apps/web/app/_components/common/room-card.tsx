@@ -1,13 +1,21 @@
 import type { Room } from '@repo/shared-types';
 import { Button } from '../ui/button';
+import { useGameContext } from '../../_contexts/game';
 
 interface RoomCardProps {
+    _id?: Room['_id'];
     name: Room['name'];
     creator: Room['creator'];
     type: Room['type'];
 }
 
-export default function RoomCard({ name, creator, type }: RoomCardProps) {
+export default function RoomCard({ _id, name, creator, type }: RoomCardProps) {
+    const { joinRoom } = useGameContext();
+
+    if (!_id) {
+        return null;
+    }
+
     return (
         <div className='bg-brown space-y-5 rounded-3xl bg-opacity-10 p-5'>
             <p className='text-center text-2xl font-bold text-white'>{name}</p>
@@ -21,7 +29,13 @@ export default function RoomCard({ name, creator, type }: RoomCardProps) {
                 </p>
             </div>
 
-            <Button className='w-full' color='white'>
+            <Button
+                className='w-full'
+                color='white'
+                onClick={() => {
+                    joinRoom(_id);
+                }}
+            >
                 Join
             </Button>
         </div>

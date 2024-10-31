@@ -4,6 +4,7 @@ import './globals.css';
 import SocketContextProvider from './_contexts/socket';
 import GameContextProvider from './_contexts/game';
 import AuthContextProvider from './_contexts/auth';
+import GameGuard from './_components/common/game-guard';
 
 const monserrat = Montserrat({
     variable: '--font-montserrat',
@@ -27,7 +28,7 @@ export default function RootLayout({
                 <AuthContextProvider>
                     <SocketContextProvider>
                         <GameContextProvider>
-                            <>{children}</>
+                            <GameGuard>{children}</GameGuard>
                         </GameContextProvider>
                     </SocketContextProvider>
                 </AuthContextProvider>
