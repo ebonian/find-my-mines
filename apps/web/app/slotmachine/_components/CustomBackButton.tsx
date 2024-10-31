@@ -7,7 +7,11 @@ type CustomBackButtonProps = {
     setShow?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const CustomBackButton: React.FC<CustomBackButtonProps> = ({ actionBeforeBack, confirmation=false, setShow }) => {
+const CustomBackButton: React.FC<CustomBackButtonProps> = ({
+    actionBeforeBack,
+    confirmation = false,
+    setShow,
+}) => {
     // const navigate = useNavigate();
     const [isHovered, setisHovered] = useState(false);
     const [confirmBack, setconfirmBack] = useState(false);
@@ -25,17 +29,19 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({ actionBeforeBack, c
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
-          // If the click is outside the button, reset confirmBack to false
-          if (buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
-            setconfirmBack(false);
-            if (setShow)
-                setShow(false);
-          }
+            // If the click is outside the button, reset confirmBack to false
+            if (
+                buttonRef.current &&
+                !buttonRef.current.contains(event.target as Node)
+            ) {
+                setconfirmBack(false);
+                if (setShow) setShow(false);
+            }
         };
-    
+
         // Add event listener to detect outside clicks
         document.addEventListener('mousedown', handleOutsideClick);
-    
+
         // Clean up the event listener when the component unmounts
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
@@ -49,16 +55,14 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({ actionBeforeBack, c
                 if (actionBeforeBack) {
                     actionBeforeBack();
                 }
-            }
-            else {
+            } else {
                 window.location.href = '/';
             }
-        }
-        else {
+        } else {
             if (actionBeforeBack) {
                 actionBeforeBack();
             }
-    
+
             window.location.href = '/';
         }
     };
@@ -73,7 +77,11 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({ actionBeforeBack, c
                 onMouseLeave={() => setisHovered(false)}
                 onClick={handleClick}
             >
-                { confirmBack ? "Are you sure?" : <i className='fas fa-arrow-left fa-xl'></i>}
+                {confirmBack ? (
+                    'Are you sure?'
+                ) : (
+                    <i className='fas fa-arrow-left fa-xl'></i>
+                )}
             </button>
         </>
     );

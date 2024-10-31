@@ -2,11 +2,44 @@
 import { Button } from '../_components/ui/button';
 import BackButton from '../_components/ui/BackButton';
 import Image from 'next/image';
+import axios from '../_lib/axios';
+import { useAuthContext } from '../_contexts/auth';
+import { useState, useEffect } from 'react';
+import SkinCard from '../_components/ui/skinCard';
 
 export default function shop() {
+    const { user } = useAuthContext();
+
+    if (!user) {
+        return <div>Loading...</div>;
+    }
+
+    useEffect(() => {
+        const fetchShopItems = async () => {
+            try {
+                const { data } = await axios.get('/skins');
+                setShopItems(data);
+            } catch (error) {
+                console.error(error);
+                setShopItems([]);
+            }
+        };
+
+        fetchShopItems();
+    }, []);
+
+    const [shopItems, setShopItems] = useState<
+        {
+            id: string;
+            price: number;
+        }[]
+    >([]);
+
+    console.log(shopItems);
+
     return (
         <div
-            className='flex grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
+            className='flex min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
             style={{ backgroundColor: '#252525' }}
         >
             <div className='absolute left-1 top-12 px-16'>
@@ -22,7 +55,7 @@ export default function shop() {
                     />
                 </div>
                 <div className='font-Monstserrat text-base font-bold'>
-                    1,000
+                    {user.balance}
                 </div>
             </div>
             <div className='inset-x-0 top-2 flex justify-center'>
@@ -36,54 +69,43 @@ export default function shop() {
                 </div>
             </div>
             <div className='mt-16 flex items-center justify-center'>
-                <div className='mr-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'>
-                    <div className='flex flex-col items-center justify-center'>
-                        <div className='relative h-72 w-72'>
-                            <Image
-                                src='/defaultskin.svg'
-                                className='mt-3 rounded-3xl object-contain'
-                                alt='board'
-                                fill
-                            />
-                        </div>
-                        <Button
-                            variant='outline'
-                            color='orange'
-                            size='lg'
-                            className='mt-6 px-24'
-                        >
-                            Bought
-                        </Button>
-                    </div>
-                </div>
-                <div className='ml-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'>
-                    <div className='flex flex-col items-center justify-center'>
-                        <div className='relative h-72 w-72'>
-                            <Image
-                                src='/defaultskin.svg'
-                                className='mt-3 rounded-3xl object-contain'
-                                alt='default skin' // edit after having new theme
-                                fill
-                            />
-                        </div>
-                        <Button
-                            variant='default'
-                            color='white'
-                            size='lg'
-                            className='mt-6 px-24'
-                        >
-                            <div className='relative h-10 w-10'>
-                                <Image
-                                    src='/coin.svg'
-                                    className='object-contain pr-3'
-                                    alt='coin'
-                                    fill
-                                />
-                            </div>
-                            200
-                        </Button>
-                    </div>
-                </div>
+                {shopItems.map((item) => (
+                    <SkinCard
+                        imgsrc='defaultskin.svg'
+                        variant='outline'
+                        color='white'
+                        text={item.price.toString()}
+                        onClick={async () => {
+                            await axios.post('/skins/buy', {
+                                userId: user.id,
+                                skinId: item.id,
+                            });
+                            console.log(`skin id: ${item.id}`);
+                        }}
+                    />
+                ))}
+
+                <SkinCard
+                    imgsrc='defaultskin.svg'
+                    variant='outline'
+                    color='orange'
+                    text='Bought'
+                    isShop
+                />
+                <SkinCard
+                    imgsrc='defaultskin.svg'
+                    variant='default'
+                    color='white'
+                    text='200'
+                    isShop
+                    onClick={async () => {
+                        await axios.post('/skins/buy', {
+                            userId: user.id,
+                            skinId: '0',
+                        });
+                        console.log(`skin id:`);
+                    }}
+                />
             </div>
             <div className='items-center'>
                 {/* <Button variant='default' color='brown'></Button> */}

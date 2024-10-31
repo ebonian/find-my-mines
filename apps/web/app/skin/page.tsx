@@ -1,12 +1,22 @@
 'use client';
 import { Button } from '../_components/ui/button';
-import BackButton from '../_components/ui/BackButton';
 import Image from 'next/image';
+import SkinCard from '../_components/ui/skinCard';
+import axios from '../_lib/axios';
+import { useAuthContext } from '../_contexts/auth';
+import { ButtonIcon } from '../_components/ui/buttonIcon';
+import BackButton from '../_components/ui/BackButton';
 
 export default function Skin() {
+    const { user } = useAuthContext();
+
+    if (!user) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div
-            className='flex grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
+            className='flex min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
             style={{ backgroundColor: '#252525' }}
         >
             <div className='absolute left-1 top-12 px-16'>
@@ -22,7 +32,7 @@ export default function Skin() {
                     />
                 </div>
                 <div className='font-Monstserrat text-base font-bold'>
-                    1,000
+                    {user.balance}
                 </div>
             </div>
 
@@ -37,46 +47,17 @@ export default function Skin() {
                 </div>
             </div>
             <div className='mt-16 flex items-center justify-center'>
-                <div className='mr-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'>
-                    <div className='flex flex-col items-center justify-center'>
-                        <div className='relative h-72 w-72'>
-                            <Image
-                                src='defaultskin.svg'
-                                className='mt-3 rounded-3xl object-contain'
-                                alt='default skin'
-                                fill
-                            />
-                        </div>
-                        <Button
-                            variant='outline'
-                            color='purple'
-                            size='lg'
-                            className='mt-6 px-20'
-                        >
-                            Equipped
-                        </Button>
-                    </div>
-                </div>
-                <div className='ml-7 h-96 w-80 rounded-3xl bg-[#86615C] bg-opacity-10'>
-                    <div className='flex flex-col items-center justify-center'>
-                        <div className='relative h-72 w-72'>
-                            <Image
-                                src='defaultskin.svg'
-                                className='mt-3 rounded-3xl object-contain'
-                                alt='default skin' // edit after having new theme
-                                fill
-                            />
-                        </div>
-                        <Button
-                            variant='default'
-                            color='white'
-                            size='lg'
-                            className='mt-6 px-28'
-                        >
-                            Use
-                        </Button>
-                    </div>
-                </div>
+                {user.skin.map((item) => (
+                    <SkinCard
+                        imgsrc='defaultskin.svg'
+                        variant='default'
+                        color='white'
+                        text='Use'
+                        onClick={() => {
+                            console.log('Use skin clicked');
+                        }}
+                    />
+                ))}
             </div>
             <div className='items-center'>
                 {/* <Button variant='default' color='brown'></Button> */}

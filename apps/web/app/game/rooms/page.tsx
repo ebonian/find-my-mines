@@ -1,16 +1,18 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
+import { useState } from 'react';
 import { Button } from '../../_components/ui/button';
-import Plus from './_icons/plus.svg';
-import Search from './_icons/search.svg';
+import { useGameContext } from '../../_contexts/game';
 import { ButtonIcon } from './_component/buttonIcon';
 import ArrowFatLeft from './_icons/arrow-fat-left.svg';
 import CircleHelp from './_icons/circle-help.svg';
+import Plus from './_icons/plus.svg';
+import Search from './_icons/search.svg';
 import X from './_icons/x.svg';
 
 export default function Lobby() {
+    const { gameRooms } = useGameContext();
     const [showHowToPlay, setShowHowToPlay] = useState(false);
 
     const room = [
@@ -59,7 +61,7 @@ export default function Lobby() {
             </div>
 
             <div className='grid w-full grid-cols-3 gap-16 px-20'>
-                {room.map((room, index) => (
+                {gameRooms.map((room) => (
                     <div className='bg-brown space-y-10 rounded-3xl bg-opacity-10 p-5'>
                         <p className='text-center text-3xl font-bold text-white'>
                             {room.name}
@@ -67,7 +69,7 @@ export default function Lobby() {
 
                         <div className='space-y-2 text-center'>
                             <p className='text-left text-xl font-semibold text-white'>
-                                Created by: {room.createdBy}
+                                Created by: {room.Creator}
                             </p>
                             <p className='text-left text-xl font-semibold text-white'>
                                 Type: {room.type}
@@ -126,6 +128,7 @@ export default function Lobby() {
                             ))}
                         </div>
                     </div>
+                    .
                 </div>
             )}
         </div>

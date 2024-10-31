@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { cn } from '../../../_lib/utils';
 import Image from 'next/image';
+import { cn } from '../../_lib/utils';
 
 export interface ButtonProps
     extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'> {

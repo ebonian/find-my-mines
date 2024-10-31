@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSocket } from '../../../_contexts/socket';
 import { Button } from '../../../_components/ui/button';
 import { Input } from '../../../_components/ui/input';
 import { Radio } from '../_component/radio';
 import { CardCheckbox } from '../_component/card';
-import { ButtonIcon } from '../_component/buttonIcon';
 import ArrowFatLeft from '../_icons/arrow-fat-left.svg';
 import CircleHelp from '../_icons/circle-help.svg';
 import type { Room } from '@repo/shared-types';
 import { useGameContext } from '../../../_contexts/game';
+import { ButtonIcon } from '../../../_components/ui/buttonIcon';
 
 export default function Create() {
     const router = useRouter();
@@ -22,6 +22,7 @@ export default function Create() {
         'normal'
     );
     const [selectedPower, setSelectedPower] = useState<string[]>([]);
+    const customSeed = useRef("");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (value: string) => {
@@ -68,7 +69,11 @@ export default function Create() {
             players: [socket.id],
             type: selectedType,
             state: 'waiting',
-            seed: '',  // Seed will be generated in createRoom
+<<<<<<< HEAD
+            seed: '', // Seed will be generated in createRoom
+=======
+            seed: customSeed.current.value,  // Seed will be generated in createRoom
+>>>>>>> 23fc994f527069c4915bd6ffcd7c0b624146dad9
             powerUps: selectedPower,
         };
 
@@ -156,6 +161,15 @@ export default function Create() {
                             onChange={() => handleChange('option3')}
                             color='purple'
                             label='Option 3'
+                        />
+                    </div>
+                </div>
+                <div className='flex'>
+                    <div className='my-auto basis-1/4'>Custom Seed (Optional)</div>
+                    <div className='basis-3/4'>
+                        <Input
+                            placeholder='Enter seed...'
+                            ref={customSeed}
                         />
                     </div>
                 </div>
