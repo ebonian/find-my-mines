@@ -13,11 +13,13 @@ import axios from '../_lib/axios';
 interface GameContextValue {
     user: User | null;
     logout: () => void;
+    loading: boolean;
 }
 
 const AuthContext = createContext<GameContextValue>({
     user: null,
     logout: () => {},
+    loading: true,
 });
 
 interface AuthContextProviderProps {
@@ -28,6 +30,7 @@ export default function AuthContextProvider({
     children,
 }: AuthContextProviderProps): JSX.Element {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const fetchUser = useCallback(async () => {
         try {
@@ -35,6 +38,8 @@ export default function AuthContextProvider({
             setUser(data);
         } catch (error) {
             setUser(null);
+        } finally {
+            setLoading(false);
         }
     }, []);
 
@@ -44,6 +49,8 @@ export default function AuthContextProvider({
             setUser(null);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     }, []);
 
@@ -56,6 +63,7 @@ export default function AuthContextProvider({
             value={{
                 user,
                 logout,
+                loading,
             }}
         >
             {children}

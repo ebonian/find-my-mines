@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../../_lib/utils';
+import { cn } from '../../_lib/utils';
 
 const radioVariants = cva(
     'inline-flex items-center justify-center rounded-full cursor-pointer',

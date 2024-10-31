@@ -1,25 +1,23 @@
-import { Button } from '../_components/ui/button';
+'use client';
+import { Button } from '../../_components/ui/button';
 import Image from 'next/image';
-import Layout from '../_components/common/layout';
-import CoinButton from '../_components/common/coin-button';
-import BackButton from '../_components/common/back-button';
+import Layout from '../../_components/common/layout';
+import CoinButton from '../../_components/common/coin-button';
+import BackButton from '../../_components/common/back-button';
 
-export default function Page() {
+export default function Skin() {
     const skins = [
         {
             id: 1,
             image: '/defaultskin.svg',
-            price: 200,
-            isBought: false,
+            isEquiped: false,
         },
         {
             id: 2,
             image: '/defaultskin.svg',
-            price: 200,
-            isBought: true,
+            isEquiped: true,
         },
     ];
-
     return (
         <Layout
             className='flex min-h-screen flex-col items-center py-16'
@@ -29,7 +27,7 @@ export default function Page() {
             <div className='flex flex-col items-center space-y-16'>
                 <div className='space-y-2 text-center font-bold'>
                     <h1 className='text-6xl text-white'>Shop</h1>
-                    <p className='text-orange text-xl'>Find My Mines</p>
+                    <p className='text-purple text-xl'>Find My Mines</p>
                 </div>
                 <div className='grid grid-cols-2 gap-10'>
                     {skins.map((skin) => (
@@ -46,15 +44,15 @@ export default function Page() {
                                         fill
                                     />
                                 </div>
-                                {skin.isBought ? (
+                                {skin.isEquiped ? (
                                     <Button
                                         variant='outline'
-                                        color='orange'
+                                        color='purple'
                                         size='lg'
                                         className='w-full'
                                         disabled
                                     >
-                                        Bought
+                                        Equiped
                                     </Button>
                                 ) : (
                                     <Button
@@ -63,15 +61,7 @@ export default function Page() {
                                         size='lg'
                                         className='w-full'
                                     >
-                                        <div className='relative h-10 w-10'>
-                                            <Image
-                                                src='/coin.svg'
-                                                className='object-contain pr-3'
-                                                alt='coin'
-                                                fill
-                                            />
-                                        </div>
-                                        {skin.price}
+                                        Use
                                     </Button>
                                 )}
                             </div>

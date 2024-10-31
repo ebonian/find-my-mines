@@ -1,5 +1,5 @@
-import { Button } from './_components/ui/button';
-import { Input } from './_components/ui/input';
+'use client';
+
 import GoogleLoginButton from './_components/common/google-login-button';
 import ShopButton from './_components/common/shop-button';
 import ScoreboardButton from './_components/common/scoreboard-button';
@@ -8,8 +8,11 @@ import MySkinButton from './_components/common/my-skin';
 import HelpButton from './_components/common/help-button';
 import Layout from './_components/common/layout';
 import Link from 'next/link';
+import { useAuthContext } from './_contexts/auth';
+import { Button } from './_components/ui/button';
 
 export default function Page() {
+    const { user } = useAuthContext();
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <Link href='/shop' className='absolute left-0 top-10'>
@@ -37,7 +40,19 @@ export default function Page() {
                     Find the mines before they find you!
                 </div>
                 <div className='flex w-full max-w-md flex-col items-center space-y-2'>
-                    <GoogleLoginButton />
+                    {user ? (
+                        <Link href='/game/rooms'>
+                            <Button
+                                color='green'
+                                size='lg'
+                                className='max-w-min px-20'
+                            >
+                                Play
+                            </Button>
+                        </Link>
+                    ) : (
+                        <GoogleLoginButton />
+                    )}
                     {/* <p className='text-center text-lg font-bold text-white'>
                         OR
                     </p>
@@ -48,9 +63,6 @@ export default function Page() {
                         </p>
                     </div> */}
                 </div>
-                {/* <Button color='green' size='lg' className='max-w-min px-20'>
-                    Play
-                </Button> */}
             </div>
         </Layout>
     );
