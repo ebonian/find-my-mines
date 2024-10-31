@@ -48,7 +48,7 @@ export default function Create() {
         const newRoom = {
             name: roomName.trim(),
             creator: user._id,
-            players: [user._id],
+            players: [],
             type: selectedType,
             state: 'waiting',
             seed: customSeed,
