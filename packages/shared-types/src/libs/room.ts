@@ -1,5 +1,5 @@
 export interface Room {
-    id: string;
+    _id?: string;
     name: string;
     creator: string;
     players: string[];

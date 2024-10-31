@@ -79,7 +79,7 @@ export default function GameContextProvider({
             seed: room.seed,
             type: room.type,
         });
-        const roomWithSeed = { ...room, seed };
+        const roomWithSeed = { ...room, seed: seed };
         send('create-room', roomWithSeed);
     };
 
@@ -88,7 +88,7 @@ export default function GameContextProvider({
         state: 'waiting' | 'playing' | 'end'
     ) => {
         send('update-room-state', {
-            roomId: room.id,
+            roomId: room._id,
             state: state,
         });
     };
@@ -105,6 +105,10 @@ export default function GameContextProvider({
             userId,
         });
     };
+
+    useEffect(() => {
+        send('get-rooms', null);
+    }, []);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
