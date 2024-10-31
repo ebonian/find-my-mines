@@ -31,6 +31,9 @@ export default function Play() {
             <Minesweeper
                 setMinesFounded={setMinesFounded}
                 resetTimer={resetTimer}
+                switchTurn={() =>
+                    setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'))
+                }
             />
         </Layout>
     );

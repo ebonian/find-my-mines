@@ -16,6 +16,7 @@ interface cell {
 interface MinesweeperProps {
     setMinesFounded: Dispatch<SetStateAction<number>>;
     resetTimer: () => void; // Add resetTimer to the props
+    switchTurn: () => void;
 }
 
 // Board size and number of mines
@@ -50,6 +51,7 @@ const createBoard = (size: number, mines: number): cell[][] => {
 const Minesweeper: React.FC<MinesweeperProps> = ({
     setMinesFounded,
     resetTimer,
+    switchTurn,
 }) => {
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines)
@@ -82,6 +84,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
             }
 
             // Reset the timer when a cell is revealed
+            switchTurn();
             resetTimer();
         } else if (event.button === 2) {
             event.preventDefault();
