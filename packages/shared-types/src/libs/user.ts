@@ -4,5 +4,5 @@ export interface User {
     username: string;
     balance: number;
     score: number;
-    skin: Object;
+    skin: string[];
 }
