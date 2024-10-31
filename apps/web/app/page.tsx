@@ -7,19 +7,20 @@ import LocaleButton from './_components/common/locale-button';
 import MySkinButton from './_components/common/my-skin';
 import HelpButton from './_components/common/help-button';
 import Layout from './_components/common/layout';
+import Link from 'next/link';
 
 export default function Home() {
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center space-y-10'>
-            <div className='absolute left-0 top-10'>
+            <Link href='/shop' className='absolute left-0 top-10'>
                 <ShopButton />
-            </div>
-            <div className='absolute right-0 top-10'>
+            </Link>
+            <Link href='/leaderboard' className='absolute right-0 top-10'>
                 <ScoreboardButton />
-            </div>
-            <div className='absolute bottom-10 left-0'>
+            </Link>
+            <Link href='/skin' className='absolute bottom-10 left-0'>
                 <MySkinButton />
-            </div>
+            </Link>
             <div className='absolute bottom-10 right-0'>
                 <LocaleButton />
             </div>
