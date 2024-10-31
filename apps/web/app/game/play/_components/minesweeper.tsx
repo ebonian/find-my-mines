@@ -64,9 +64,22 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines)
     );
+    const [userAction, setUserAction] = useState<{
+        cellId: string | null;
+        bombFounded: boolean;
+    } | null>(null);
+    const [currentActionIndex, setCurrentActionIndex] = useState(0);
     const [flaggedCount, setFlaggedCount] = useState(0);
     const [revealedMineCount, setRevealedMineCount] = useState(0);
 
+    // Sample hardcoded action array for opponent's turn
+    const Actions = [
+        { actionId: 1, userId: 'opponent', cellId: '0-0', bombFounded: false },
+        { actionId: 2, userId: 'opponent', cellId: '1-2', bombFounded: true },
+        { actionId: 3, userId: 'opponent', cellId: '2-3', bombFounded: false },
+        { actionId: 4, userId: 'opponent', cellId: '3-1', bombFounded: true },
+        // Add more actions as needed
+    ];
     // Update the mines founded based on flags and revealed mines
     useEffect(() => {
         const foundedMines = flaggedCount + revealedMineCount; // Correctly flagged or revealed mines
@@ -115,6 +128,88 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         }
         setBoard(newBoard);
     };
+
+    useEffect(() => {
+        if (turn === 'opponent' && currentActionIndex < Actions.length) {
+            const action = Actions[currentActionIndex];
+
+            // Ensure action and cellId are defined before proceeding
+            if (action && action.cellId) {
+                const [rowIndexStr, colIndexStr] = action.cellId.split('-');
+                const rowIndex = Number(rowIndexStr);
+                const colIndex = Number(colIndexStr);
+
+                // Ensure the indices are valid numbers
+                if (
+                    !isNaN(rowIndex) &&
+                    !isNaN(colIndex) &&
+                    rowIndex >= 0 &&
+                    rowIndex < boardSize &&
+                    colIndex >= 0 &&
+                    colIndex < boardSize
+                ) {
+                    const newBoard = [...board];
+                    newBoard[rowIndex]![colIndex]!.status = 'revealed';
+
+                    // Simulate the opponent action
+                    if (action.bombFounded) {
+                        setRevealedMineCount((prev) => prev + 1);
+                        onAction(action.userId, action.cellId, true); // Bomb found
+                    } else {
+                        onAction(action.userId, action.cellId, false); // No bomb
+                    }
+
+                    setBoard(newBoard);
+                    setCurrentActionIndex((prev) => prev + 1); // Move to the next action
+                    switchTurn(); // Switch turn after opponent's action
+                }
+            }
+        }
+
+        if (turn === 'user' && userAction) {
+            // Check if userAction exists
+            const { cellId, bombFounded } = userAction; // Destructure the user action
+            if (cellId) {
+                const [rowIndexStr, colIndexStr] = cellId.split('-');
+                const rowIndex = Number(rowIndexStr);
+                const colIndex = Number(colIndexStr);
+
+                // Ensure the indices are valid numbers
+                if (
+                    !isNaN(rowIndex) &&
+                    !isNaN(colIndex) &&
+                    rowIndex >= 0 &&
+                    rowIndex < boardSize &&
+                    colIndex >= 0 &&
+                    colIndex < boardSize
+                ) {
+                    const newBoard = [...board];
+                    newBoard[rowIndex]![colIndex]!.status = 'revealed';
+
+                    if (bombFounded) {
+                        setRevealedMineCount((prev) => prev + 1);
+                        onAction('user', cellId, true); // Bomb found
+                    } else {
+                        onAction('user', cellId, false); // No bomb
+                    }
+
+                    setBoard(newBoard);
+                    resetTimer(); // Reset the timer when the user acts
+                    switchTurn(); // Switch turn after user's action
+                }
+            }
+        }
+    }, [
+        turn,
+        currentActionIndex,
+        Actions,
+        boardSize,
+        onAction,
+        switchTurn,
+        board,
+        resetTimer,
+        userAction,
+    ]);
 
     return (
         <div>
