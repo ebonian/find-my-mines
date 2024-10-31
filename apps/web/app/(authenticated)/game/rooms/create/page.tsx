@@ -9,11 +9,13 @@ import type { Room } from '@repo/shared-types';
 import { useGameContext } from '../../../../_contexts/game';
 import { Radio } from '../../../../_components/ui/radio';
 import { CardCheckbox } from '../../../../_components/ui/card';
+import { useAuthContext } from '../../../../_contexts/auth';
 
 export default function Create() {
     const router = useRouter();
+    const { user } = useAuthContext();
     const { createRoom } = useGameContext();
-    const { socket } = useSocket();
+
     const [roomName, setRoomName] = useState('');
     const [selectedType, setSelectedType] = useState<'normal' | 'extreme'>(
         'normal'
@@ -31,13 +33,22 @@ export default function Create() {
     };
 
     const handleCreateRoom = async () => {
+        if (!roomName.trim()) {
+            return alert('Room name is required.');
+        }
+
+        if (isLoading) return;
+
+        if (!user) {
+            return alert('Not authenticated.');
+        }
+
         setIsLoading(true);
 
         const newRoom = {
-            id: crypto.randomUUID(),
             name: roomName.trim(),
-            creator: socket.id,
-            players: [socket.id],
+            creator: user._id,
+            players: [user._id],
             type: selectedType,
             state: 'waiting',
             seed: customSeed,
