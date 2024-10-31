@@ -38,7 +38,7 @@ export default function Page() {
                 </div>
                 <div className='flex w-full max-w-md flex-col items-center space-y-2'>
                     <GoogleLoginButton />
-                    <p className='text-center text-lg font-bold text-white'>
+                    {/* <p className='text-center text-lg font-bold text-white'>
                         OR
                     </p>
                     <div className='flex w-full flex-col items-center'>
@@ -46,11 +46,11 @@ export default function Page() {
                         <p className='text-red text-center font-light italic'>
                             Progress will not be saved
                         </p>
-                    </div>
+                    </div> */}
                 </div>
-                <Button color='green' size='lg' className='max-w-min px-20'>
+                {/* <Button color='green' size='lg' className='max-w-min px-20'>
                     Play
-                </Button>
+                </Button> */}
             </div>
         </Layout>
     );
