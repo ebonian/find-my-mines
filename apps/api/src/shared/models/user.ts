@@ -6,7 +6,7 @@ export type UserInterface = User & Document;
 
 const UserSchema = new Schema({
     googleId: { type: String, required: true, unique: true },
-    username: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
     balance: { type: Number, required: true },
     score: { type: Number, required: true },
     skin: { type: Array, required: false }, // type arai wa

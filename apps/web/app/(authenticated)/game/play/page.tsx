@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Minesweeper } from './_components/minesweeper';
 import Layout from '../../../_components/common/layout';
 import MenuButton from '../../../_components/common/menu-button';
@@ -19,6 +19,8 @@ export default function Play() {
     const { resetTimer, turn, setTurn } = useGameContext();
 
     const [minesFounded, setMinesFounded] = useState(0);
+    const [userFoundedBombs, setuserFoundedBombs] = useState(0);
+    const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
     const [actionId, setActionId] = useState(0);
     const [actions, setActions] = useState<Action[]>([]);
     const handleAction = (
@@ -38,6 +40,19 @@ export default function Play() {
         setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
     };
 
+    // Calculate number of bombs found by user and opponent based on actions
+    useEffect(() => {
+        const userFoundedBombs = actions.filter(
+            (action) => action.userId === 'user' && action.bombFounded
+        ).length;
+        setuserFoundedBombs(userFoundedBombs); // Update user mines founded state
+
+        const opponentFoundedBombs = actions.filter(
+            (action) => action.userId === 'opponent' && action.bombFounded
+        ).length;
+        setopponentFoundedBombs(opponentFoundedBombs); // Update opponent mines founded state
+    }, [actions]); // Update whenever actions change
+
     return (
         <Layout
             className='flex flex-col items-center gap-6 py-12'
@@ -50,7 +65,10 @@ export default function Play() {
             >
                 Set to {turn !== 'user' ? 'User' : 'Opponent'} turn
             </button>
-            <Scoreboard userFoundedBombs={0} opponentFoundedBombs={0} />
+            <Scoreboard
+                userFoundedBombs={userFoundedBombs}
+                opponentFoundedBombs={opponentFoundedBombs}
+            />
             <Status />
             <Minesweeper
                 setMinesFounded={setMinesFounded}
