@@ -1,5 +1,4 @@
-export interface Room {
-    _id: string;
+export interface RoomDto {
     name: string;
     creator: string;
     players: string[];
