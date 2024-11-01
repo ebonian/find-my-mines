@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 // import BackButton from '../_components/ui/BackButton';
-import CustomBackButton from './_components/CustomBackButton';
+import BackButton from './_components/back-button';
 import { Button } from '../_components/ui/button';
 
 export default function slotmachine() {
@@ -178,7 +178,7 @@ export default function slotmachine() {
                     className='container mx-auto py-5'
                     style={{ marginBottom: '96px' }}
                 >
-                    <CustomBackButton
+                    <BackButton
                         actionBeforeBack={motivationBeforeQuit}
                         confirmation={true}
                         setShow={setshowMotivation}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import BackButton from '../_components/ui/BackButton';
+import BackButton from '../_components/common/back-button';
 
 export default function leaderboard() {
     type returnMyData = {
@@ -170,7 +170,7 @@ export default function leaderboard() {
                     className='container mx-auto py-5'
                     style={{ marginBottom: '96px' }}
                 >
-                    <BackButton />
+                    <BackButton href='/' />
                     <p
                         className='mb-14 mt-12 text-center text-6xl font-bold'
                         style={{ color: '#FFEDDF' }}
