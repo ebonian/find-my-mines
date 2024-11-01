@@ -69,7 +69,6 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         bombFounded: boolean;
     } | null>(null);
     const [currentActionIndex, setCurrentActionIndex] = useState(0);
-    const [flaggedCount, setFlaggedCount] = useState(0);
     const [revealedMineCount, setRevealedMineCount] = useState(0);
 
     // Sample hardcoded action array for opponent's turn
@@ -82,9 +81,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     ];
     // Update the mines founded based on flags and revealed mines
     useEffect(() => {
-        const foundedMines = flaggedCount + revealedMineCount; // Correctly flagged or revealed mines
+        const foundedMines = revealedMineCount; // Correctly flagged or revealed mines
         setMinesFounded(foundedMines);
-    }, [flaggedCount, revealedMineCount, setMinesFounded]);
+    }, [revealedMineCount, setMinesFounded]);
 
     // Handle cell click for revealing or flagging
     const clickHandlerComponent = (
@@ -115,16 +114,6 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
             // Reset the timer when a cell is revealed
             switchTurn();
             resetTimer();
-        } else if (event.button === 2) {
-            event.preventDefault();
-            event.stopPropagation();
-            if (newBoard[rowIndex]![colIndex]!.status === 'hidden') {
-                newBoard[rowIndex]![colIndex]!.status = 'flagged';
-                setFlaggedCount((prev) => prev + 1); // Increment flagged count
-            } else if (newBoard[rowIndex]![colIndex]!.status === 'flagged') {
-                newBoard[rowIndex]![colIndex]!.status = 'hidden';
-                setFlaggedCount((prev) => prev - 1); // Decrement flagged count
-            }
         }
         setBoard(newBoard);
     };
