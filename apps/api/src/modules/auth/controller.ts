@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import passport from 'passport';
+import userService from '../users/service';
+import { User } from '@repo/shared-types';
 
 const router = Router();
 
-router.get('/auth/me', (req, res) => {
+router.get('/auth/me', async (req, res) => {
     if (req.user) {
-        res.json(req.user);
+        const reqUser = req.user as User;
+        const user = await userService.getUserById(reqUser._id);
+        res.json(user);
     } else {
         res.sendStatus(401);
     }

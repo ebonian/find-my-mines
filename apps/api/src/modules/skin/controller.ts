@@ -1,51 +1,45 @@
 import { Router } from 'express';
-import User from '../../shared/models/user';
-import Skin from '../../shared/models/skin';
+import skinService from './service';
+import { User as User } from '@repo/shared-types';
+import userService from '../users/service';
 
-// create router
 const router = Router();
 
-// create skins
 router.post('/skins', async (req, res) => {
-    const { price } = req.body;
     try {
-        // create skin
-        const skin = await Skin.create({ price });
-        res.json(skin);
+        const { name, price } = req.body;
+        const createdSkin = await skinService.createSkin({ name, price });
+        res.json(createdSkin);
     } catch (err) {
         res.status(500).json({ message: err });
     }
 });
 
-// get skins user wants to buy and find the price
 router.get('/skins/:id', async (req, res) => {
     try {
-        // find skin by id
-        const skin = await Skin.findById(req.params.id);
+        const skin = await skinService.getSkinById(req.params.id);
         res.json(skin);
     } catch (err) {
         res.status(500).json({ message: err });
     }
 });
 
-// get all skins
 router.get('/skins', async (req, res) => {
     try {
-        // find all skins
-        const skins = await Skin.find();
+        const skins = await skinService.getSkins();
         res.json(skins);
     } catch (err) {
         res.status(500).json({ message: err });
     }
 });
 
-// buy skins and update user balance
 router.post('/skins/buy', async (req, res) => {
     try {
-        const { userId, skinId } = req.body;
+        const { skinId } = req.body;
 
-        const user = await User.findById(userId);
-        const skin = await Skin.findById(skinId);
+        const reqUser = req.user as User;
+        const user = await userService.getUserById(reqUser._id);
+        const skin = await skinService.getSkinById(skinId);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -65,20 +59,12 @@ router.post('/skins/buy', async (req, res) => {
                 .json({ message: 'User already has this skin' });
         }
 
-        await User.findByIdAndUpdate(
-            userId,
-            {
-                balance: user.balance - skin.price,
-                skin: [...user.skin, skinId],
-            },
-            { new: true }
-        )
-            .then((user) => {
-                res.json(user);
-            })
-            .catch((err) => {
-                res.status(500).json({ message: err });
-            });
+        const updatedUser = await userService.updateUserById(reqUser._id, {
+            balance: user.balance - skin.price,
+            skin: [...user.skin, skinId],
+        });
+
+        res.json(updatedUser);
     } catch (err) {
         res.status(500).json({ message: err });
     }
