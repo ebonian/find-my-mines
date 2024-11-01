@@ -118,6 +118,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         setBoard(newBoard);
     };
 
+    // Opponent's Turn - Auto Play Logic
     useEffect(() => {
         if (turn === 'opponent' && currentActionIndex < Actions.length) {
             const action = Actions[currentActionIndex];
@@ -150,41 +151,16 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
 
                     setBoard(newBoard);
                     setCurrentActionIndex((prev) => prev + 1); // Move to the next action
-                    switchTurn(); // Switch turn after opponent's action
-                }
-            }
-        }
 
-        if (turn === 'user' && userAction) {
-            // Check if userAction exists
-            const { cellId, bombFounded } = userAction; // Destructure the user action
-            if (cellId) {
-                const [rowIndexStr, colIndexStr] = cellId.split('-');
-                const rowIndex = Number(rowIndexStr);
-                const colIndex = Number(colIndexStr);
-
-                // Ensure the indices are valid numbers
-                if (
-                    !isNaN(rowIndex) &&
-                    !isNaN(colIndex) &&
-                    rowIndex >= 0 &&
-                    rowIndex < boardSize &&
-                    colIndex >= 0 &&
-                    colIndex < boardSize
-                ) {
-                    const newBoard = [...board];
-                    newBoard[rowIndex]![colIndex]!.status = 'revealed';
-
-                    if (bombFounded) {
-                        setRevealedMineCount((prev) => prev + 1);
-                        onAction('user', cellId, true); // Bomb found
-                    } else {
-                        onAction('user', cellId, false); // No bomb
-                    }
-
-                    setBoard(newBoard);
-                    resetTimer(); // Reset the timer when the user acts
-                    switchTurn(); // Switch turn after user's action
+                    // Switch turn after the opponent action, with a slight delay for UX purposes
+                    setTimeout(() => {
+                        // If the opponent has more actions, continue; otherwise, switch back to the user
+                        if (currentActionIndex < Actions.length - 1) {
+                            setCurrentActionIndex((prev) => prev + 1); // Move to next opponent action
+                        } else {
+                            switchTurn(); // Switch back to the user
+                        }
+                    }, 2000); // Add a 2-second delay for better UX
                 }
             }
         }
@@ -193,11 +169,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         currentActionIndex,
         Actions,
         boardSize,
+        board,
         onAction,
         switchTurn,
-        board,
-        resetTimer,
-        userAction,
     ]);
 
     return (
