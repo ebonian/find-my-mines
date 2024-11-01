@@ -23,6 +23,7 @@ interface MinesweeperProps {
         cellId: string | null,
         bombFounded: boolean
     ) => void;
+    onEnd: () => void;
 }
 
 // Board size and number of mines
@@ -60,6 +61,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     switchTurn,
     turn,
     onAction,
+    onEnd,
 }) => {
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines)
@@ -83,6 +85,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     useEffect(() => {
         const foundedMines = revealedMineCount; // Correctly flagged or revealed mines
         setMinesFounded(foundedMines);
+        if (foundedMines === numOfMines) {
+            onEnd();
+        }
     }, [revealedMineCount, setMinesFounded]);
 
     // Handle cell click for revealing or flagging

@@ -6,6 +6,7 @@ import Layout from '../../../_components/common/layout';
 import MenuButton from '../../../_components/common/menu-button';
 import Scoreboard from './_components/scoreboard';
 import Status from './_components/status';
+import { useRouter } from '../../../../node_modules/next/navigation';
 import { useGameContext } from '../../../_contexts/game';
 
 interface Action {
@@ -16,8 +17,9 @@ interface Action {
 }
 
 export default function Play() {
-    const { resetTimer, turn, setTurn } = useGameContext();
-
+    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } = useGameContext();
+    
+    const router = useRouter();
     const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
@@ -39,6 +41,11 @@ export default function Play() {
         setActionId((prevID) => prevID + 1);
         setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
     };
+
+    const handleEnd = () => {
+        updateRoomState(joinedGameRoom, "end");
+        router.push("/game/end");
+    }
 
     // Calculate number of bombs found by user and opponent based on actions
     useEffect(() => {
@@ -78,6 +85,7 @@ export default function Play() {
                 }
                 turn={turn}
                 onAction={handleAction}
+                onEnd={handleEnd}
             />
         </Layout>
     );
