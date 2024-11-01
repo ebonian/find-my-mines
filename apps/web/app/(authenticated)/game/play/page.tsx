@@ -25,6 +25,10 @@ export default function Play() {
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
     const [actionId, setActionId] = useState(0);
     const [actions, setActions] = useState<Action[]>([]);
+    const seedAndType = {
+        seed: joinedGameRoom.seed,
+        type: joinedGameRoom.type,
+    }
     const handleAction = (
         userId: string,
         cellId: string | null,
@@ -78,6 +82,7 @@ export default function Play() {
             />
             <Status />
             <Minesweeper
+                seedAndType={seedAndType}
                 setMinesFounded={setMinesFounded}
                 resetTimer={resetTimer}
                 switchTurn={() =>
