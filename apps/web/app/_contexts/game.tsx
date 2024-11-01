@@ -101,11 +101,9 @@ export default function GameContextProvider({
             return;
         }
 
-        const userId = user._id;
-
         send('join-room', {
             roomId,
-            userId,
+            userId: user._id,
         });
     };
 

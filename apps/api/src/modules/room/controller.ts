@@ -98,6 +98,7 @@ export default async function roomController(socket: Socket) {
 
                     const gameRooms = await RoomModel.find();
                     socket.broadcast.emit('rooms', gameRooms);
+                    socket.emit('user-joined-room', joinRoom);
                 } else if (joinRoom.state === 'end') {
                     socket.emit('error', `Room "${roomId}" is already ended.`);
                 } else {
