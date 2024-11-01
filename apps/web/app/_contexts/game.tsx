@@ -112,14 +112,14 @@ export default function GameContextProvider({
             return;
         }
         send('get-rooms', null);
-        send('get-user-joined-room', { userId: user._id });
+        send('get-joined-room', { userId: user._id });
     }, [user]);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
             setGameRooms(rooms);
         });
-        subscribe('user-joined-room', (room: Room) => {
+        subscribe('joined-room', (room: Room) => {
             setJoinedGameRoom(room);
         });
     }, [subscribe]);
