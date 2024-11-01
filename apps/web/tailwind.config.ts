@@ -16,8 +16,8 @@ const config: Config = {
                 red: '#C33432',
             },
             animation: {
-                'spinFast': 'spin 0.1s linear infinite',
-            }
+                spinFast: 'spin 0.1s linear infinite',
+            },
         },
     },
     plugins: [],

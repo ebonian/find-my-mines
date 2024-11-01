@@ -9,6 +9,7 @@ import passport from 'passport';
 import { googleStrategy } from './utils/auth';
 import { AuthRouter } from './modules/auth/controller';
 import { UserRouter } from './modules/users/controller';
+import { SkinRouter } from './modules/skin/controller';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 if (!CLIENT_URL) {
@@ -47,7 +48,9 @@ export const createServer = (): Application => {
             res.json({ message: 'Find My Mines API is running' });
         })
         .use(AuthRouter)
-        .use(UserRouter);
+        .use(UserRouter)
+        .use(SkinRouter)
+        ;
 
     passport.use(googleStrategy);
     passport.serializeUser((user, done) => {
