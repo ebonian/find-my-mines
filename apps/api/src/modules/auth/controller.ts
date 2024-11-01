@@ -18,7 +18,7 @@ router.get('/auth/me', async (req, res) => {
 router.post('/auth/logout', (req, res) => {
     req.logout((err) => {
         if (err) {
-            return res.status(500).send;
+            return res.sendStatus(500);
         }
     });
     res.sendStatus(200);
