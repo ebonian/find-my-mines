@@ -1,4 +1,0 @@
-# Users Module
-
--   `controller`
--   `services`

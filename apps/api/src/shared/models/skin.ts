@@ -5,6 +5,7 @@ import type { Skin } from '@repo/shared-types';
 export type SkinInterface = Skin & Document;
 
 const SkinSchema = new Schema({
+    name: { type: String, required: true },
     price: { type: Number, required: true },
 });
 
