@@ -1,5 +1,4 @@
 import type { Socket } from 'socket.io';
-import type { Room } from '@repo/shared-types';
 import roomService from './service';
 import gameService from '../game/service';
 import { RoomDto } from './dto';
