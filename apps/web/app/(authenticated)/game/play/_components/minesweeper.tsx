@@ -14,6 +14,10 @@ interface cell {
 }
 
 interface MinesweeperProps {
+    seedAndType: {
+        seed: string,
+        type: "normal" | "extreme",
+    },
     setMinesFounded: Dispatch<SetStateAction<number>>;
     resetTimer: () => void; // Add resetTimer to the props
     switchTurn: () => void;
@@ -26,12 +30,49 @@ interface MinesweeperProps {
     onEnd: () => void;
 }
 
+const coordinatesGen = ({ seed, type }: { seed: string, type: "normal" | "extreme" }): { x: number; y: number }[] => {
+    const coordAmount = (type === "normal") ? 11 : 35;
+    const coordMax = (type === "normal") ? 6 : 9;
+    const coordinates = new Set<string>();
+    let jumper = 0;
+    let runner = 0;
+
+    while (coordinates.size < coordAmount) {
+        const segmentX = seed.substring(runner * 4, ((runner * 4) + 1 + jumper) % coordAmount);
+        const segmentY = seed.substring((runner * 4) + 2, ((runner * 4) + 3 + jumper) % coordAmount);
+        const numCodeX = Array.from(segmentX).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const numCodeY = Array.from(segmentY).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const coorX = Math.floor(numCodeX) % coordMax;
+        const coorY = Math.floor(numCodeY) % coordMax;
+        const coordKey = `${coorX},${coorY}`;
+        
+        coordinates.add(coordKey);
+        runner += 1;
+        if (runner === coordAmount) {
+            runner = 0;
+            jumper += 1;
+        }
+    }
+
+    const coordinatesArray = Array.from(coordinates).map((coord: string) => {
+        const [x, y] = coord.split(',').map(Number);
+        if (x !== undefined && y !== undefined) {
+            return { x, y };
+        } else {
+            throw new Error(`Invalid coordinate generated: ${coord}`);
+        }
+    });
+    console.log(coordinatesArray);
+
+    return coordinatesArray;
+}
+
 // Board size and number of mines
-const boardSize = 6;
-const numOfMines = 11;
+// const boardSize = 6;
+// const numOfMines = 11;
 
 // Utility function to generate the board
-const createBoard = (size: number, mines: number): cell[][] => {
+const createBoard = (size: number, mines: number, coordinates: { x: number; y: number }[]): cell[][] => {
     let board: cell[][] = Array.from({ length: size }, () =>
         Array.from({ length: size }, () => ({
             hasMine: false,
@@ -41,14 +82,21 @@ const createBoard = (size: number, mines: number): cell[][] => {
     );
 
     // Add mines randomly
-    let placedMines = 0;
-    while (placedMines < mines) {
-        const row = Math.floor(Math.random() * size);
-        const col = Math.floor(Math.random() * size);
-        if (!board[row]![col]!.hasMine) {
-            board[row]![col]!.hasMine = true;
-            placedMines++;
-        }
+    // let placedMines = 0;
+    // while (placedMines < mines) {
+    //     const row = Math.floor(Math.random() * size);
+    //     const col = Math.floor(Math.random() * size);
+    //     if (!board[row]![col]!.hasMine) {
+    //         board[row]![col]!.hasMine = true;
+    //         placedMines++;
+    //     }
+    // }
+
+    // Add mines from seed
+    for (let i = 0; i < mines; i++) {
+        const row = coordinates[i]!["y"];
+        const col = coordinates[i]!["x"];
+        board[row]![col]!.hasMine = true;
     }
 
     return board;
@@ -56,6 +104,7 @@ const createBoard = (size: number, mines: number): cell[][] => {
 
 // Main Minesweeper component
 const Minesweeper: React.FC<MinesweeperProps> = ({
+    seedAndType,
     setMinesFounded,
     resetTimer,
     switchTurn,
@@ -63,8 +112,11 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     onAction,
     onEnd,
 }) => {
+    const boardSize = seedAndType.type === "normal" ? 6 : 9;
+    const numOfMines = seedAndType.type === "normal" ? 11 : 35;
+    const coordinates = coordinatesGen(seedAndType)
     const [board, setBoard] = useState<cell[][]>(
-        createBoard(boardSize, numOfMines)
+        createBoard(boardSize, numOfMines, coordinates)
     );
     const [userAction, setUserAction] = useState<{
         cellId: string | null;
