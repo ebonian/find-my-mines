@@ -62,7 +62,6 @@ const coordinatesGen = ({ seed, type }: { seed: string, type: "normal" | "extrem
             throw new Error(`Invalid coordinate generated: ${coord}`);
         }
     });
-    console.log(coordinatesArray);
 
     return coordinatesArray;
 }
