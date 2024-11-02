@@ -6,6 +6,7 @@ import Layout from '../../../_components/common/layout';
 import MenuButton from '../../../_components/common/menu-button';
 import Scoreboard from './_components/scoreboard';
 import Status from './_components/status';
+import axios from '../../../../node_modules/axios/index';
 import { useRouter } from '../../../../node_modules/next/navigation';
 import { useGameContext } from '../../../_contexts/game';
 
@@ -47,6 +48,9 @@ export default function Play() {
     };
 
     const handleEnd = () => {
+        // if (userFoundedBombs > opponentFoundedBombs) {
+        //     const response = await axios.patch(`/users/${}`);
+        // }
         updateRoomState(joinedGameRoom, "end");
         router.push("/game/end");
     }
