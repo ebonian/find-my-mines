@@ -17,7 +17,7 @@ router.get('/users/:id', async (req, res) => {
     }
 });
 
-router.get('/users/leaderboard', async (req, res) => {
+router.get('/users/get/leaderboard', async (req, res) => {
     try {
         const users = await userService.getTopNUsers(5);
 
@@ -27,7 +27,7 @@ router.get('/users/leaderboard', async (req, res) => {
     }
 });
 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users/update/:id', async (req, res) => {
     try {
         const { updatingUser } = req.body;
 
