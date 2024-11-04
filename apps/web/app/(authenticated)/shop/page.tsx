@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { Button } from '../../_components/ui/button';
 import Image from 'next/image';
@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import axios from '../../_lib/axios';
 
 export default function Page() {
-
     const { user } = useAuthContext();
 
     if (!user) {
@@ -39,7 +38,7 @@ export default function Page() {
     >([]);
 
     console.log(shopItems);
-    
+
     // const skins = [
     //     {
     //         id: 1,
@@ -81,7 +80,7 @@ export default function Page() {
                                         fill
                                     />
                                 </div>
-                                {user.skin.includes(skin._id) ? (
+                                {user.skins.includes(skin._id) ? (
                                     <Button
                                         variant='outline'
                                         color='orange'

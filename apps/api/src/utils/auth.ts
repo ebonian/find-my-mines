@@ -37,7 +37,7 @@ export const googleStrategy = new GoogleStrategy(
                         username: profile.displayName,
                         balance: 0,
                         score: 0,
-                        skin: {},
+                        skins: ['Default'],
                     });
                     newUser.save();
                     return done(null, newUser);
