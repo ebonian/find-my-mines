@@ -24,6 +24,10 @@
         "dev": {
             "cache": false,
             "persistent": true
+        },
+        "db:seed": {
+            "cache": false,
+            "persistent": true
         }
     }
 }
