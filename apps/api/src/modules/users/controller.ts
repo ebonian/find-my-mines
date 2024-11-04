@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userService from './service';
+import { User } from '@repo/shared-types';
 
 const router = Router();
 

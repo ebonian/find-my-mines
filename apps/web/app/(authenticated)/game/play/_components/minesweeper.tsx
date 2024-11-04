@@ -3,6 +3,7 @@
 import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { cn } from '../../../../_lib/utils';
 import Image from 'next/image';
+import { useGameContext } from '../../../../_contexts/game';
 
 // Define the cell status type and cell interface
 type cellStatus = 'hidden' | 'revealed' | 'flagged';
@@ -15,9 +16,9 @@ interface cell {
 
 interface MinesweeperProps {
     seedAndType: {
-        seed: string,
-        type: "normal" | "extreme",
-    },
+        seed: string;
+        type: 'normal' | 'extreme';
+    };
     setMinesFounded: Dispatch<SetStateAction<number>>;
     resetTimer: () => void; // Add resetTimer to the props
     switchTurn: () => void;
@@ -30,22 +31,40 @@ interface MinesweeperProps {
     onEnd: () => void;
 }
 
-const coordinatesGen = ({ seed, type }: { seed: string, type: "normal" | "extreme" }): { x: number; y: number }[] => {
-    const coordAmount = (type === "normal") ? 11 : 35;
-    const coordMax = (type === "normal") ? 6 : 9;
+const coordinatesGen = ({
+    seed,
+    type,
+}: {
+    seed: string;
+    type: 'normal' | 'extreme';
+}): { x: number; y: number }[] => {
+    const coordAmount = type === 'normal' ? 11 : 35;
+    const coordMax = type === 'normal' ? 6 : 9;
     const coordinates = new Set<string>();
     let jumper = 0;
     let runner = 0;
 
     while (coordinates.size < coordAmount) {
-        const segmentX = seed.substring(runner * 4, ((runner * 4) + 1 + jumper) % coordAmount);
-        const segmentY = seed.substring((runner * 4) + 2, ((runner * 4) + 3 + jumper) % coordAmount);
-        const numCodeX = Array.from(segmentX).reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        const numCodeY = Array.from(segmentY).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const segmentX = seed.substring(
+            runner * 4,
+            (runner * 4 + 1 + jumper) % coordAmount
+        );
+        const segmentY = seed.substring(
+            runner * 4 + 2,
+            (runner * 4 + 3 + jumper) % coordAmount
+        );
+        const numCodeX = Array.from(segmentX).reduce(
+            (acc, char) => acc + char.charCodeAt(0),
+            0
+        );
+        const numCodeY = Array.from(segmentY).reduce(
+            (acc, char) => acc + char.charCodeAt(0),
+            0
+        );
         const coorX = Math.floor(numCodeX) % coordMax;
         const coorY = Math.floor(numCodeY) % coordMax;
         const coordKey = `${coorX},${coorY}`;
-        
+
         coordinates.add(coordKey);
         runner += 1;
         if (runner === coordAmount) {
@@ -64,14 +83,18 @@ const coordinatesGen = ({ seed, type }: { seed: string, type: "normal" | "extrem
     });
 
     return coordinatesArray;
-}
+};
 
 // Board size and number of mines
 // const boardSize = 6;
 // const numOfMines = 11;
 
 // Utility function to generate the board
-const createBoard = (size: number, mines: number, coordinates: { x: number; y: number }[]): cell[][] => {
+const createBoard = (
+    size: number,
+    mines: number,
+    coordinates: { x: number; y: number }[]
+): cell[][] => {
     let board: cell[][] = Array.from({ length: size }, () =>
         Array.from({ length: size }, () => ({
             hasMine: false,
@@ -93,8 +116,8 @@ const createBoard = (size: number, mines: number, coordinates: { x: number; y: n
 
     // Add mines from seed
     for (let i = 0; i < mines; i++) {
-        const row = coordinates[i]!["y"];
-        const col = coordinates[i]!["x"];
+        const row = coordinates[i]!['y'];
+        const col = coordinates[i]!['x'];
         board[row]![col]!.hasMine = true;
     }
 
@@ -111,9 +134,12 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     onAction,
     onEnd,
 }) => {
-    const boardSize = seedAndType.type === "normal" ? 6 : 9;
-    const numOfMines = seedAndType.type === "normal" ? 11 : 35;
-    const coordinates = coordinatesGen(seedAndType)
+    const { equippedSkin, skins } = useGameContext();
+    const activeSkin = skins.find((skin) => skin.name === equippedSkin)!;
+
+    const boardSize = seedAndType.type === 'normal' ? 6 : 9;
+    const numOfMines = seedAndType.type === 'normal' ? 11 : 35;
+    const coordinates = coordinatesGen(seedAndType);
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines, coordinates)
     );
@@ -241,11 +267,17 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
                             className={cn(
                                 'relative h-24 w-24',
                                 cell.status === 'revealed'
-                                    ? 'border-rgba(255, 237, 223,0.65) border-opacity-0.2 border-2 bg-[#0D1321] bg-opacity-65'
-                                    : (rowIndex + colIndex) % 2 === 0
-                                      ? 'bg-[#191B27]'
-                                      : 'bg-black'
+                                    ? 'border-rgba(255, 237, 223,0.65) border-opacity-0.2 border-2'
+                                    : ''
                             )}
+                            style={{
+                                background:
+                                    cell.status === 'revealed'
+                                        ? activeSkin.colors[0]
+                                        : (rowIndex + colIndex) % 2 === 0
+                                          ? activeSkin.colors[1]
+                                          : activeSkin.colors[0],
+                            }}
                             onClick={(e) =>
                                 clickHandlerComponent(e, rowIndex, colIndex)
                             }
