@@ -1,6 +1,9 @@
 {
     "extends": "@repo/typescript-config/expressjs.json",
-    "compilerOptions": {},
-    "include": ["**/*.ts", "**/*.tsx"],
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "./src"
+    },
+    "include": ["src/**/*"],
     "exclude": ["node_modules"]
 }

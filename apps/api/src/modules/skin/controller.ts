@@ -2,6 +2,7 @@ import { Router } from 'express';
 import skinService from './service';
 import { User as User } from '@repo/shared-types';
 import userService from '../users/service';
+import { AuthGuard } from '../../shared/middlewares/auth';
 
 const router = Router();
 
@@ -33,7 +34,7 @@ router.get('/skins', async (req, res) => {
     }
 });
 
-router.post('/skins/buy', async (req, res) => {
+router.post('/skins/buy', AuthGuard, async (req, res) => {
     try {
         const { skinId } = req.body;
 

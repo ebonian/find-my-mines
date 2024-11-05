@@ -3,6 +3,7 @@
 import { createContext, useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { env } from 'next-runtime-env';
 
 interface SocketContextValue {
     socket: any;
@@ -32,14 +33,7 @@ export default function SocketContextProvider({
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
-        if (!NEXT_PUBLIC_SERVER_URL) {
-            throw new Error(
-                'NEXT_PUBLIC_SERVER_URL environment variable not set'
-            );
-        }
-
-        const socket = io(NEXT_PUBLIC_SERVER_URL, {
+        const socket = io(env('NEXT_PUBLIC_SERVER_URL'), {
             autoConnect: true,
         });
         setSocket(socket);

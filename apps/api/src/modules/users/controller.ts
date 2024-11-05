@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import userService from './service';
-import { User } from '@repo/shared-types';
+import { AuthGuard } from '../../shared/middlewares/auth';
+import type { User } from '@repo/shared-types';
 
 const router = Router();
 
@@ -28,18 +29,19 @@ router.get('/users/leaderboard', async (req, res) => {
     }
 });
 
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users', AuthGuard, async (req, res) => {
     try {
+        const reqUser = req.user as User;
         const { updatingUser } = req.body;
 
-        const user = await userService.getUserById(req.params.id);
+        const user = await userService.getUserById(reqUser._id);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         const updatedUser = await userService.updateUserById(
-            req.params.id,
+            reqUser._id,
             updatingUser
         );
 
