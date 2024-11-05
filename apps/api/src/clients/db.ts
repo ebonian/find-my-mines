@@ -5,8 +5,8 @@ if (!MONGODB_URI) {
     throw new Error('MONGODB_URI not set in environment variables');
 }
 
-export const setupDB = (): void => {
-    mongoose
+export const setupDB = async (): Promise<void> => {
+    await mongoose
         .connect(MONGODB_URI)
         .then(() => {
             console.log('MongoDB connected');

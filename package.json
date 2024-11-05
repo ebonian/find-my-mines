@@ -5,7 +5,8 @@
         "build": "dotenv -- turbo build",
         "dev": "dotenv -- turbo dev",
         "lint": "turbo lint",
-        "format": "prettier --write \"**/*.{ts,tsx,md,js,mjs,json,yml}\""
+        "format": "prettier --write \"**/*.{ts,tsx,md,js,mjs,json,yml}\"",
+        "db:seed": "dotenv -- turbo db:seed"
     },
     "devDependencies": {
         "dotenv-cli": "^7.4.2",
