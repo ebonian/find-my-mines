@@ -21,7 +21,6 @@ export default function Play() {
     const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
-    const [actionId, setActionId] = useState(0);
     const [actions, setActions] = useState<Action[]>([]);
     const { actionArray, setActionHandler } = useGameContext();
     const seedAndType = {
@@ -31,7 +30,7 @@ export default function Play() {
     const handleAction = (
         id: number,
         userId: string,
-        cellId: number | null,
+        cellId: string | null,
         bombFound: boolean
     ) => {
         const newAction: Action = {
@@ -42,7 +41,6 @@ export default function Play() {
         };
 
         setActions((prevActions) => [...prevActions, newAction]);
-        setActionId((prevID) => prevID + 1);
         setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
         setActionHandler(newAction);
     };

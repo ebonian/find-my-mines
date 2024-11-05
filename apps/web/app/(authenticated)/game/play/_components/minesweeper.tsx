@@ -24,6 +24,7 @@ interface MinesweeperProps {
     switchTurn: () => void;
     turn: 'user' | 'opponent' | null;
     onAction: (
+        id: number,
         userId: string,
         cellId: string | null,
         bombFounded: boolean
@@ -182,10 +183,22 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
             // If a mine is revealed, increase the revealedMineCount
             if (newBoard[rowIndex]![colIndex]!.hasMine) {
                 setRevealedMineCount((prev) => prev + 1);
-                onAction('user', `${rowIndex}-${colIndex}`, true);
+                setCurrentActionIndex((prev) => prev + 1);
+                onAction(
+                    currentActionIndex,
+                    'user',
+                    `${rowIndex}-${colIndex}`,
+                    true
+                );
                 switchTurn();
             } else {
-                onAction('user', `${rowIndex}-${colIndex}`, false);
+                setCurrentActionIndex((prev) => prev + 1);
+                onAction(
+                    currentActionIndex,
+                    'user',
+                    `${rowIndex}-${colIndex}`,
+                    false
+                );
                 switchTurn();
             }
             // Reset the timer when a cell is revealed
@@ -221,9 +234,19 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
                     // Simulate the opponent action
                     if (action.bombFounded) {
                         setRevealedMineCount((prev) => prev + 1);
-                        onAction(action.userId, action.cellId, true); // Bomb found
+                        onAction(
+                            action.actionId,
+                            action.userId,
+                            action.cellId,
+                            true
+                        ); // Bomb found
                     } else {
-                        onAction(action.userId, action.cellId, false); // No bomb
+                        onAction(
+                            action.actionId,
+                            action.userId,
+                            action.cellId,
+                            false
+                        ); // No bomb
                     }
 
                     setBoard(newBoard);
