@@ -50,10 +50,7 @@ export default async function gameController(socket: Socket) {
         'reset',
         async (actions: Action, roomId: string, game: GameDto) => {
             try {
-                actions.id = 0;
-                actions.userId = '';
-                actions.cellId = null;
-                actions.bombFound = false;
+                game.actions = [];
 
                 game.actions.push(actions);
                 const gameUpdated = await gameService.getGameByRoomId(roomId);
