@@ -2,6 +2,7 @@ import { Router } from 'express';
 import skinService from './service';
 import { User as User } from '@repo/shared-types';
 import userService from '../users/service';
+import { AuthGuard } from '../../shared/middlewares/auth';
 
 const router = Router();
 
@@ -33,7 +34,7 @@ router.get('/skins', async (req, res) => {
     }
 });
 
-router.post('/skins/buy', async (req, res) => {
+router.post('/skins/buy', AuthGuard, async (req, res) => {
     try {
         const { skinId } = req.body;
 
@@ -53,7 +54,7 @@ router.post('/skins/buy', async (req, res) => {
             return res.status(400).json({ message: 'Insufficient balance' });
         }
 
-        if (user.skin.includes(skinId)) {
+        if (user.skins.includes(skinId)) {
             return res
                 .status(400)
                 .json({ message: 'User already has this skin' });
@@ -61,7 +62,7 @@ router.post('/skins/buy', async (req, res) => {
 
         const updatedUser = await userService.updateUserById(reqUser._id, {
             balance: user.balance - skin.price,
-            skin: [...user.skin, skinId],
+            skin: [...user.skins, skinId],
         });
 
         res.json(updatedUser);

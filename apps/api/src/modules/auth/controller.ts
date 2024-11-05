@@ -2,20 +2,17 @@ import { Router } from 'express';
 import passport from 'passport';
 import userService from '../users/service';
 import { User } from '@repo/shared-types';
+import { AuthGuard } from '../../shared/middlewares/auth';
 
 const router = Router();
 
-router.get('/auth/me', async (req, res) => {
-    if (req.user) {
-        const reqUser = req.user as User;
-        const user = await userService.getUserById(reqUser._id);
-        res.json(user);
-    } else {
-        res.sendStatus(401);
-    }
+router.get('/auth/me', AuthGuard, async (req, res) => {
+    const reqUser = req.user as User;
+    const user = await userService.getUserById(reqUser._id);
+    res.json(user);
 });
 
-router.post('/auth/logout', (req, res) => {
+router.post('/auth/logout', AuthGuard, (req, res) => {
     req.logout((err) => {
         if (err) {
             return res.sendStatus(500);
