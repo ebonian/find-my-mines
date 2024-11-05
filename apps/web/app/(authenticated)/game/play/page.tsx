@@ -9,44 +9,42 @@ import Status from './_components/status';
 import axios from '../../../_lib/axios';
 import { useAuthContext } from '../../../_contexts/auth';
 import { useRouter } from '../../../../node_modules/next/navigation';
+import { Action } from '@repo/shared-types';
 import { useGameContext } from '../../../_contexts/game';
 
-interface Action {
-    actionId: number;
-    userId: string;
-    cellId: string | null;
-    bombFounded: boolean;
-}
-
 export default function Play() {
-    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } = useGameContext();
+    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } =
+        useGameContext();
     const { user } = useAuthContext();
-    
+
     const router = useRouter();
     const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
     const [actionId, setActionId] = useState(0);
     const [actions, setActions] = useState<Action[]>([]);
+    const { actionArray, setActionHandler } = useGameContext();
     const seedAndType = {
         seed: joinedGameRoom.seed,
         type: joinedGameRoom.type,
-    }
+    };
     const handleAction = (
+        id: number,
         userId: string,
-        cellId: string | null,
-        bombFounded: boolean
+        cellId: number | null,
+        bombFound: boolean
     ) => {
         const newAction: Action = {
-            actionId: actionId + 1,
+            id: id + 1,
             userId,
             cellId,
-            bombFounded,
+            bombFound,
         };
 
         setActions((prevActions) => [...prevActions, newAction]);
         setActionId((prevID) => prevID + 1);
         setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
+        setActionHandler(newAction);
     };
 
     const handleEnd = async () => {
@@ -59,25 +57,25 @@ export default function Play() {
                     updatingUser: {
                         balance: user.balance + 20,
                         score: user.score + userFoundedBombs,
-                    }
+                    },
                 });
             }
         } catch (err) {
             console.log(err);
         }
-        updateRoomState(joinedGameRoom, "end");
-        router.push("/game/end");
-    }
+        updateRoomState(joinedGameRoom, 'end');
+        router.push('/game/end');
+    };
 
     // Calculate number of bombs found by user and opponent based on actions
     useEffect(() => {
         const userFoundedBombs = actions.filter(
-            (action) => action.userId === 'user' && action.bombFounded
+            (action) => action.userId === 'user' && action.bombFound
         ).length;
         setuserFoundedBombs(userFoundedBombs); // Update user mines founded state
 
         const opponentFoundedBombs = actions.filter(
-            (action) => action.userId === 'opponent' && action.bombFounded
+            (action) => action.userId === 'opponent' && action.bombFound
         ).length;
         setopponentFoundedBombs(opponentFoundedBombs); // Update opponent mines founded state
     }, [actions]); // Update whenever actions change

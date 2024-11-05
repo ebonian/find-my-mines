@@ -143,10 +143,6 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     const [board, setBoard] = useState<cell[][]>(
         createBoard(boardSize, numOfMines, coordinates)
     );
-    const [userAction, setUserAction] = useState<{
-        cellId: string | null;
-        bombFounded: boolean;
-    } | null>(null);
     const [currentActionIndex, setCurrentActionIndex] = useState(0);
     const [revealedMineCount, setRevealedMineCount] = useState(0);
 
@@ -192,7 +188,6 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
                 onAction('user', `${rowIndex}-${colIndex}`, false);
                 switchTurn();
             }
-
             // Reset the timer when a cell is revealed
             switchTurn();
             resetTimer();

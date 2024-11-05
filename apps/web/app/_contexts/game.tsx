@@ -7,7 +7,7 @@ import {
     useEffect,
     useCallback,
 } from 'react';
-import { Room, Skin } from '@repo/shared-types';
+import { Action, Game, Room, Skin } from '@repo/shared-types';
 import { useSocket } from './socket';
 import { useAuthContext } from './auth';
 import { seedGen } from '../_lib/seed';
@@ -26,6 +26,8 @@ interface GameContextValue {
     skins: Skin[];
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
+    actionArray: Action[];
+    setActionHandler: (actions: Action) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -41,6 +43,8 @@ const GameContext = createContext<GameContextValue>({
     skins: [],
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
+    actionArray: [],
+    setActionHandler: () => {},
 });
 
 interface GameContextProviderProps {
@@ -99,6 +103,7 @@ export default function GameContextProvider({
     const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
+    const [actionArray, setActionArray] = useState<Action[]>([]);
 
     const resetTimer = () => {
         setTimer(10);
@@ -160,6 +165,10 @@ export default function GameContextProvider({
         });
     };
 
+    const setActionHandler = (action: Action) => {
+        send('send-actions', action);
+    };
+
     useEffect(() => {
         if (!user) {
             return;
@@ -174,6 +183,10 @@ export default function GameContextProvider({
         });
         subscribe('joined-room', (room: Room) => {
             setJoinedGameRoom(room);
+        });
+        subscribe('game', (game: Game) => {});
+        subscribe('send-actions', (action: Action[]) => {
+            setActionArray(action);
         });
     }, [subscribe]);
 
@@ -192,6 +205,8 @@ export default function GameContextProvider({
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,
+                actionArray,
+                setActionHandler,
             }}
         >
             {children}
