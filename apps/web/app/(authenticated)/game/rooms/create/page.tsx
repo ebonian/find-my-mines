@@ -20,17 +20,17 @@ export default function Page() {
     const [selectedType, setSelectedType] = useState<'normal' | 'extreme'>(
         'normal'
     );
-    const [selectedPower, setSelectedPower] = useState<string[]>([]);
+    // const [selectedPower, setSelectedPower] = useState<string[]>([]);
     const [customSeed, setCustomSeed] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleChange = (value: string) => {
-        setSelectedPower((prev) =>
-            prev.includes(value)
-                ? prev.filter((item) => item !== value)
-                : [...prev, value]
-        );
-    };
+    // const handleChange = (value: string) => {
+    //     setSelectedPower((prev) =>
+    //         prev.includes(value)
+    //             ? prev.filter((item) => item !== value)
+    //             : [...prev, value]
+    //     );
+    // };
 
     const handleCreateRoom = async () => {
         if (!roomName.trim()) {
@@ -50,9 +50,8 @@ export default function Page() {
             creator: user._id,
             players: [],
             type: selectedType,
-            state: 'waiting',
+            state: "waiting",
             seed: customSeed,
-            powerUps: selectedPower,
         } as Omit<Room, '_id'>;
 
         createRoom(newRoom);
@@ -111,7 +110,7 @@ export default function Page() {
                     </div>
                 </div>
 
-                <div className='flex'>
+                {/* <div className='flex'>
                     <div className='basis-1/4 content-start'>Power Ups</div>
                     <div className='flex basis-3/4 flex-row gap-x-8'>
                         <CardCheckbox
@@ -139,7 +138,7 @@ export default function Page() {
                             label='Option 3'
                         />
                     </div>
-                </div>
+                </div> */}
                 <div className='flex'>
                     <div className='my-auto basis-1/4'>
                         Custom Seed (Optional)
