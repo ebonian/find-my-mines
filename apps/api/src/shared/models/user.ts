@@ -9,7 +9,7 @@ const UserSchema = new Schema({
     username: { type: String, required: true },
     balance: { type: Number, required: true },
     score: { type: Number, required: true },
-    skin: { type: Array, required: false }, // type arai wa
+    skins: { type: Array, required: false },
 });
 
 const UserModel = mongoose.model<UserInterface>('User', UserSchema);

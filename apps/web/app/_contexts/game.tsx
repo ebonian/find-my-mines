@@ -1,14 +1,21 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
-import { Room } from '@repo/shared-types';
+import {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    useCallback,
+} from 'react';
+import { Room, Skin } from '@repo/shared-types';
 import { useSocket } from './socket';
 import { useAuthContext } from './auth';
 import { seedGen } from '../_lib/seed';
+import axios from '../_lib/axios';
 
 interface GameContextValue {
     gameRooms: Room[];
-    createRoom: (room: Room) => void;
+    createRoom: (room: Omit<Room, '_id'>) => void;
     timer: number;
     resetTimer: () => void;
     turn: null | 'user' | 'opponent';
@@ -16,6 +23,9 @@ interface GameContextValue {
     updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
     joinRoom: (roomId: string) => void;
     joinedGameRoom: Room | null;
+    skins: Skin[];
+    equippedSkin: string;
+    setEquippedSkinHandler: (skin: string) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -28,6 +38,9 @@ const GameContext = createContext<GameContextValue>({
     setTurn: () => {},
     updateRoomState: () => {},
     joinedGameRoom: null,
+    skins: [],
+    equippedSkin: 'Default',
+    setEquippedSkinHandler: () => {},
 });
 
 interface GameContextProviderProps {
@@ -41,7 +54,47 @@ export default function GameContextProvider({
     const { subscribe, send } = useSocket();
     const { user } = useAuthContext();
 
-    // STATES
+    // GAME SKIN
+    const [skins, setSkins] = useState<Skin[]>([]);
+    const [equippedSkin, setEquippedSkin] = useState<string>('Default');
+
+    const fetchSkins = useCallback(async () => {
+        try {
+            const { data } = await axios.get('/skins');
+            setSkins(data);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
+    const setEquippedSkinHandler = (skin: string) => {
+        if (!user) {
+            return;
+        }
+
+        if (!user.skins.includes(skin)) {
+            setEquippedSkin('Default');
+            localStorage.setItem('equippedSkin', 'Default');
+        } else {
+            setEquippedSkin(skin);
+            localStorage.setItem('equippedSkin', skin);
+        }
+    };
+
+    useEffect(() => {
+        fetchSkins();
+    }, []);
+
+    useEffect(() => {
+        const equipped = localStorage.getItem('equippedSkin');
+        if (equipped) {
+            setEquippedSkinHandler(equipped);
+        } else {
+            setEquippedSkinHandler('Default');
+        }
+    }, [user]);
+
+    // GAME LOGIC
     const [gameRooms, setGameRooms] = useState<Room[]>([]);
     const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
@@ -77,7 +130,7 @@ export default function GameContextProvider({
     }, [turn]);
 
     // METHODS
-    const createRoom = async (room: Room) => {
+    const createRoom = async (room: Omit<Room, '_id'>) => {
         const seed = await seedGen({
             seed: room.seed,
             type: room.type,
@@ -136,6 +189,9 @@ export default function GameContextProvider({
                 updateRoomState,
                 joinRoom,
                 joinedGameRoom,
+                skins,
+                equippedSkin,
+                setEquippedSkinHandler,
             }}
         >
             {children}

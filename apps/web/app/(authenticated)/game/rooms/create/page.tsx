@@ -53,7 +53,7 @@ export default function Create() {
             state: 'waiting',
             seed: customSeed,
             powerUps: selectedPower,
-        } as Room;
+        } as Omit<Room, '_id'>;
 
         createRoom(newRoom);
         setIsLoading(false);
