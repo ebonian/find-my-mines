@@ -8,6 +8,7 @@ import BackButton from '../../_components/common/back-button';
 import { useAuthContext } from '../../_contexts/auth';
 import axios from '../../_lib/axios';
 import { useGameContext } from '../../_contexts/game';
+import SkinBoard from '../../_components/common/skin-board';
 
 export default function Page() {
     const { user, fetchUser } = useAuthContext();
@@ -55,15 +56,7 @@ export default function Page() {
                                 className='bg-brown rounded-3xl bg-opacity-10'
                             >
                                 <div className='flex flex-col items-center justify-center space-y-4 p-4'>
-                                    <div className='relative aspect-square w-72'>
-                                        {/* TODO: change skin image */}
-                                        <Image
-                                            src='/defaultskin.svg'
-                                            className='rounded-3xl object-contain'
-                                            alt='skin'
-                                            fill
-                                        />
-                                    </div>
+                                    <SkinBoard skin={skin} />
                                     <Button
                                         variant={
                                             !isBought
