@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react';
 // import BackButton from '../_components/ui/BackButton';
 import BackButton from './_components/back-button';
 import { Button } from '../_components/ui/button';
-import axios from '../_lib/axios';
-import { useAuthContext } from '../_contexts/auth';
 
 export default function slotmachine() {
     type emojiState = {
@@ -23,7 +21,6 @@ export default function slotmachine() {
     // };
 
     // const [session, setsession] = useState(true);
-    const { user } = useAuthContext();
     const [visual, setvisual] = useState({
         spinAnimation: false,
         buttonDisable: false,
@@ -35,7 +32,7 @@ export default function slotmachine() {
     const [hoverSlot3, sethoverSlot3] = useState(false);
 
     const totalPercent = 100;
-    const [balance, setbalance] = useState(0);
+    const [balance, setbalance] = useState(1000);
     const [gained, setgained] = useState(0);
     const [emojiSlots, setemojiSlots] = useState({
         1: '👲',
@@ -61,12 +58,6 @@ export default function slotmachine() {
         5: '🐉',
         6: '🎰',
     };
-
-    useEffect(() => {
-        if (user) {
-          setbalance(user.balance);
-        }
-      }, [user]);
 
     // useEffect(() => {
     //     if (session) {
@@ -118,19 +109,6 @@ export default function slotmachine() {
     //     );
     // }
 
-    const updateGamblerBalance = async (newBalance: number) => {
-        try {
-            const response = await axios.patch(`/users/update/${user._id}`, {
-                updatingUser : {
-                    balance: newBalance,
-                }
-            });
-        }
-        catch (exception) {
-            console.log(exception);
-        }
-    }
-
     const spinSlot = () => {
         if (balance <= 0) {
             alert("Bro's broke 😭🙏");
@@ -172,11 +150,11 @@ export default function slotmachine() {
                 }, 6500);
                 setgained(gain);
                 setbalance(bal);
-                updateGamblerBalance(bal);
+                // updateGamblerBalance(session.user.email, bal);
             } else {
-                setgained(0);
                 setbalance(balance - 20);
-                updateGamblerBalance(balance - 20);
+                setgained(0);
+                // updateGamblerBalance(session.user.email, balance - 20);
             }
             setvisual({
                 ...visual,

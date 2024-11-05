@@ -35,10 +35,11 @@ router.get('/skins', async (req, res) => {
 
 router.post('/skins/buy', async (req, res) => {
     try {
-        const { data } = req.body;
-        
-        const user = await userService.getUserById(data.userId);
-        const skin = await skinService.getSkinById(data.skinId);
+        const { skinId } = req.body;
+
+        const reqUser = req.user as User;
+        const user = await userService.getUserById(reqUser._id);
+        const skin = await skinService.getSkinById(skinId);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

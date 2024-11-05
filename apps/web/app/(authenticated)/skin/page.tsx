@@ -30,29 +30,28 @@ export default function Skin() {
     //     },
     // ];
 
-    // console.log("user.skin: ",user.skin);
+    console.log("user.skin: ",user.skin);
 
     
     useEffect(() => {
         const fetchShopItems = async () => {
             try {
-                const promises = user.skin
-                    .filter(skin => skin.length > 0)
-                    .map(skin => axios.get(`/skins/${skin}`));
+                user.skin.map(async (skin) => 
+                    {
+                        if(skin.length > 0) {
+                        const { data } = await axios.get(`/skins/${skin}`);
+                        console.log(data);
     
-                const results = await Promise.all(promises);
-                const data = results.map(result => result.data);
-    
-                // Set skinItems only once after all data has been fetched
-                console.log(data);
-                setSkinItems(data);
+                        setSkinItems(skinItems => [...skinItems, data]);
+                    }
+                })
             } catch (error) {
                 console.error(error);
             }
         };
-    
+
         fetchShopItems();
-    }, [user]);
+    }, []);
     
 
     const [skinItems, setSkinItems] = useState<
@@ -62,7 +61,9 @@ export default function Skin() {
     }[]
     >([]);
 
-    // console.log(skinItems);
+    console.log(skinItems);
+    
+
     
     return (
         <Layout

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from '../../../node_modules/next/navigation';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+// import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 
 type CustomBackButtonProps = {
     actionBeforeBack?: () => void;
@@ -13,7 +12,7 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
     confirmation = false,
     setShow,
 }) => {
-    const router = useRouter();
+    // const navigate = useNavigate();
     const [isHovered, setisHovered] = useState(false);
     const [confirmBack, setconfirmBack] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -57,14 +56,14 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
                     actionBeforeBack();
                 }
             } else {
-                router.push("/");
+                window.location.href = '/';
             }
         } else {
             if (actionBeforeBack) {
                 actionBeforeBack();
             }
 
-            router.push("/");
+            window.location.href = '/';
         }
     };
 

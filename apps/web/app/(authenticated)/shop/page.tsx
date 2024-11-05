@@ -99,10 +99,8 @@ export default function Page() {
                                         className='w-full'
                                         onClick={async () => {
                                             await axios.post('/skins/buy', {
-                                                data: {
-                                                    userId: user._id,
-                                                    skinId: skin._id,
-                                                }
+                                                userId: user._id,
+                                                skinId: skin._id,
                                             });
                                             console.log(`skin id: ${skin._id}`);
                                         }}

@@ -6,8 +6,7 @@ import Layout from '../../../_components/common/layout';
 import MenuButton from '../../../_components/common/menu-button';
 import Scoreboard from './_components/scoreboard';
 import Status from './_components/status';
-import axios from '../../../_lib/axios';
-import { useAuthContext } from '../../../_contexts/auth';
+import axios from '../../../../node_modules/axios/index';
 import { useRouter } from '../../../../node_modules/next/navigation';
 import { useGameContext } from '../../../_contexts/game';
 
@@ -22,7 +21,6 @@ export default function Play() {
     const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } = useGameContext();
     
     const router = useRouter();
-    const { user } = useAuthContext();
     const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
@@ -49,20 +47,10 @@ export default function Play() {
         setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
     };
 
-    const handleEnd = async () => {
-        if (userFoundedBombs > opponentFoundedBombs) {
-            try {
-                const response = await axios.patch(`/users/update/${user._id}`, {
-                    updatingUser : {
-                        balance: user.balance + 20,
-                        score: user.score + userFoundedBombs,
-                    }
-                });
-            }
-            catch (exception) {
-                console.log(exception);
-            }
-        }
+    const handleEnd = () => {
+        // if (userFoundedBombs > opponentFoundedBombs) {
+        //     const response = await axios.patch(`/users/${}`);
+        // }
         updateRoomState(joinedGameRoom, "end");
         router.push("/game/end");
     }
