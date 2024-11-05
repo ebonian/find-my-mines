@@ -53,7 +53,7 @@ router.post('/skins/buy', async (req, res) => {
             return res.status(400).json({ message: 'Insufficient balance' });
         }
 
-        if (user.skin.includes(skinId)) {
+        if (user.skins.includes(skin.name)) {
             return res
                 .status(400)
                 .json({ message: 'User already has this skin' });
@@ -61,8 +61,10 @@ router.post('/skins/buy', async (req, res) => {
 
         const updatedUser = await userService.updateUserById(reqUser._id, {
             balance: user.balance - skin.price,
-            skin: [...user.skin, skinId],
+            skins: [...user.skins, skin.name],
         });
+
+        console.log(updatedUser);
 
         res.json(updatedUser);
     } catch (err) {
