@@ -32,10 +32,6 @@ router.get('/users/leaderboard', async (req, res) => {
 router.patch('/users', AuthGuard, async (req, res) => {
     try {
         const reqUser = req.user as User;
-        if (!reqUser) {
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
-
         const { updatingUser } = req.body;
 
         const user = await userService.getUserById(reqUser._id);
