@@ -15,7 +15,7 @@ import axios from '../_lib/axios';
 
 interface GameContextValue {
     gameRooms: Room[];
-    createRoom: (room: Room) => void;
+    createRoom: (room: Omit<Room, '_id'>) => void;
     timer: number;
     resetTimer: () => void;
     turn: null | 'user' | 'opponent';
@@ -130,7 +130,7 @@ export default function GameContextProvider({
     }, [turn]);
 
     // METHODS
-    const createRoom = async (room: Room) => {
+    const createRoom = async (room: Omit<Room, '_id'>) => {
         const seed = await seedGen({
             seed: room.seed,
             type: room.type,
