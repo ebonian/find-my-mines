@@ -5,11 +5,13 @@ import SocketContextProvider from './_contexts/socket';
 import GameContextProvider from './_contexts/game';
 import AuthContextProvider from './_contexts/auth';
 import GameGuard from './_components/common/game-guard';
+import { PublicEnvScript } from 'next-runtime-env';
 
 const monserrat = Montserrat({
     variable: '--font-montserrat',
     display: 'swap',
     weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+    subsets: ['latin-ext'],
 });
 
 export const metadata: Metadata = {
@@ -24,6 +26,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
+            <head>
+                <PublicEnvScript />
+            </head>
             <body className={`${monserrat.className} bg-gray text-white`}>
                 <AuthContextProvider>
                     <SocketContextProvider>

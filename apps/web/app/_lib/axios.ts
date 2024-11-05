@@ -1,7 +1,8 @@
 import { default as axiosDefault } from 'axios';
+import { env } from 'next-runtime-env';
 
 const axios = axiosDefault.create({
-    baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+    baseURL: env('NEXT_PUBLIC_SERVER_URL'),
     withCredentials: true,
 });
 
