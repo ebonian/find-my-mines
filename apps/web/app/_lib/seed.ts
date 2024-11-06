@@ -128,7 +128,7 @@ export const coordinatesGen = ({
 
     const coordinatesArray = Array.from(coordinates).map((coord: string) => {
         const [x, y] = coord.split(',').map(Number);
-        return { x, y };
+        return { x: x as number, y: y as number };
     });
 
     return coordinatesArray; // TODO: fix type error @Tung

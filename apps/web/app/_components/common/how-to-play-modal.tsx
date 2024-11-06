@@ -6,12 +6,12 @@ interface HowToPlayModalProps {
 
 export default function HowToPlayModal({ onClose }: HowToPlayModalProps) {
     const howToPlay = [
-        '1. The point of this game is to win go team go',
-        '2. Fight until death',
-        '3. I need a bunch of sample text for this page',
-        '4. How to make Khaow Man Kai',
-        '5. First, You need a Rice Cooker',
-        '6. You put rice in the rice cooker',
+        '1. Find as many bombs as you can on the grid to earn points.',
+        '2. In each turn, you have 10 seconds to choose a slot on the grid that you think contains a bomb.',
+        '3. For every bomb you find, you earn points. The more bombs you uncover, the higher your score.',
+        '4. The game ends when all bombs on the grid have been found.',
+        'Good luck, and happy hunting!',
+        ,
     ];
     return (
         <div className='fixed inset-0 flex items-center justify-center bg-black/50 p-4'>

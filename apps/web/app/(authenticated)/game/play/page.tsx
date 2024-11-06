@@ -29,8 +29,8 @@ export default function Play() {
         return <div>Loading...</div>;
     }
     const seedAndType = {
-        seed: joinedGameRoom.seed,
-        type: joinedGameRoom.type,
+        seed: joinedGameRoom !== null ? joinedGameRoom.seed : '',
+        type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
     const handleAction = (
         id: number,
@@ -59,7 +59,7 @@ export default function Play() {
         //     const response = await axios.patch(`/users/${}`);
         // }
         try {
-            if (userFoundedBombs > opponentFoundedBombs) {
+            if (userFoundedBombs > opponentFoundedBombs && user !== null) {
                 const response = await axios.patch('/users', {
                     updatingUser: {
                         balance: user.balance + 20,
@@ -70,8 +70,10 @@ export default function Play() {
         } catch (err) {
             console.log(err);
         }
-        updateRoomState(joinedGameRoom, 'end');
-        router.push('/game/end');
+        if (joinedGameRoom) {
+            updateRoomState(joinedGameRoom, 'end');
+            router.push('/game/end');
+        }
     };
 
     // Calculate number of bombs found by user and opponent based on actions

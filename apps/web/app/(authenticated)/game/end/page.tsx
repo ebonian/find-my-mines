@@ -1,8 +1,27 @@
 'use client';
 
 import { Button } from '../../../_components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function end() {
+    const router = useRouter();
+
+    const handleClickBack = () => {
+        router.push("/");
+    }
+
+    const handleClickShop = () => {
+        router.push("/shop");
+    }
+
+    const handleClickLeaderboard = () => {
+        router.push("/leaderboard");
+    }
+
+    const handleClickPlayAgain = () => {
+        router.push("/game/rooms");
+    }
+
     return (
         <div
             className='grid min-h-dvh w-full flex-grow place-content-center items-center justify-center gap-5'
@@ -15,6 +34,7 @@ export default function end() {
                         color='gray'
                         size='lg'
                         className='absolute left-20 px-4 text-left'
+                        onClick={handleClickShop}
                     >
                         <img src='/shop.svg' className='h-12 w-12 pr-4'></img>
                         Shop
@@ -27,6 +47,7 @@ export default function end() {
                         color='gray'
                         size='lg'
                         className='absolute right-20 px-4 text-right'
+                        onClick={handleClickLeaderboard}
                     >
                         <img
                             src='/scoreboard.svg'
@@ -57,10 +78,18 @@ export default function end() {
             </div>
 
             <div className='mx-auto flex justify-center gap-16'>
-                <Button variant='default' size='lg'>
+                <Button 
+                    variant='default' 
+                    size='lg'
+                    onClick={handleClickPlayAgain}
+                >
                     Play Again!
                 </Button>
-                <Button variant='default' size='lg'>
+                <Button 
+                    variant='default' 
+                    size='lg' 
+                    onClick={handleClickBack}
+                >
                     <img
                         src='/black-left-arrow.svg'
                         className='h-9 w-9 pr-4'
