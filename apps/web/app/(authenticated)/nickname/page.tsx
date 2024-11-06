@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 export default function Page() {
     const router = useRouter();
-    const { user } = useAuthContext();
+    const { user, fetchUser } = useAuthContext();
     const [nickname, setNickname] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,6 +22,7 @@ export default function Page() {
                     username: newNickname,
                 },
             });
+            fetchUser();
         } catch (exception) {
             console.log(exception);
         }
