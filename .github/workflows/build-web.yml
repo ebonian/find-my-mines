@@ -1,0 +1,68 @@
+name: Build Web Image
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+        tags:
+            - 'v*'
+
+env:
+    IMAGE_NAME: ${{ github.repository }}-web
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: write
+            packages: write
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Gather tags name
+              env:
+                  IMAGE_NAME: ${{ env.IMAGE_NAME }}
+                  SHA: ${{ github.sha }}
+                  REF: ${{ github.ref }}
+              id: tags
+              run: |
+                  RESULT="$IMAGE_NAME:latest,$IMAGE_NAME:$SHA"
+
+                  case "$REF" in
+                  refs/tags/v*)
+                      RESULT="${RESULT},$IMAGE_NAME:${REF#refs/tags/v}"
+                  ;;
+                  esac
+
+                  echo "tags = $RESULT"
+                  echo "tags=$RESULT" >> "$GITHUB_OUTPUT"
+
+            - name: Build Docker image with multiple tags
+              run: |
+                  tags="${{ steps.tags.outputs.tags }}"
+                  for tag in $(echo $tags | tr ',' '\n'); do
+                    docker build . -t ghcr.io/$tag -f ./apps/web/Dockerfile \
+                    --build-arg NEXT_PUBLIC_API_SERVER_URL=${{ secrets.NEXT_PUBLIC_API_SERVER_URL }}
+                  done
+
+            - name: Push Docker image to GitHub Container Registry
+              run: |
+                  tags="${{ steps.tags.outputs.tags }}"
+                  for tag in $(echo $tags | tr ',' '\n'); do
+                    docker push ghcr.io/$tag
+                  done
