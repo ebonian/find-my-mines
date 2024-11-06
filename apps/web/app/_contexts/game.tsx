@@ -7,7 +7,7 @@ import {
     useEffect,
     useCallback,
 } from 'react';
-import { Room, Skin } from '@repo/shared-types';
+import { Action, Game, Room, Skin } from '@repo/shared-types';
 import { useSocket } from './socket';
 import { useAuthContext } from './auth';
 import { seedGen } from '../_lib/seed';
@@ -27,6 +27,10 @@ interface GameContextValue {
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
     resetJoinedRoom: (userId: string) => void;
+    game: Game | null;
+    getGame: (roomId: string) => void;
+    setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
+    setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -43,6 +47,10 @@ const GameContext = createContext<GameContextValue>({
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
     resetJoinedRoom: () => {},
+    game: null,
+    getGame: () => {},
+    setActionHandler: () => {},
+    setTurnHandler: () => {},
 });
 
 interface GameContextProviderProps {
@@ -101,6 +109,46 @@ export default function GameContextProvider({
     const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
+    const [game, setGame] = useState<Game | null>(null);
+    const [broadcastedGame, setBroadcastedGame] = useState<Game | null>(null);
+
+    const getGame = (roomId: string) => {
+        send('get-game', { roomId });
+    };
+
+    const setActionHandler = ({
+        cellId,
+        bombFound,
+    }: {
+        cellId: string;
+        bombFound: boolean;
+    }) => {
+        if (turn !== 'user') {
+            return;
+        }
+        if (!game || !user) {
+            return;
+        }
+
+        send('send-action', {
+            gameId: game._id,
+            userId: user._id,
+            cellId: cellId,
+            bombFound: bombFound,
+        });
+    };
+
+    const setTurnHandler = (settingTurn: 'user' | 'opponent' | null) => {
+        setTurn(settingTurn);
+        resetTimer();
+    };
+
+    const timeoutHandler = () => {
+        setActionHandler({
+            cellId: '',
+            bombFound: false,
+        });
+    };
 
     const resetTimer = () => {
         setTimer(10);
@@ -113,23 +161,11 @@ export default function GameContextProvider({
             }, 1000);
             return () => clearInterval(countdown);
         } else {
-            setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
-            resetTimer();
+            if (turn === 'user') {
+                timeoutHandler();
+            }
         }
     }, [timer, turn]);
-
-    useEffect(() => {
-        switch (turn) {
-            case 'user':
-                resetTimer();
-                break;
-            case 'opponent':
-                resetTimer();
-                break;
-            default:
-                break;
-        }
-    }, [turn]);
 
     // METHODS
     const createRoom = async (room: Omit<Room, '_id'>) => {
@@ -175,6 +211,18 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
+        console.log(broadcastedGame, joinedGameRoom);
+
+        if (!broadcastedGame) {
+            return;
+        }
+
+        if (broadcastedGame.roomId === joinedGameRoom?._id) {
+            setGame(broadcastedGame);
+        }
+    }, [broadcastedGame]);
+
+    useEffect(() => {
         if (!user) {
             return;
         }
@@ -187,7 +235,17 @@ export default function GameContextProvider({
             setGameRooms(rooms);
         });
         subscribe('joined-room', (room: Room) => {
+            if (!room) {
+                return;
+            }
             setJoinedGameRoom(room);
+            getGame(room._id);
+        });
+        subscribe('game', (game: Game) => {
+            setGame(game);
+        });
+        subscribe('broadcast-game', (game: Game) => {
+            setBroadcastedGame(game);
         });
     }, [subscribe]);
 
@@ -207,6 +265,10 @@ export default function GameContextProvider({
                 equippedSkin,
                 setEquippedSkinHandler,
                 resetJoinedRoom,
+                game,
+                getGame,
+                setActionHandler,
+                setTurnHandler,
             }}
         >
             {children}

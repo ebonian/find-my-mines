@@ -11,8 +11,16 @@ const createGame = async (game: GameDto) => {
     }
 };
 
+const getGameById = async (gameId: string) => {
+    return await GameModel.findById(gameId);
+};
+
 const getGameByRoomId = async (roomId: string) => {
     return await GameModel.findOne({ roomId });
+};
+
+const updateGameById = async (gameId: string, game: any) => {
+    return await GameModel.findByIdAndUpdate(gameId, game, { new: true });
 };
 
 const randomFirstPlayer = async (roomId: string, players: string[]) => {
@@ -26,6 +34,8 @@ const randomFirstPlayer = async (roomId: string, players: string[]) => {
 
 export default {
     createGame,
+    getGameById,
     getGameByRoomId,
+    updateGameById,
     randomFirstPlayer,
 };
