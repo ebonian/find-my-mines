@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '../../../_components/ui/button';
 import { useRouter } from 'next/navigation';
+import { Button } from '../../../_components/ui/button';
 
-export default function end() {
+export default function End({ result }: { result: 'win' | 'lose' }) {
     const router = useRouter();
 
     const handleClickBack = () => {
@@ -28,7 +28,7 @@ export default function end() {
             style={{ backgroundColor: '#0D1321' }}
         >
             <div className='mb-20'>
-                <div className='items-center'>
+                <div className='jsutify-center items-center'>
                     <Button
                         variant='default'
                         color='gray'
@@ -36,12 +36,12 @@ export default function end() {
                         className='absolute left-20 px-4 text-left'
                         onClick={handleClickShop}
                     >
-                        <img src='/shop.svg' className='h-12 w-12 pr-4'></img>
-                        Shop
+                        <img src='/my-skin.svg' className='h-12 w-12 pr-4'></img>
+                        Skins
                     </Button>
                 </div>
 
-                <div className='items-center'>
+                <div className='justify-center items-center'>
                     <Button
                         variant='default'
                         color='gray'
@@ -60,11 +60,15 @@ export default function end() {
 
             <div className='mb-10 mt-10'>
                 <div className='font-Montserrat text-center text-7xl font-bold'>
-                    <span className='text-[#C5D86D]'>You Win!</span>
+                    <span
+                        className={result === 'win' ? 'text-[#C5D86D]' : 'text-[#FF5733]'}
+                    >
+                        {result === 'win' ? 'You Win!' : 'You Lose!'}
+                    </span>
                 </div>
 
                 <div className='font-Montserrat mt-8 text-center text-3xl font-bold text-[#FFEDDF]'>
-                    You Found X out of 11 Bombs
+                    {result === 'win' ? 'You Found X out of 11 Bombs' : 'Better Luck Next Time!'}
                 </div>
 
                 <div className='font-Montserrat mt-8 flex items-center justify-center text-center text-3xl font-bold text-[#C59CC8]'>
@@ -73,21 +77,21 @@ export default function end() {
                         className='h-12 w-12 pr-2'
                         alt='Coin'
                     />
-                    <span>+ 20</span>
+                    <span>{result === 'win' ? '+ 20' : '+ 0'}</span>
                 </div>
             </div>
 
             <div className='mx-auto flex justify-center gap-16'>
-                <Button 
-                    variant='default' 
+                <Button
+                    variant='default'
                     size='lg'
                     onClick={handleClickPlayAgain}
                 >
                     Play Again!
                 </Button>
-                <Button 
-                    variant='default' 
-                    size='lg' 
+                <Button
+                    variant='default'
+                    size='lg'
                     onClick={handleClickBack}
                 >
                     <img
