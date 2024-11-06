@@ -185,7 +185,7 @@ export default function GameContextProvider({
             setJoinedGameRoom(room);
         });
         subscribe('game', (game: Game) => {});
-        subscribe('send-actions', (action: Action[]) => {
+        subscribe('actions', (action: Action[]) => {
             setActionArray(action);
         });
     }, [subscribe]);

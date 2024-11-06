@@ -21,8 +21,13 @@ export default function Play() {
     const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
+    const [actionId, setActionId] = useState(0);
     const [actions, setActions] = useState<Action[]>([]);
     const { actionArray, setActionHandler } = useGameContext();
+
+    if (!joinedGameRoom || !user) {
+        return <div>Loading...</div>;
+    }
     const seedAndType = {
         seed: joinedGameRoom.seed,
         type: joinedGameRoom.type,
@@ -34,14 +39,18 @@ export default function Play() {
         bombFound: boolean
     ) => {
         const newAction: Action = {
-            id: id + 1,
+            id: id,
             userId,
             cellId,
             bombFound,
         };
 
+        console.log(actionArray);
         setActions((prevActions) => [...prevActions, newAction]);
+        setActionId((prevID) => prevID + 1);
         setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
+        console.log(id, userId, cellId, bombFound);
+        console.log(newAction);
         setActionHandler(newAction);
     };
 
