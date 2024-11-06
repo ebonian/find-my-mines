@@ -1,7 +1,6 @@
 import type { Socket } from 'socket.io';
 import gameService from '../game/service';
 import roomService from '../room/service';
-import { GameDto } from './dto';
 import { Action } from '@repo/shared-types';
 
 export default async function gameController(socket: Socket) {
@@ -15,7 +14,7 @@ export default async function gameController(socket: Socket) {
 
             const game = await gameService.getGameByRoomId(roomId);
 
-            socket.emit('game', game);
+            socket.emit('game', [game]);
         } catch (error) {
             socket.emit(
                 'error',
@@ -85,23 +84,4 @@ export default async function gameController(socket: Socket) {
             }
         }
     );
-
-    socket.on('reset', async ({ roomId }: { roomId: string }) => {
-        try {
-            const updatedGame = await gameService.updateGameByRoomId(roomId, {
-                actions: [] as Action[],
-            });
-            if (!updatedGame) {
-                throw new Error('Failed to update game.');
-            }
-
-            socket.emit('reset-game', updatedGame);
-            socket.broadcast.emit('broadcast-reset-game', updatedGame);
-        } catch (error) {
-            socket.emit(
-                'error',
-                error instanceof Error ? error.message : error
-            );
-        }
-    });
 }
