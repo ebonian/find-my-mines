@@ -40,32 +40,24 @@ export default function Play() {
         type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
 
-    const handleEnd = async () => {
-        const userScore = actions.filter(
-            (action) => action.userId === 'user' && action.bombFounded
-        ).length;
-
-        const oppScore = actions.filter(
-            (action) => action.userId === 'opponent' && action.bombFounded
-        ).length;
-
-        try {
-            if (userScore > oppScore && user !== null) {
-                const response = await axios.patch('/users', {
-                    updatingUser: {
-                        balance: user.balance + 20,
-                        score: user.score + userScore,
-                    }
-                });
-            }
-        } catch (err) {
-            console.log(err);
-        }
-        if (joinedGameRoom && user) {
-            updateRoomState(joinedGameRoom, "end");
-            router.push(`/game/end?score=${userScore.toString()}`);
-        }
-    };
+    // const handleEnd = async () => {
+    //     try {
+    //         if (userFoundedBombs > opponentFoundedBombs && user !== null) {
+    //             const response = await axios.patch('/users', {
+    //                 updatingUser: {
+    //                     balance: user.balance + 20,
+    //                     score: user.score + userFoundedBombs,
+    //                 }
+    //             });
+    //         }
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    //     if (joinedGameRoom && user) {
+    //         updateRoomState(joinedGameRoom, "end");
+    //         router.push(`/game/end?score=${userFoundedBombs.toString()}`);
+    //     }
+    // };
 
     useEffect(() => {
         if (!game || game.actions.length === 0) {
