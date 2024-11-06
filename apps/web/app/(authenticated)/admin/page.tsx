@@ -57,6 +57,13 @@ export default function Page() {
       return (
             <p className="text-center">Loading...</p>
       );
+    }  
+    
+    const handleResetAllScores = () => {
+      activeRooms.forEach(room => {
+        send('reset', { gameId: room._id })
+      })
+      alert("Reset all games")
     }
 
     return (
@@ -74,9 +81,7 @@ export default function Page() {
             
             <Button size="lg"
             color="purple"
-            onClick={ () =>
-              console.log("click")
-            }
+            onClick={handleResetAllScores}
             >
               Reset All Scores
             </Button>
