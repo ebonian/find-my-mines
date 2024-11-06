@@ -1,38 +1,28 @@
-import type { Socket, Server } from 'socket.io';
+import { AppStats } from '@repo/shared-types';
+import type { Socket } from 'socket.io';
 
-interface ServerStats {
-    connectedUsers: string[];
-    totalConnections: number;
-}
+const appStats = {
+    connectedSessions: [],
+} as AppStats;
 
-let connectedUsers: string[] = [];
+const broadcastStats = (socket: Socket) => {
+    socket.emit('stats', appStats);
+    socket.broadcast.emit('stats', appStats);
+};
 
-function getStats(): ServerStats {
-    return {
-        connectedUsers: [...connectedUsers],
-        totalConnections: connectedUsers.length,
-    };
-}
+export default async function adminController(socket: Socket) {
+    appStats.connectedSessions.push(socket.id);
+    broadcastStats(socket);
 
-function broadcastStats(io: Server): void {
-    io.emit('stats', getStats());
-}
-
-export function addUser(socket: Socket, io: Server): void {
-    connectedUsers.push(socket.id);
-    broadcastStats(io);
-}
-
-export function removeUser(socket: Socket, io: Server): void {
-    const index = connectedUsers.indexOf(socket.id);
-    if (index !== -1) {
-        connectedUsers.splice(index, 1);
-        broadcastStats(io);
-    }
-}
-
-export function setupListeners(socket: Socket, io: Server): void {
     socket.on('get-stats', () => {
-        socket.emit('stats', getStats());
+        broadcastStats(socket);
+    });
+
+    socket.on('disconnect', () => {
+        const index = appStats.connectedSessions.indexOf(socket.id);
+        if (index !== -1) {
+            appStats.connectedSessions.splice(index, 1);
+            broadcastStats(socket);
+        }
     });
 }

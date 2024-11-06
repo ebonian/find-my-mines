@@ -1,9 +1,8 @@
 import http from 'http';
 import { Server } from 'socket.io';
 import roomController from './modules/room/controller';
-import { addUser, setupListeners, removeUser } from './modules/admin/controller';
 import gameController from './modules/game/controller';
-import { Room } from '@repo/shared-types';
+import adminController from './modules/admin/controller';
 
 const CLIENT_URL = process.env.CLIENT_URL;
 if (!CLIENT_URL) {
@@ -20,16 +19,7 @@ export const createSocket = (httpServer: http.Server): Server => {
     io.on('connection', (socket) => {
         roomController(socket);
         gameController(socket);
-
-        console.log('a user connected');
-
-        addUser(socket,io);
-        setupListeners(socket,io);
-
-        socket.on('disconnect', () => {
-            console.log('User disconnected:', socket.id);
-            removeUser(socket,io);
-        });
+        adminController(socket);
     });
 
     console.log('Socket server created');
