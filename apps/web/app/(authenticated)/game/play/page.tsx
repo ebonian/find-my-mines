@@ -30,7 +30,6 @@ export default function Play() {
     const router = useRouter();
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
-    const { actions, setActionHandler } = useGameContext();
 
     if (!joinedGameRoom || !user) {
         return <div>Loading...</div>;
@@ -80,17 +79,17 @@ export default function Play() {
     };
 
     // Calculate number of bombs found by user and opponent based on actions
-    useEffect(() => {
-        const userFoundedBombs = actions.filter(
-            (action) => action.userId === 'user' && action.bombFound
-        ).length;
-        setuserFoundedBombs(userFoundedBombs); // Update user mines founded state
+    // useEffect(() => {
+    //     const userFoundedBombs = actions.filter(
+    //         (action) => action.userId === 'user' && action.bombFound
+    //     ).length;
+    //     setuserFoundedBombs(userFoundedBombs); // Update user mines founded state
 
-        const opponentFoundedBombs = actions.filter(
-            (action) => action.userId === 'opponent' && action.bombFound
-        ).length;
-        setopponentFoundedBombs(opponentFoundedBombs); // Update opponent mines founded state
-    }, [actions]); // Update whenever actions change
+    //     const opponentFoundedBombs = actions.filter(
+    //         (action) => action.userId === 'opponent' && action.bombFound
+    //     ).length;
+    //     setopponentFoundedBombs(opponentFoundedBombs); // Update opponent mines founded state
+    // }, [actions]); // Update whenever actions change
 
     return (
         <Layout

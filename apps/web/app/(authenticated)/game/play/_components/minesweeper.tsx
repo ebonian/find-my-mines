@@ -106,14 +106,16 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
     onEnd,
 }) => {
     const { user } = useAuthContext();
-    const { equippedSkin, skins, actions, setActionHandler, game, setTurn } =
+    const { equippedSkin, skins, setActionHandler, game, setTurn } =
         useGameContext();
     const activeSkin = skins.find((skin) => skin.name === equippedSkin)!;
 
     const boardSize = seedAndType.type === 'normal' ? 6 : 9;
     const numOfMines = seedAndType.type === 'normal' ? 11 : 35;
     const coordinates = coordinatesGen(seedAndType);
-    const board = createBoard(boardSize, numOfMines, coordinates);
+    const [board, setBoard] = useState<Cell[][]>(
+        createBoard(boardSize, numOfMines, coordinates)
+    );
 
     const clickHandlerComponent = (rowIndex: number, colIndex: number) => {
         setActionHandler({
@@ -122,59 +124,51 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         });
     };
 
-    // useEffect(() => {
-    //     if (turn === 'opponent') {
-    //         const action = actions[actions.length - 1];
+    useEffect(() => {
+        if (!game) {
+            return;
+        }
 
-    //         if (action && action.cellId) {
-    //             const [rowIndexStr, colIndexStr] = action.cellId.split('-');
-    //             const rowIndex = Number(rowIndexStr);
-    //             const colIndex = Number(colIndexStr);
+        const newBoard = [...board];
 
-    //             // Ensure the indices are valid numbers
-    //             if (
-    //                 !isNaN(rowIndex) &&
-    //                 !isNaN(colIndex) &&
-    //                 rowIndex >= 0 &&
-    //                 rowIndex < boardSize &&
-    //                 colIndex >= 0 &&
-    //                 colIndex < boardSize
-    //             ) {
-    //                 const newBoard = [...board];
-    //                 newBoard[rowIndex]![colIndex]!.status = 'revealed';
+        for (const action of game.actions) {
+            if (!action.cellId) {
+                continue;
+            }
 
-    //                 // Simulate the opponent action
-    //                 if (action.bombFound) {
-    //                     setRevealedMineCount((prev) => prev + 1);
-    //                     onAction(action.userId, action.cellId, true); // Bomb found
-    //                 } else {
-    //                     onAction(action.userId, action.cellId, false); // No bomb
-    //                 }
+            const [rowIndexStr, colIndexStr] = action.cellId.split('-');
+            const rowIndex = Number(rowIndexStr);
+            const colIndex = Number(colIndexStr);
 
-    //                 setBoard(newBoard);
+            // Ensure the indices are valid numbers
+            if (
+                !isNaN(rowIndex) &&
+                !isNaN(colIndex) &&
+                rowIndex >= 0 &&
+                rowIndex < boardSize &&
+                colIndex >= 0 &&
+                colIndex < boardSize
+            ) {
+                newBoard[rowIndex]![colIndex]!.status = 'revealed';
+            }
+        }
 
-    //                 // Switch turn after the opponent action, with a slight delay for UX purposes
-    //                 setTimeout(() => {
-    //                     switchTurn(); // Switch back to the user
-    //                 }, 2000); // Add a 2-second delay for better UX
-    //             }
-    //         }
-    //     }
-    // }, [turn, actions, boardSize, board, onAction, switchTurn]);
+        setBoard(newBoard);
+    }, [game?.actions]);
 
     useEffect(() => {
         if (!game || !user) {
             return;
         }
 
-        if (actions.length === 0) {
+        if (game?.actions.length === 0) {
             if (game.firstPlayerId === user._id) {
                 setTurn('user');
             } else {
                 setTurn('opponent');
             }
         } else {
-            const lastAction = actions[actions.length - 1];
+            const lastAction = game?.actions[game?.actions.length - 1];
             if (!lastAction) {
                 return;
             }
@@ -185,7 +179,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
                 setTurn('user');
             }
         }
-    }, [actions, game, user]);
+    }, [game?.actions, game, user]);
 
     return (
         <div>

@@ -6,7 +6,6 @@ import { Action } from '@repo/shared-types';
 
 export default async function gameController(socket: Socket) {
     socket.on('get-game', async ({ roomId }: { roomId: string }) => {
-        console.log(1);
         try {
             const room = await roomService.getRoomById(roomId);
 
@@ -72,8 +71,12 @@ export default async function gameController(socket: Socket) {
                 const updatedGame = await gameService.updateGameById(gameId, {
                     actions: newActions,
                 });
+                if (!updatedGame) {
+                    throw new Error('Failed to update game.');
+                }
 
                 socket.emit('game', updatedGame);
+                socket.broadcast.emit('broadcast-game', updatedGame);
             } catch (error) {
                 socket.emit(
                     'error',

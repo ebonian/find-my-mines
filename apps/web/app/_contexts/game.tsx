@@ -27,7 +27,6 @@ interface GameContextValue {
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
     game: Game | null;
-    actions: Action[];
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
 }
@@ -46,7 +45,6 @@ const GameContext = createContext<GameContextValue>({
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
     game: null,
-    actions: [],
     getGame: () => {},
     setActionHandler: () => {},
 });
@@ -108,7 +106,7 @@ export default function GameContextProvider({
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
     const [game, setGame] = useState<Game | null>(null);
-    const [actions, setActions] = useState<Action[]>([]);
+    const [broadcastedGame, setBroadcastedGame] = useState<Game | null>(null);
 
     const getGame = (roomId: string) => {
         send('get-game', { roomId });
@@ -121,6 +119,9 @@ export default function GameContextProvider({
         cellId: string;
         bombFound: boolean;
     }) => {
+        if (turn !== 'user') {
+            return;
+        }
         if (!game || !user) {
             return;
         }
@@ -148,19 +149,6 @@ export default function GameContextProvider({
             resetTimer();
         }
     }, [timer, turn]);
-
-    useEffect(() => {
-        switch (turn) {
-            case 'user':
-                resetTimer();
-                break;
-            case 'opponent':
-                resetTimer();
-                break;
-            default:
-                break;
-        }
-    }, [turn]);
 
     // METHODS
     const createRoom = async (room: Omit<Room, '_id'>) => {
@@ -194,6 +182,18 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
+        console.log(broadcastedGame, joinedGameRoom);
+
+        if (!broadcastedGame) {
+            return;
+        }
+
+        if (broadcastedGame.roomId === joinedGameRoom?._id) {
+            setGame(broadcastedGame);
+        }
+    }, [broadcastedGame]);
+
+    useEffect(() => {
         if (!user) {
             return;
         }
@@ -207,12 +207,13 @@ export default function GameContextProvider({
         });
         subscribe('joined-room', (room: Room) => {
             setJoinedGameRoom(room);
+            getGame(room._id);
         });
         subscribe('game', (game: Game) => {
             setGame(game);
         });
-        subscribe('actions', (action: Action[]) => {
-            setActions(action);
+        subscribe('broadcast-game', (game: Game) => {
+            setBroadcastedGame(game);
         });
     }, [subscribe]);
 
@@ -231,7 +232,6 @@ export default function GameContextProvider({
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,
-                actions,
                 game,
                 getGame,
                 setActionHandler,
