@@ -156,7 +156,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({ seedAndType }) => {
         }
 
         if (game?.actions.length === 0) {
-            if (game.firstPlayerId === user._id) {
+            if (game.firstPlayerId === null) {
+                setTurnHandler(null);
+            } else if (game.firstPlayerId === user._id) {
                 setTurnHandler('user');
             } else {
                 setTurnHandler('opponent');

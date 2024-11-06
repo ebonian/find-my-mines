@@ -29,7 +29,7 @@ interface GameContextValue {
     game: Game | null;
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
-    setTurnHandler: (settingTurn: 'user' | 'opponent') => void;
+    setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -136,7 +136,7 @@ export default function GameContextProvider({
         });
     };
 
-    const setTurnHandler = (settingTurn: 'user' | 'opponent') => {
+    const setTurnHandler = (settingTurn: 'user' | 'opponent' | null) => {
         setTurn(settingTurn);
         resetTimer();
     };
@@ -159,8 +159,9 @@ export default function GameContextProvider({
             }, 1000);
             return () => clearInterval(countdown);
         } else {
-            // timeout
-            timeoutHandler();
+            if (turn === 'user') {
+                timeoutHandler();
+            }
         }
     }, [timer, turn]);
 
