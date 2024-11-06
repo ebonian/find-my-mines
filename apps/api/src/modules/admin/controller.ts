@@ -5,40 +5,34 @@ interface ServerStats {
     totalConnections: number;
 }
 
-class AdminController {
-    private connectedUsers: string[] = [];
+let connectedUsers: string[] = [];
 
-    constructor(private io: Server) {}
+function getStats(): ServerStats {
+    return {
+        connectedUsers: [...connectedUsers],
+        totalConnections: connectedUsers.length,
+    };
+}
 
-    private getStats(): ServerStats {
-        return {
-            connectedUsers: [...this.connectedUsers],
-            totalConnections: this.connectedUsers.length,
-        };
-    }
+function broadcastStats(io: Server): void {
+    io.emit('stats', getStats());
+}
 
-    private broadcastStats(): void {
-        this.io.emit('stats', this.getStats());
-    }
+export function addUser(socket: Socket, io: Server): void {
+    connectedUsers.push(socket.id);
+    broadcastStats(io);
+}
 
-    public addUser(socket: Socket): void {
-        this.connectedUsers.push(socket.id);
-        this.broadcastStats();
-    }
-
-    public removeUser(socket: Socket): void {
-        const index = this.connectedUsers.indexOf(socket.id);
-        if (index !== -1) {
-            this.connectedUsers.splice(index, 1);
-            this.broadcastStats();
-        }
-    }
-
-    public setupListeners(socket: Socket): void {
-        socket.on('/get-stats', () => {
-            socket.emit('stats', this.getStats());
-        });
+export function removeUser(socket: Socket, io: Server): void {
+    const index = connectedUsers.indexOf(socket.id);
+    if (index !== -1) {
+        connectedUsers.splice(index, 1);
+        broadcastStats(io);
     }
 }
 
-export default AdminController;
+export function setupListeners(socket: Socket, io: Server): void {
+    socket.on('get-stats', () => {
+        socket.emit('stats', getStats());
+    });
+}

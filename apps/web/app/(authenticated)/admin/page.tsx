@@ -38,10 +38,10 @@ export default function Page() {
 
         subscribe('stats', handleStats);
 
-        send('/get-stats', {});
+        send('get-stats', {});
 
         const interval = setInterval(() => {
-            send('/get-stats', {});
+            send('get-stats', {});
         }, 10000);
 
         return () => {
