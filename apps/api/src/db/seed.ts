@@ -14,6 +14,11 @@ async function seed() {
             colors: ['#34182A', '#25161F'],
             price: 10,
         },
+        {
+            name: 'Green',
+            colors: ['#183421', '#16251D'],
+            price: 20,
+        },
     ];
 
     await SkinModel.deleteMany({});

@@ -12,12 +12,14 @@ import axios from '../_lib/axios';
 
 interface GameContextValue {
     user: User | null;
+    fetchUser: () => void;
     logout: () => void;
     loading: boolean;
 }
 
 const AuthContext = createContext<GameContextValue>({
     user: null,
+    fetchUser: () => {},
     logout: () => {},
     loading: true,
 });
@@ -62,6 +64,7 @@ export default function AuthContextProvider({
         <AuthContext.Provider
             value={{
                 user,
+                fetchUser,
                 logout,
                 loading,
             }}
