@@ -124,6 +124,19 @@ export default async function roomController(socket: Socket) {
         }
     );
 
+    socket.on('leave-joined-room', async ({ userId, roomId }: { userId: string, roomId: string }) => {
+        try {
+            const response = await roomService.removePlayersFromRoom(
+                userId,
+                roomId,
+            );
+            socket.emit("leave-room", response);
+        } catch (err) {
+            console.log(err);
+            socket.emit("error leaving");
+        }
+    });
+
     socket.on('get-joined-room', async ({ userId }: { userId: string }) => {
         try {
             const joinedRoom = await roomService.getUserJoinedRoom(userId);
