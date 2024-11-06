@@ -2,46 +2,83 @@ import type { Socket } from 'socket.io';
 import gameService from '../game/service';
 import roomService from '../room/service';
 import { GameDto } from './dto';
-import GameModel from '../../shared/models/game';
 import { Action } from '@repo/shared-types';
 
 export default async function gameController(socket: Socket) {
-    socket.on('get-game', async (roomId: string) => {
+    socket.on('get-game', async ({ roomId }: { roomId: string }) => {
+        console.log(1);
         try {
-            const userJoinedRoom = await roomService.getUserJoinedRoom(
-                socket.id
-            );
-            if (!userJoinedRoom) {
-                throw new Error('User not in any room.');
+            const room = await roomService.getRoomById(roomId);
+
+            if (!room) {
+                throw new Error('Room not found.');
             }
-            const gameId = await gameService.getGameByRoomId(roomId);
-            socket.emit('game', gameId);
+
+            const game = await gameService.getGameByRoomId(roomId);
+
+            socket.emit('game', game);
         } catch (error) {
-            socket.emit('error', error);
+            socket.emit(
+                'error',
+                error instanceof Error ? error.message : error
+            );
         }
     });
 
     socket.on(
-        'send-actions',
-        async (actions: Action, roomId: string, game: GameDto) => {
+        'send-action',
+        async ({
+            gameId,
+            userId,
+            cellId,
+            bombFound,
+        }: {
+            gameId: string;
+            userId: string;
+            cellId: string;
+            bombFound: boolean;
+        }) => {
             try {
-                if (
-                    typeof actions.id !== 'number' ||
-                    typeof actions.userId !== 'string' ||
-                    (actions.cellId !== null &&
-                        typeof actions.cellId !== 'string') ||
-                    typeof actions.bombFound !== 'boolean'
-                ) {
-                    throw new Error('Invalid action format.');
+                const game = await gameService.getGameById(gameId);
+                if (!game) {
+                    throw new Error('Game not found.');
                 }
 
-                game.actions.push(actions);
-                const gameUpdated = await gameService.getGameByRoomId(roomId);
-                socket.emit('game', gameUpdated);
+                if (!game.firstPlayerId) {
+                    throw new Error('Game is not ready yet.');
+                }
 
-                socket.to(roomId).emit('game', gameUpdated);
+                if (
+                    game.actions.length === 0 &&
+                    game.firstPlayerId !== userId
+                ) {
+                    throw new Error('It is not your turn.');
+                } else if (
+                    game.actions[game.actions.length - 1]?.userId === userId
+                ) {
+                    throw new Error('It is not your turn.');
+                }
+
+                const newActions = [
+                    ...game.actions,
+                    {
+                        id: game.actions.length + 1,
+                        userId,
+                        cellId,
+                        bombFound,
+                    },
+                ] as Action[];
+
+                const updatedGame = await gameService.updateGameById(gameId, {
+                    actions: newActions,
+                });
+
+                socket.emit('game', updatedGame);
             } catch (error) {
-                socket.emit('error', error);
+                socket.emit(
+                    'error',
+                    error instanceof Error ? error.message : error
+                );
             }
         }
     );

@@ -26,8 +26,10 @@ interface GameContextValue {
     skins: Skin[];
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
-    actionArray: Action[];
-    setActionHandler: (actions: Action) => void;
+    game: Game | null;
+    actions: Action[];
+    getGame: (roomId: string) => void;
+    setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -43,7 +45,9 @@ const GameContext = createContext<GameContextValue>({
     skins: [],
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
-    actionArray: [],
+    game: null,
+    actions: [],
+    getGame: () => {},
     setActionHandler: () => {},
 });
 
@@ -103,7 +107,31 @@ export default function GameContextProvider({
     const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
-    const [actionArray, setActionArray] = useState<Action[]>([]);
+    const [game, setGame] = useState<Game | null>(null);
+    const [actions, setActions] = useState<Action[]>([]);
+
+    const getGame = (roomId: string) => {
+        send('get-game', { roomId });
+    };
+
+    const setActionHandler = ({
+        cellId,
+        bombFound,
+    }: {
+        cellId: string;
+        bombFound: boolean;
+    }) => {
+        if (!game || !user) {
+            return;
+        }
+
+        send('send-action', {
+            gameId: game._id,
+            userId: user._id,
+            cellId: cellId,
+            bombFound: bombFound,
+        });
+    };
 
     const resetTimer = () => {
         setTimer(10);
@@ -165,10 +193,6 @@ export default function GameContextProvider({
         });
     };
 
-    const setActionHandler = (action: Action) => {
-        send('send-actions', action);
-    };
-
     useEffect(() => {
         if (!user) {
             return;
@@ -184,9 +208,11 @@ export default function GameContextProvider({
         subscribe('joined-room', (room: Room) => {
             setJoinedGameRoom(room);
         });
-        subscribe('game', (game: Game) => {});
+        subscribe('game', (game: Game) => {
+            setGame(game);
+        });
         subscribe('actions', (action: Action[]) => {
-            setActionArray(action);
+            setActions(action);
         });
     }, [subscribe]);
 
@@ -205,7 +231,9 @@ export default function GameContextProvider({
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,
-                actionArray,
+                actions,
+                game,
+                getGame,
                 setActionHandler,
             }}
         >

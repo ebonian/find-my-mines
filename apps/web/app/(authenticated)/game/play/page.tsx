@@ -13,17 +13,24 @@ import { Action } from '@repo/shared-types';
 import { useGameContext } from '../../../_contexts/game';
 
 export default function Play() {
-    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } =
-        useGameContext();
     const { user } = useAuthContext();
+    const {
+        resetTimer,
+        turn,
+        setTurn,
+        joinedGameRoom,
+        updateRoomState,
+        getGame,
+    } = useGameContext();
+
+    useEffect(() => {
+        getGame(joinedGameRoom?._id!);
+    }, []);
 
     const router = useRouter();
-    const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
-    const [actionId, setActionId] = useState(0);
-    const [actions, setActions] = useState<Action[]>([]);
-    const { actionArray, setActionHandler } = useGameContext();
+    const { actions, setActionHandler } = useGameContext();
 
     if (!joinedGameRoom || !user) {
         return <div>Loading...</div>;
@@ -32,35 +39,31 @@ export default function Play() {
         seed: joinedGameRoom !== null ? joinedGameRoom.seed : '',
         type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
-    const handleAction = (
-        id: number,
-        userId: string,
-        cellId: string | null,
-        bombFound: boolean
-    ) => {
-        const newAction: Action = {
-            id: id,
-            userId,
-            cellId,
-            bombFound,
-        };
+    // const handleAction = (
+    //     userId: string,
+    //     cellId: string | null,
+    //     bombFound: boolean
+    // ) => {
+    //     const prevActions = actions[actions.length - 1];
 
-        console.log(actionArray);
-        setActions((prevActions) => [...prevActions, newAction]);
-        setActionId((prevID) => prevID + 1);
-        setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
-        console.log(id, userId, cellId, bombFound);
-        console.log(newAction);
-        setActionHandler(newAction);
-    };
+    //     if (!prevActions) {
+    //         return;
+    //     }
+
+    //     const newAction: Action = {
+    //         id: prevActions?.id + 1,
+    //         userId,
+    //         cellId,
+    //         bombFound,
+    //     };
+    //     setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
+    //     setActionHandler(newAction);
+    // };
 
     const handleEnd = async () => {
-        // if (userFoundedBombs > opponentFoundedBombs) {
-        //     const response = await axios.patch(`/users/${}`);
-        // }
         try {
             if (userFoundedBombs > opponentFoundedBombs && user !== null) {
-                const response = await axios.patch('/users', {
+                await axios.patch('/users', {
                     updatingUser: {
                         balance: user.balance + 20,
                         score: user.score + userFoundedBombs,
@@ -108,13 +111,10 @@ export default function Play() {
             <Status />
             <Minesweeper
                 seedAndType={seedAndType}
-                setMinesFounded={setMinesFounded}
                 resetTimer={resetTimer}
                 switchTurn={() =>
                     setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'))
                 }
-                turn={turn}
-                onAction={handleAction}
                 onEnd={handleEnd}
             />
         </Layout>
