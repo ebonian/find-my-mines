@@ -22,7 +22,8 @@ export const createSocket = (httpServer: http.Server): Server => {
     io.on('connection', (socket) => {
         roomController(socket);
         gameController(socket);
-        console.log('A user connected:', socket.id);
+        
+        console.log('a user connected');
 
         adminController.addUser(socket);
         adminController.setupListeners(socket);

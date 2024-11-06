@@ -33,6 +33,7 @@ interface GameContextValue {
     setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
     actions: Action[];
     updateActions: (action: Action) => void;
+    resetGame: (roomId: string) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -55,6 +56,7 @@ const GameContext = createContext<GameContextValue>({
     setTurnHandler: () => {},
     actions: [],
     updateActions: () => {},
+    resetGame: () => {},
 });
 
 interface GameContextProviderProps {
@@ -173,6 +175,10 @@ export default function GameContextProvider({
         });
     };
 
+    const resetGame = (roomId: string) => {
+        send('reset', { roomId });
+    };
+
     const setTurnHandler = (settingTurn: 'user' | 'opponent' | null) => {
         setTurn(settingTurn);
         resetTimer();
@@ -289,6 +295,7 @@ export default function GameContextProvider({
                 setTurnHandler,
                 actions,
                 updateActions,
+                resetGame
             }}
         >
             {children}
