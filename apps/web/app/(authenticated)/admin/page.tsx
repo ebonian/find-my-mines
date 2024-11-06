@@ -65,20 +65,27 @@ export default function Page() {
 
     return (
         <Layout className='flex min-h-screen flex-col items-center py-16'>
-            <div className='text-6xl font-bold'>Admin Panel</div>
-            <div className='text-6xl'>
-                Currently Online: {stats.totalConnections}
-            </div>
+            <div className='flex max-w-screen-xl flex-col items-center space-y-16'>
+                <div className='space-y-2 text-center font-bold'>
+                    <h1 className='text-6xl font-bold'>Admin Panel</h1>
+                    <p className='text-cyan text-xl font-bold'>
+                        Current Users: {stats.totalConnections}
+                    </p>
+                </div>
 
-            <div className='grid w-full grid-cols-3 gap-12'>
-                {activeRooms.map((room) => (
-                    <RoomCardReset key={room._id} {...room} />
-                ))}
-            </div>
+                <div className='space-y-4'>
+                    <p className='text-cyan text-xl font-bold'>Room List</p>
+                    <div className='grid w-full grid-cols-3 gap-12'>
+                        {activeRooms.map((room) => (
+                            <RoomCardReset key={room._id} {...room} />
+                        ))}
+                    </div>
+                </div>
 
-            <Button size='lg' color='purple' onClick={handleResetAllScores}>
-                Reset All Scores
-            </Button>
+                <Button size='lg' color='cyan' onClick={handleResetAllScores}>
+                    Reset All Scores
+                </Button>
+            </div>
         </Layout>
     );
 }
