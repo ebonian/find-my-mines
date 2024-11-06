@@ -33,7 +33,7 @@ router.get('/auth/google/callback', async (req, res, next) => {
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
     passport.authenticate('google', {
-        successRedirect: `${clientUrl}/game/rooms`,
+        successRedirect: `${clientUrl}/nickname`,
         failureRedirect: `${clientUrl}`,
     })(req, res, next);
 });
