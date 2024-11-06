@@ -40,6 +40,7 @@ export default function Play() {
         type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
 
+    //for game end
     const handleEnd = async () => {
         try {
             if (userFoundedBombs > opponentFoundedBombs && user !== null) {
@@ -58,6 +59,20 @@ export default function Play() {
             router.push('/game/end');
         }
     };
+
+    useEffect(() => {
+        if (!joinedGameRoom) {
+            return;
+        }
+        if (
+            (userFoundedBombs + opponentFoundedBombs === 11 &&
+                joinedGameRoom.type === 'normal') ||
+            (userFoundedBombs + opponentFoundedBombs === 35 &&
+                joinedGameRoom.type === 'extreme')
+        ) {
+            handleEnd();
+        }
+    }, [userFoundedBombs, opponentFoundedBombs]);
 
     useEffect(() => {
         if (!game || game.actions.length === 0) {
