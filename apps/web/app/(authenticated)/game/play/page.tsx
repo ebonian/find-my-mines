@@ -19,7 +19,7 @@ interface Action {
 }
 
 export default function Play() {
-    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState, resetJoinedRoom } = useGameContext();
+    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } = useGameContext();
     const { user } = useAuthContext();
     
     const router = useRouter();
