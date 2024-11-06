@@ -14,7 +14,7 @@ export default async function gameController(socket: Socket) {
 
             const game = await gameService.getGameByRoomId(roomId);
 
-            socket.emit('game', [game]);
+            socket.emit('game', game);
         } catch (error) {
             socket.emit(
                 'error',
