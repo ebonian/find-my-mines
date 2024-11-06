@@ -15,6 +15,18 @@ export default function Page() {
     const [nickname, setNickname] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    const updateUsername = async (newNickname: string) => {
+        try {
+            const response = await axios.patch('/users', {
+                updatingUser: {
+                    username: newNickname,
+                },
+            });
+        } catch (exception) {
+            console.log(exception);
+        }
+    };
+
     const handleSetNickname = async () => {
         if (!user) {
             return alert('Not authenticated.');
@@ -27,6 +39,7 @@ export default function Page() {
         }
 
         setIsLoading(true);
+        await updateUsername(nickname);
         router.push('/');
     };
     return (
