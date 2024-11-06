@@ -173,7 +173,7 @@ export default function GameContextProvider({
         });
     };
 
-    const resetGame = (roomId: string) => {
+    const resetGame = async (roomId: string) => {
         send('reset', { roomId });
     };
 
@@ -267,6 +267,12 @@ export default function GameContextProvider({
             setGame(game);
         });
         subscribe('broadcast-game', (game: Game) => {
+            setBroadcastedGame(game);
+        });
+        subscribe('reset-game', (game: Game) => {
+            setGame(game);
+        });
+        subscribe('broadcast-reset-game', (game: Game) => {
             setBroadcastedGame(game);
         });
     }, [subscribe]);

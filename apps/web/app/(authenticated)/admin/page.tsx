@@ -21,7 +21,7 @@ interface GameRoom {
 
 export default function Page() {
     const { socket, subscribe, unsubscribe, send } = useSocket();
-    const { gameRooms, joinedGameRoom } = useGameContext();
+    const { gameRooms, joinedGameRoom, resetGame } = useGameContext();
 
     const [stats, setStats] = useState<ServerStats>({
         connectedUsers: [],
@@ -58,7 +58,7 @@ export default function Page() {
 
     const handleResetAllScores = () => {
         activeRooms.forEach((room) => {
-            send('reset', { gameId: room._id });
+            resetGame(room._id);
         });
         alert('Reset all games');
     };
