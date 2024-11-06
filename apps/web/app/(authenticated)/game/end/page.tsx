@@ -1,17 +1,20 @@
 'use client';
 
 import { Button } from '../../../_components/ui/button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useGameContext } from '../../../_contexts/game';
 import { useAuthContext } from '../../../_contexts/auth';
 
 export default function end() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { user } = useAuthContext();
-    const { resetJoinedRoom } = useGameContext();
+    const { resetJoinedRoom, joinedGameRoom } = useGameContext();
+    const score = searchParams.get("score");
+
     useEffect(() => {
-        if (user) {
+        if (user && joinedGameRoom) {
             resetJoinedRoom(user._id);
         }
     }, [resetJoinedRoom]);
@@ -74,7 +77,7 @@ export default function end() {
                 </div>
 
                 <div className='font-Montserrat mt-8 text-center text-3xl font-bold text-[#FFEDDF]'>
-                    You Found X out of 11 Bombs
+                    You Found {score} out of 11 Bombs
                 </div>
 
                 <div className='font-Montserrat mt-8 flex items-center justify-center text-center text-3xl font-bold text-[#C59CC8]'>

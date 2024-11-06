@@ -50,15 +50,20 @@ export default function Play() {
     };
 
     const handleEnd = async () => {
-        // if (userFoundedBombs > opponentFoundedBombs) {
-        //     const response = await axios.patch(`/users/${}`);
-        // }
+        const userScore = actions.filter(
+            (action) => action.userId === 'user' && action.bombFounded
+        ).length;
+
+        const oppScore = actions.filter(
+            (action) => action.userId === 'opponent' && action.bombFounded
+        ).length;
+
         try {
-            if (userFoundedBombs > opponentFoundedBombs && user !== null) {
+            if (userScore > oppScore && user !== null) {
                 const response = await axios.patch('/users', {
                     updatingUser: {
                         balance: user.balance + 20,
-                        score: user.score + userFoundedBombs,
+                        score: user.score + userScore,
                     }
                 });
             }
@@ -67,7 +72,7 @@ export default function Play() {
         }
         if (joinedGameRoom && user) {
             updateRoomState(joinedGameRoom, "end");
-            router.push("/game/end");
+            router.push(`/game/end?score=${userScore.toString()}`);
         }
     }
 
