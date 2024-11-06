@@ -2,9 +2,20 @@
 
 import { Button } from '../../../_components/ui/button';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useGameContext } from '../../../_contexts/game';
+import { useAuthContext } from '../../../_contexts/auth';
 
 export default function end() {
     const router = useRouter();
+    const { user } = useAuthContext();
+    const { resetJoinedRoom } = useGameContext();
+
+    useEffect(() => {
+        if (user) {
+            resetJoinedRoom(user._id);
+        }
+    }, [resetJoinedRoom]);
 
     const handleClickBack = () => {
         router.push("/");

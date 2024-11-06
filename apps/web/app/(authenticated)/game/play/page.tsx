@@ -19,7 +19,7 @@ interface Action {
 }
 
 export default function Play() {
-    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } = useGameContext();
+    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState, resetJoinedRoom } = useGameContext();
     const { user } = useAuthContext();
     
     const router = useRouter();
@@ -65,7 +65,7 @@ export default function Play() {
         } catch (err) {
             console.log(err);
         }
-        if (joinedGameRoom) {
+        if (joinedGameRoom && user) {
             updateRoomState(joinedGameRoom, "end");
             router.push("/game/end");
         }
