@@ -9,7 +9,12 @@ interface RoomCardProps {
     type: Room['type'];
 }
 
-export default function RoomCardReset({ _id, name, creator, type }: RoomCardProps) {
+export default function RoomCardReset({
+    _id,
+    name,
+    creator,
+    type,
+}: RoomCardProps) {
     const { resetGame } = useGameContext();
 
     if (!_id) {
@@ -34,7 +39,7 @@ export default function RoomCardReset({ _id, name, creator, type }: RoomCardProp
                 color='white'
                 onClick={() => {
                     resetGame(_id);
-                    alert(`Reset game "${name}"`)
+                    alert(`Reset game "${name}"`);
                 }}
             >
                 Reset

@@ -49,8 +49,7 @@ export const createServer = (): Application => {
         })
         .use(AuthRouter)
         .use(UserRouter)
-        .use(SkinRouter)
-        ;
+        .use(SkinRouter);
 
     passport.use(googleStrategy);
     passport.serializeUser((user, done) => {

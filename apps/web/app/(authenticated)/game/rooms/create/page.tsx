@@ -50,7 +50,7 @@ export default function Page() {
             creator: user._id,
             players: [],
             type: selectedType,
-            state: "waiting",
+            state: 'waiting',
             seed: customSeed,
         } as Omit<Room, '_id'>;
 

@@ -24,7 +24,7 @@ const updateGameById = async (gameId: string, game: any) => {
 };
 
 const updateGameByRoomId = async (roomId: string, game: any) => {
-    return await GameModel.findOneAndUpdate( {roomId} , game, { new: true });
+    return await GameModel.findOneAndUpdate({ roomId }, game, { new: true });
 };
 
 const randomFirstPlayer = async (roomId: string, players: string[]) => {

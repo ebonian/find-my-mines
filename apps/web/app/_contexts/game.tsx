@@ -76,21 +76,19 @@ export default function GameContextProvider({
     const [actions, setActions] = useState<Action[]>([]);
 
     const fetchActions = useCallback(async () => {
-        try{
+        try {
             const { data } = await axios.get('/game');
             setActions(data.actions);
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
         }
     }, []);
 
     const updateActions = useCallback(async (action: Action) => {
         try {
-            const {data} = await axios.get('game');
-            data.actions = {...action, action};
-        }
-        catch (error) {
+            const { data } = await axios.get('game');
+            data.actions = { ...action, action };
+        } catch (error) {
             console.error(error);
         }
     }, []);
@@ -295,7 +293,7 @@ export default function GameContextProvider({
                 setTurnHandler,
                 actions,
                 updateActions,
-                resetGame
+                resetGame,
             }}
         >
             {children}

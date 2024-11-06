@@ -86,29 +86,27 @@ export default async function gameController(socket: Socket) {
         }
     );
 
-    socket.on(
-        'reset',
-        async ({ roomId }: { roomId: string }) => {
-            try {
-                const game = await gameService.getGameByRoomId(roomId);
-                if (!game) {
-                    throw new Error('Game not found.');
-                }
-
-                const updatedGame = await gameService.updateGameByRoomId(roomId, {
-                    actions: [],
-                });
-                if (!updatedGame) {
-                    throw new Error('Failed to update game.');
-                }
-        
-                socket.emit('game', updatedGame);
-                socket.broadcast.emit('broadcast-game', updatedGame);
-            } catch (error) {
-                socket.emit(
-                    'error',
-                    error instanceof Error ? error.message : error
-                );
+    socket.on('reset', async ({ roomId }: { roomId: string }) => {
+        try {
+            const game = await gameService.getGameByRoomId(roomId);
+            if (!game) {
+                throw new Error('Game not found.');
             }
-        });
+
+            const updatedGame = await gameService.updateGameByRoomId(roomId, {
+                actions: [],
+            });
+            if (!updatedGame) {
+                throw new Error('Failed to update game.');
+            }
+
+            socket.emit('game', updatedGame);
+            socket.broadcast.emit('broadcast-game', updatedGame);
+        } catch (error) {
+            socket.emit(
+                'error',
+                error instanceof Error ? error.message : error
+            );
+        }
+    });
 }

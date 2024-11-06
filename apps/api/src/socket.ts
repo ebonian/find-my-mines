@@ -22,7 +22,7 @@ export const createSocket = (httpServer: http.Server): Server => {
     io.on('connection', (socket) => {
         roomController(socket);
         gameController(socket);
-        
+
         console.log('a user connected');
 
         adminController.addUser(socket);
