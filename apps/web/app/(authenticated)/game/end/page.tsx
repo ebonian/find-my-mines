@@ -8,10 +8,10 @@ import { useAuthContext } from '../../../_contexts/auth';
 
 export default function end() {
     const router = useRouter();
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
     const { user } = useAuthContext();
     const { resetJoinedRoom, joinedGameRoom } = useGameContext();
-    const score = searchParams.get("score");
+    // const score = searchParams.get("score");
 
     useEffect(() => {
         if (user && joinedGameRoom) {
@@ -77,7 +77,7 @@ export default function end() {
                 </div>
 
                 <div className='font-Montserrat mt-8 text-center text-3xl font-bold text-[#FFEDDF]'>
-                    You Found {score} out of 11 Bombs
+                    You Found {"X"} out of 11 Bombs
                 </div>
 
                 <div className='font-Montserrat mt-8 flex items-center justify-center text-center text-3xl font-bold text-[#C59CC8]'>
