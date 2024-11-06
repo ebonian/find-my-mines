@@ -9,109 +9,91 @@ import Status from './_components/status';
 import axios from '../../../_lib/axios';
 import { useAuthContext } from '../../../_contexts/auth';
 import { useRouter } from '../../../../node_modules/next/navigation';
+import { Action } from '@repo/shared-types';
 import { useGameContext } from '../../../_contexts/game';
 
-interface Action {
-    actionId: number;
-    userId: string;
-    cellId: string | null;
-    bombFounded: boolean;
-}
-
 export default function Play() {
-    const { resetTimer, turn, setTurn, joinedGameRoom, updateRoomState } = useGameContext();
     const { user } = useAuthContext();
-    
+    const {
+        resetTimer,
+        turn,
+        setTurn,
+        joinedGameRoom,
+        updateRoomState,
+        getGame,
+        game,
+    } = useGameContext();
+
+    useEffect(() => {
+        getGame(joinedGameRoom?._id!);
+    }, []);
+
     const router = useRouter();
-    const [minesFounded, setMinesFounded] = useState(0);
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
-    const [actionId, setActionId] = useState(0);
-    const [actions, setActions] = useState<Action[]>([]);
-    const seedAndType = {
-        seed: joinedGameRoom !== null ? joinedGameRoom.seed : "",
-        type: joinedGameRoom !== null ? joinedGameRoom.type : "normal",
-    }
-    const handleAction = (
-        userId: string,
-        cellId: string | null,
-        bombFounded: boolean
-    ) => {
-        const newAction: Action = {
-            actionId: actionId + 1,
-            userId,
-            cellId,
-            bombFounded,
-        };
 
-        setActions((prevActions) => [...prevActions, newAction]);
-        setActionId((prevID) => prevID + 1);
-        setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
+    if (!joinedGameRoom || !user) {
+        return <div>Loading...</div>;
+    }
+    const seedAndType = {
+        seed: joinedGameRoom !== null ? joinedGameRoom.seed : '',
+        type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
 
     const handleEnd = async () => {
-        // if (userFoundedBombs > opponentFoundedBombs) {
-        //     const response = await axios.patch(`/users/${}`);
-        // }
         try {
             if (userFoundedBombs > opponentFoundedBombs && user !== null) {
-                const response = await axios.patch('/users', {
+                await axios.patch('/users', {
                     updatingUser: {
                         balance: user.balance + 20,
                         score: user.score + userFoundedBombs,
-                    }
+                    },
                 });
             }
         } catch (err) {
             console.log(err);
         }
         if (joinedGameRoom) {
-            updateRoomState(joinedGameRoom, "end");
-            router.push("/game/end");
+            updateRoomState(joinedGameRoom, 'end');
+            router.push('/game/end');
         }
-    }
+    };
 
-    // Calculate number of bombs found by user and opponent based on actions
     useEffect(() => {
-        const userFoundedBombs = actions.filter(
-            (action) => action.userId === 'user' && action.bombFounded
-        ).length;
-        setuserFoundedBombs(userFoundedBombs); // Update user mines founded state
+        if (!game || game.actions.length === 0) {
+            return;
+        }
 
-        const opponentFoundedBombs = actions.filter(
-            (action) => action.userId === 'opponent' && action.bombFounded
-        ).length;
-        setopponentFoundedBombs(opponentFoundedBombs); // Update opponent mines founded state
-    }, [actions]); // Update whenever actions change
+        const latestAction = game.actions[game.actions.length - 1];
+
+        if (latestAction?.bombFound) {
+            if (latestAction.userId === user._id) {
+                setuserFoundedBombs((prev) => prev + 1);
+            }
+            if (latestAction.userId !== user._id) {
+                setopponentFoundedBombs((prev) => prev + 1);
+            }
+        }
+    }, [game?.actions]);
 
     return (
         <Layout
             className='flex flex-col items-center gap-6 py-12'
             leftButton={<MenuButton />}
         >
-            <button
+            {/* <button
                 onClick={() => {
                     setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
                 }}
             >
                 Set to {turn !== 'user' ? 'User' : 'Opponent'} turn
-            </button>
+            </button> */}
             <Scoreboard
                 userFoundedBombs={userFoundedBombs}
                 opponentFoundedBombs={opponentFoundedBombs}
             />
             <Status />
-            <Minesweeper
-                seedAndType={seedAndType}
-                setMinesFounded={setMinesFounded}
-                resetTimer={resetTimer}
-                switchTurn={() =>
-                    setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'))
-                }
-                turn={turn}
-                onAction={handleAction}
-                onEnd={handleEnd}
-            />
+            <Minesweeper seedAndType={seedAndType} />
         </Layout>
     );
 }

@@ -8,6 +8,6 @@ export interface Game {
 export interface Action {
     id: number; // auto increment
     userId: string;
-    cellId: number | null;
+    cellId: string | null;
     bombFound: boolean;
 }

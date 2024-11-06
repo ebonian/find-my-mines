@@ -14,6 +14,7 @@ export default async function roomController(socket: Socket) {
                 actions: [],
             });
             socket.emit('rooms', gameRooms);
+            socket.broadcast.emit('rooms', gameRooms);
         } catch (error) {
             socket.emit('error', error);
         }
@@ -44,6 +45,7 @@ export default async function roomController(socket: Socket) {
                 if (room) {
                     const gameRooms = await roomService.getRooms();
                     socket.emit('rooms', gameRooms);
+                    socket.broadcast.emit('rooms', gameRooms);
                 } else {
                     socket.emit('error', `Room "${roomId}" not found.`);
                 }
