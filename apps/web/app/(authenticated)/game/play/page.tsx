@@ -21,6 +21,7 @@ export default function Play() {
         joinedGameRoom,
         updateRoomState,
         getGame,
+        game,
     } = useGameContext();
 
     useEffect(() => {
@@ -57,6 +58,23 @@ export default function Play() {
             router.push('/game/end');
         }
     };
+
+    useEffect(() => {
+        if (!game || game.actions.length === 0) {
+            return;
+        }
+
+        const latestAction = game.actions[game.actions.length - 1];
+
+        if (latestAction?.bombFound) {
+            if (latestAction.userId === user._id) {
+                setuserFoundedBombs((prev) => prev + 1);
+            }
+            if (latestAction.userId !== user._id) {
+                setopponentFoundedBombs((prev) => prev + 1);
+            }
+        }
+    }, [game?.actions]);
 
     return (
         <Layout
