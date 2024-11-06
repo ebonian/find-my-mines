@@ -38,26 +38,6 @@ export default function Play() {
         seed: joinedGameRoom !== null ? joinedGameRoom.seed : '',
         type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
-    // const handleAction = (
-    //     userId: string,
-    //     cellId: string | null,
-    //     bombFound: boolean
-    // ) => {
-    //     const prevActions = actions[actions.length - 1];
-
-    //     if (!prevActions) {
-    //         return;
-    //     }
-
-    //     const newAction: Action = {
-    //         id: prevActions?.id + 1,
-    //         userId,
-    //         cellId,
-    //         bombFound,
-    //     };
-    //     setTurn((prevTurn) => (prevTurn === 'user' ? 'opponent' : 'user'));
-    //     setActionHandler(newAction);
-    // };
 
     const handleEnd = async () => {
         try {
@@ -78,44 +58,24 @@ export default function Play() {
         }
     };
 
-    // Calculate number of bombs found by user and opponent based on actions
-    // useEffect(() => {
-    //     const userFoundedBombs = actions.filter(
-    //         (action) => action.userId === 'user' && action.bombFound
-    //     ).length;
-    //     setuserFoundedBombs(userFoundedBombs); // Update user mines founded state
-
-    //     const opponentFoundedBombs = actions.filter(
-    //         (action) => action.userId === 'opponent' && action.bombFound
-    //     ).length;
-    //     setopponentFoundedBombs(opponentFoundedBombs); // Update opponent mines founded state
-    // }, [actions]); // Update whenever actions change
-
     return (
         <Layout
             className='flex flex-col items-center gap-6 py-12'
             leftButton={<MenuButton />}
         >
-            <button
+            {/* <button
                 onClick={() => {
                     setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
                 }}
             >
                 Set to {turn !== 'user' ? 'User' : 'Opponent'} turn
-            </button>
+            </button> */}
             <Scoreboard
                 userFoundedBombs={userFoundedBombs}
                 opponentFoundedBombs={opponentFoundedBombs}
             />
             <Status />
-            <Minesweeper
-                seedAndType={seedAndType}
-                resetTimer={resetTimer}
-                switchTurn={() =>
-                    setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'))
-                }
-                onEnd={handleEnd}
-            />
+            <Minesweeper seedAndType={seedAndType} />
         </Layout>
     );
 }

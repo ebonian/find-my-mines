@@ -18,9 +18,6 @@ interface MinesweeperProps {
         seed: string;
         type: 'normal' | 'extreme';
     };
-    resetTimer: () => void;
-    switchTurn: () => void;
-    onEnd: () => void;
 }
 
 const coordinatesGen = ({
@@ -99,14 +96,9 @@ const createBoard = (
     return board;
 };
 
-const Minesweeper: React.FC<MinesweeperProps> = ({
-    seedAndType,
-    resetTimer,
-    switchTurn,
-    onEnd,
-}) => {
+const Minesweeper: React.FC<MinesweeperProps> = ({ seedAndType }) => {
     const { user } = useAuthContext();
-    const { equippedSkin, skins, setActionHandler, game, setTurn } =
+    const { equippedSkin, skins, setActionHandler, game, setTurnHandler } =
         useGameContext();
     const activeSkin = skins.find((skin) => skin.name === equippedSkin)!;
 
@@ -124,6 +116,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         });
     };
 
+    // apply actions to board
     useEffect(() => {
         if (!game) {
             return;
@@ -156,6 +149,7 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
         setBoard(newBoard);
     }, [game?.actions]);
 
+    // apply turn from actions
     useEffect(() => {
         if (!game || !user) {
             return;
@@ -163,9 +157,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
 
         if (game?.actions.length === 0) {
             if (game.firstPlayerId === user._id) {
-                setTurn('user');
+                setTurnHandler('user');
             } else {
-                setTurn('opponent');
+                setTurnHandler('opponent');
             }
         } else {
             const lastAction = game?.actions[game?.actions.length - 1];
@@ -174,9 +168,9 @@ const Minesweeper: React.FC<MinesweeperProps> = ({
             }
 
             if (lastAction.userId === user._id) {
-                setTurn('opponent');
+                setTurnHandler('opponent');
             } else {
-                setTurn('user');
+                setTurnHandler('user');
             }
         }
     }, [game?.actions, game, user]);

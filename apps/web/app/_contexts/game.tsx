@@ -29,6 +29,7 @@ interface GameContextValue {
     game: Game | null;
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
+    setTurnHandler: (settingTurn: 'user' | 'opponent') => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -47,6 +48,7 @@ const GameContext = createContext<GameContextValue>({
     game: null,
     getGame: () => {},
     setActionHandler: () => {},
+    setTurnHandler: () => {},
 });
 
 interface GameContextProviderProps {
@@ -134,6 +136,18 @@ export default function GameContextProvider({
         });
     };
 
+    const setTurnHandler = (settingTurn: 'user' | 'opponent') => {
+        setTurn(settingTurn);
+        resetTimer();
+    };
+
+    const timeoutHandler = () => {
+        setActionHandler({
+            cellId: '',
+            bombFound: false,
+        });
+    };
+
     const resetTimer = () => {
         setTimer(10);
     };
@@ -145,8 +159,8 @@ export default function GameContextProvider({
             }, 1000);
             return () => clearInterval(countdown);
         } else {
-            setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
-            resetTimer();
+            // timeout
+            timeoutHandler();
         }
     }, [timer, turn]);
 
@@ -206,6 +220,9 @@ export default function GameContextProvider({
             setGameRooms(rooms);
         });
         subscribe('joined-room', (room: Room) => {
+            if (!room) {
+                return;
+            }
             setJoinedGameRoom(room);
             getGame(room._id);
         });
@@ -235,6 +252,7 @@ export default function GameContextProvider({
                 game,
                 getGame,
                 setActionHandler,
+                setTurnHandler,
             }}
         >
             {children}
