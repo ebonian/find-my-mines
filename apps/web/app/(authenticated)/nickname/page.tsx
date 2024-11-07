@@ -1,12 +1,12 @@
 'use client';
 
-import { Button } from '../../_components/ui/button';
 import { useRouter } from 'next/navigation';
-import Layout from '../../_components/common/layout';
-import { useAuthContext } from '../../_contexts/auth';
 import { useState } from 'react';
-import axios from '../../_lib/axios';
+import Layout from '../../_components/common/layout';
+import { Button } from '../../_components/ui/button';
 import { Input } from '../../_components/ui/input';
+import { useAuthContext } from '../../_contexts/auth';
+import axios from '../../_lib/axios';
 
 export default function Page() {
     const router = useRouter();
@@ -46,9 +46,9 @@ export default function Page() {
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <div className='flex flex-col items-center space-y-16'>
                 <div className='text-center font-bold'>
-                    <h1 className='text-6xl text-white'>Set Your Name</h1>
-                    <p className='text-green mt-8 text-3xl font-bold'>
-                        Find My Mines
+                    <h1 className='text-6xl text-cyan'>Enter Your Name</h1>
+                    <p className='text-purple mt-8 text-3xl font-bold'>
+                        Eg. poonisnotconcrete, Tungdude, ...
                     </p>
                 </div>
                 <Input
