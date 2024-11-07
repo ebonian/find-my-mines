@@ -3,17 +3,18 @@
 import Image from 'next/image';
 import { useGameContext } from '../../../../_contexts/game';
 import { cn } from '../../../../_lib/utils';
+import { useAuthContext } from '../../../../_contexts/auth';
 
-interface HeaderProps {
-    userFoundedBombs: number;
-    opponentFoundedBombs: number;
-}
+export default function Header() {
+    const { game, turn } = useGameContext();
+    const { user } = useAuthContext();
 
-export default function Header({
-    userFoundedBombs,
-    opponentFoundedBombs,
-}: HeaderProps) {
-    const { turn } = useGameContext();
+    const userFoundedBombs = game?.actions.filter(
+        (action) => action.userId === user?._id && action.bombFound
+    ).length;
+    const opponentFoundedBombs = game?.actions.filter(
+        (action) => action.userId !== user?._id && action.bombFound
+    ).length;
 
     return (
         <div className='grid w-full max-w-2xl grid-cols-3'>

@@ -1,11 +1,11 @@
 'use client';
 
-import Layout from '../_components/common/layout';
+import Layout from '../../_components/common/layout';
 import { useEffect, useState } from 'react';
-import { useSocket } from '../_contexts/socket';
-import { useGameContext } from '../_contexts/game';
-import { Button } from '../_components/ui/button';
-import RoomCardReset from '../_components/common/room-card-reset';
+import { useSocket } from '../../_contexts/socket';
+import { useGameContext } from '../../_contexts/game';
+import { Button } from '../../_components/ui/button';
+import RoomCardReset from '../../_components/common/room-card-reset';
 import { AppStats } from '@repo/shared-types';
 
 export default function Page() {

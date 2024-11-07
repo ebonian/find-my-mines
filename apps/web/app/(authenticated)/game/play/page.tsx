@@ -23,19 +23,18 @@ export default function Play() {
     }, [joinedGameRoom]);
 
     const router = useRouter();
-    const [userFoundedBombs, setuserFoundedBombs] = useState(0);
-    const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
 
     const handleEnd = async () => {
         try {
-            if (userFoundedBombs > opponentFoundedBombs && user !== null) {
-                await axios.patch('/users', {
-                    updatingUser: {
-                        balance: user.balance + 20,
-                        score: user.score + userFoundedBombs,
-                    },
-                });
-            }
+            // TODO: use game action to calculate the score or do it server side
+            // if (userFoundedBombs > opponentFoundedBombs && user !== null) {
+            //     await axios.patch('/users', {
+            //         updatingUser: {
+            //             balance: user.balance + 20,
+            //             score: user.score + userFoundedBombs,
+            //         },
+            //     });
+            // }
         } catch (err) {
             console.log(err);
         }
@@ -45,46 +44,12 @@ export default function Play() {
         }
     };
 
-    useEffect(() => {
-        if (!joinedGameRoom) {
-            return;
-        }
-        if (
-            (userFoundedBombs + opponentFoundedBombs === 11 &&
-                joinedGameRoom.type === 'normal') ||
-            (userFoundedBombs + opponentFoundedBombs === 35 &&
-                joinedGameRoom.type === 'extreme')
-        ) {
-            handleEnd();
-        }
-    }, [userFoundedBombs, opponentFoundedBombs]);
-
-    useEffect(() => {
-        if (!game || game.actions.length === 0) {
-            return;
-        }
-
-        const latestAction = game.actions[game.actions.length - 1];
-
-        if (latestAction?.bombFound) {
-            if (latestAction.userId === user?._id) {
-                setuserFoundedBombs((prev) => prev + 1);
-            }
-            if (latestAction.userId !== user?._id) {
-                setopponentFoundedBombs((prev) => prev + 1);
-            }
-        }
-    }, [game?.actions]);
-
     return (
         <Layout
             className='flex flex-col items-center gap-6 py-12'
             leftButton={<MenuButton />}
         >
-            <Scoreboard
-                userFoundedBombs={userFoundedBombs}
-                opponentFoundedBombs={opponentFoundedBombs}
-            />
+            <Scoreboard />
             <Status />
             <GameBoard />
         </Layout>
