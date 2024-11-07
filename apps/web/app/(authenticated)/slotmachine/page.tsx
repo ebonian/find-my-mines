@@ -264,7 +264,7 @@ export default function Page() {
             {/* <main className="flex min-h-screen flex-col items-center justify-between p-2"> */}
             <div
                 className='flex min-h-screen flex-grow items-center justify-center'
-                style={{ backgroundColor: '#0D1321' }}
+                style={{ backgroundColor: '#252525' }}
             >
                 <div
                     className='container mx-auto py-5'

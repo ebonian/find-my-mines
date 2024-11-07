@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 // import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 type CustomBackButtonProps = {
     actionBeforeBack?: () => void;
@@ -74,7 +75,7 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
         <>
             <button
                 ref={buttonRef}
-                className={`relative left-0 top-0 rounded-[3px] border-0 px-9 py-4 ${isHovered ? 'bg-[#FFEDDF] text-[#0D1321]' : 'bg-[#252525] text-[#FFEDDF]'}`}
+                className={`relative left-0 top-0 rounded-full border-0 px-9 py-4 bg-[#86615C] text-[#FFEDDF] bg-opacity-10 ${ isHovered ? "opacity-90" : "" }`}
                 // style={buttonStyle}
                 onMouseEnter={() => setisHovered(true)}
                 onMouseLeave={() => setisHovered(false)}
@@ -83,7 +84,15 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
                 {confirmBack ? (
                     'Are you sure?'
                 ) : (
-                    <i className='fas fa-arrow-left fa-xl'></i>
+                    <div className='aspect-square h-full'>
+                        <Image
+                            src='/arrow-left.svg'
+                            alt='arrow-left'
+                            width={24}
+                            height={24}
+                            className='object-contain'
+                        />
+                    </div>
                 )}
             </button>
         </>
