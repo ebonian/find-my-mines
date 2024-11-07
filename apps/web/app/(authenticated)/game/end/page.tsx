@@ -10,18 +10,12 @@ export default function Page(/*{ result }: { result: 'win' | 'lose' }*/) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user } = useAuthContext();
-    const { resetJoinedRoom, room } = useGameContext();
+    const { room } = useGameContext();
     const result = searchParams.get('result');
     const userFoundedBombs = parseInt(
         searchParams.get('userFoundedBombs') || '0'
     );
     // const score = searchParams.get("score");
-
-    useEffect(() => {
-        if (user && room) {
-            resetJoinedRoom(user._id);
-        }
-    }, [resetJoinedRoom]);
 
     const handleClickBack = () => {
         router.push('/');

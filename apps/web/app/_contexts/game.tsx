@@ -20,13 +20,11 @@ interface GameContextValue {
     resetTimer: () => void;
     turn: null | 'user' | 'opponent';
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
-    updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
     joinRoom: (roomId: string) => void;
     room: Room | null;
     skins: Skin[];
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
-    resetJoinedRoom: (userId: string) => void;
     game: Game | null;
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
@@ -41,12 +39,10 @@ const GameContext = createContext<GameContextValue>({
     resetTimer: () => {},
     turn: 'user',
     setTurn: () => {},
-    updateRoomState: () => {},
     room: null,
     skins: [],
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
-    resetJoinedRoom: () => {},
     game: null,
     getGame: () => {},
     setActionHandler: () => {},
@@ -117,7 +113,6 @@ export default function GameContextProvider({
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
     const [game, setGame] = useState<Game | null>(null);
     const [games, setGames] = useState<Game[] | null>(null);
-    const [broadcastedGame, setBroadcastedGame] = useState<Game | null>(null);
 
     const getGame = (roomId: string) => {
         send('get-game', { roomId });
@@ -183,28 +178,6 @@ export default function GameContextProvider({
         send('create-room', roomWithSeed);
     };
 
-    const updateRoomState = async (
-        room: Room,
-        state: 'waiting' | 'playing' | 'end'
-    ) => {
-        send('update-room-state', {
-            roomId: room._id,
-            state: state,
-        });
-        // if (user !== null) {
-        //     send('leave-room', {
-        //         userId: user._id,
-        //         roomId: room._id,
-        //     })
-        // }
-    };
-
-    const resetJoinedRoom = (userId: string) => {
-        send('get-room', {
-            userId: userId,
-        });
-    };
-
     const joinRoom = (roomId: string) => {
         if (!user) {
             return;
@@ -215,30 +188,6 @@ export default function GameContextProvider({
             userId: user._id,
         });
     };
-
-    useEffect(() => {
-        if (!broadcastedGame || !room) {
-            return;
-        }
-
-        if (broadcastedGame.roomId === room._id) {
-            setGame(broadcastedGame);
-        }
-    }, [broadcastedGame]);
-
-    useEffect(() => {
-        if (!games || !room) {
-            return;
-        }
-
-        const currentGame = games.find((game) => game.roomId === room._id);
-
-        if (!currentGame) {
-            return;
-        }
-
-        setGame(currentGame);
-    }, [games]);
 
     useEffect(() => {
         if (!rooms || !user) {
@@ -256,20 +205,31 @@ export default function GameContextProvider({
     }, [rooms]);
 
     useEffect(() => {
+        if (!games || !room) {
+            return;
+        }
+
+        const currentGame = games.find((game) => game.roomId === room._id);
+
+        if (!currentGame) {
+            return;
+        }
+
+        setGame(currentGame);
+    }, [games]);
+
+    useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
             setRooms(rooms);
         });
         subscribe('room', (room: Room) => {
             setRoom(room);
         });
-        subscribe('game', (game: Game) => {
-            setGame(game);
-        });
-        subscribe('broadcast-game', (game: Game) => {
-            setBroadcastedGame(game);
-        });
         subscribe('games', (games: Game[]) => {
             setGames(games);
+        });
+        subscribe('game', (game: Game) => {
+            setGame(game);
         });
     }, [subscribe]);
 
@@ -282,13 +242,11 @@ export default function GameContextProvider({
                 resetTimer,
                 turn,
                 setTurn,
-                updateRoomState,
                 joinRoom,
                 room,
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,
-                resetJoinedRoom,
                 game,
                 getGame,
                 setActionHandler,

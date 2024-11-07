@@ -85,7 +85,7 @@ export default async function gameController(socket: Socket) {
                 }
 
                 socket.emit('game', updatedGame);
-                socket.broadcast.emit('broadcast-game', updatedGame);
+                socket.broadcast.emit('games', [updatedGame]);
 
                 new Promise((resolve) => setTimeout(resolve, 1000));
 
