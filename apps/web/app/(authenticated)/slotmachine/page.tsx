@@ -89,6 +89,9 @@ export default function Page() {
     useEffect(() => {
         if (user) {
             setbalance(user.balance);
+            if (user.username === 'TungDude') {
+                setAdmin(true);
+            }
         }
     }, [user]);
     // useEffect(() => {

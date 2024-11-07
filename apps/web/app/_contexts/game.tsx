@@ -218,6 +218,12 @@ export default function GameContextProvider({
             roomId: room._id,
             state: state,
         });
+        // if (user !== null) {
+        //     send('leave-joined-room', {
+        //         userId: user._id,
+        //         roomId: room._id,
+        //     })
+        // }
     };
 
     const resetJoinedRoom = (userId: string) => {
