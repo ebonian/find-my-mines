@@ -325,7 +325,7 @@ export default function Page() {
                                     sethoverSlot1(false);
                                 }}
                             >
-                                {hoverSlot1 ? '🖕' : emojiSlots[1]}
+                                {hoverSlot1 ? '👁️' : emojiSlots[1]}
                             </p>
                         </div>
                         <div
@@ -341,7 +341,7 @@ export default function Page() {
                                     sethoverSlot2(false);
                                 }}
                             >
-                                {hoverSlot2 ? '🖕' : emojiSlots[2]}
+                                {hoverSlot2 ? '👄' : emojiSlots[2]}
                             </p>
                         </div>
                         <div
@@ -357,7 +357,7 @@ export default function Page() {
                                     sethoverSlot3(false);
                                 }}
                             >
-                                {hoverSlot3 ? '🖕' : emojiSlots[3]}
+                                {hoverSlot3 ? '👁️' : emojiSlots[3]}
                             </p>
                         </div>
                     </div>
