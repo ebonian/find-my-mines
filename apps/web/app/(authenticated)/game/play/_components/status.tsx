@@ -22,8 +22,12 @@ export default function Status() {
     return (
         <div className='text-center text-xl font-bold text-[#FFEDDF]'>
             {message}
-            <br />
-            {timer}
+            {turn ? (
+                <>
+                    <br />
+                    {timer}
+                </>
+            ) : null}
         </div>
     );
 }
