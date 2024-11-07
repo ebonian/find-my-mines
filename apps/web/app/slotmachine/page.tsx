@@ -47,18 +47,35 @@ export default function slotmachine() {
         3: '🎰',
     });
     const [admin, setAdmin] = useState(false);
-    const [randomWeight, setrandomWeight] = useState(
-        admin ?
-            '6'.repeat(1) +
-            '5'.repeat(3) +
-            '4'.repeat(7) +
-            '3'.repeat(14) +
-            '2'.repeat(20) +
-            '1'.repeat(25) +
-            '0'.repeat(30)
-        : '6'.repeat(100)
-    );
-    const weight = randomWeight;
+    // const randomWeight = !admin ?
+    //                     '6'.repeat(1) +
+    //                     '5'.repeat(3) +
+    //                     '4'.repeat(7) +
+    //                     '3'.repeat(14) +
+    //                     '2'.repeat(20) +
+    //                     '1'.repeat(25) +
+    //                     '0'.repeat(30)
+    //                     : '6'.repeat(100);
+    // const [randomWeight, setrandomWeight] = useState(
+    //     admin ?
+    //         '6'.repeat(1) +
+    //         '5'.repeat(3) +
+    //         '4'.repeat(7) +
+    //         '3'.repeat(14) +
+    //         '2'.repeat(20) +
+    //         '1'.repeat(25) +
+    //         '0'.repeat(30)
+    //     : '6'.repeat(100)
+    // );
+    const weight = !admin ?
+                    '6'.repeat(1) +
+                    '5'.repeat(3) +
+                    '4'.repeat(7) +
+                    '3'.repeat(14) +
+                    '2'.repeat(20) +
+                    '1'.repeat(25) +
+                    '0'.repeat(30)
+                    : '6'.repeat(100);
     const emojis: emojiState = {
         0: '🥢',
         1: '🥮',
@@ -96,15 +113,15 @@ export default function slotmachine() {
     //     });
     // }
 
-    const setSlotEmojis = (key1: number, key2: number, key3: number) => {
-        const emojiStates: emojiState = {
-            1: emojis[key1]!,
-            2: emojis[key2]!,
-            3: emojis[key3]!,
-        };
+    // const setSlotEmojis = (key1: number, key2: number, key3: number) => {
+    //     const emojiStates: emojiState = {
+    //         1: emojis[key1]!,
+    //         2: emojis[key2]!,
+    //         3: emojis[key3]!,
+    //     };
 
-        setemojiSlots((prevSlots) => ({ ...prevSlots, ...emojiStates }));
-    };
+    //     setemojiSlots((prevSlots) => ({ ...prevSlots, ...emojiStates }));
+    // };
 
     // const setRandomWeight = (weightPairs: WeightPairs) => {
     //     const sum = Object.keys(weightPairs)
