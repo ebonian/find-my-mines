@@ -17,7 +17,15 @@ export default function Page() {
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <div className='absolute right-0 top-10'>
-                {user ? <UserButton>{user?.username}</UserButton> : null}
+                {user ? (
+                    <>
+                        <div>
+                            <Link href='/nickname'>
+                                <UserButton>{user?.username}</UserButton>
+                            </Link>
+                        </div>
+                    </>
+                ) : null}
             </div>
             <div className='absolute left-0 top-10'>
                 {user ? <CoinButton>{user?.balance}</CoinButton> : null}
@@ -44,10 +52,10 @@ export default function Page() {
                                 </Button>
                             </Link>
                             <button
+                                className='opacity-50 hover:underline'
                                 onClick={() => {
                                     logout();
                                 }}
-                                className='opacity-50'
                             >
                                 Logout
                             </button>
