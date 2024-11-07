@@ -19,9 +19,19 @@ router.get('/users/:id', async (req, res) => {
     }
 });
 
-router.get('/users/leaderboard', async (req, res) => {
+router.get('/users/leaderboard/:n', async (req, res) => {
     try {
-        const users = await userService.getTopNUsers(5);
+        const users = await userService.getTopNUsers(parseInt(req.params.n));
+
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+
+router.get('/users/all/leaderboard', async (req, res) => {
+    try {
+        const users = await userService.getAllUsers();
 
         res.json(users);
     } catch (err) {
