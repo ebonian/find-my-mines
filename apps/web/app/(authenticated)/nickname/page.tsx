@@ -4,10 +4,9 @@ import { Button } from '../../_components/ui/button';
 import { useRouter } from 'next/navigation';
 import Layout from '../../_components/common/layout';
 import { useAuthContext } from '../../_contexts/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from '../../_lib/axios';
 import { Input } from '../../_components/ui/input';
-import Link from 'next/link';
 
 export default function Page() {
     const router = useRouter();

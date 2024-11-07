@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react';
 // import BackButton from '../_components/ui/BackButton';
 import BackButton from './_components/back-button';
-import { Button } from '../_components/ui/button';
-import axios from '../_lib/axios';
-import { useAuthContext } from '../_contexts/auth';
+import { Button } from '../../_components/ui/button';
+import axios from '../../_lib/axios';
+import { useAuthContext } from '../../_contexts/auth';
 
-export default function slotmachine() {
+export default function Page() {
     type emojiState = {
         [key: number]: string;
     };
@@ -67,15 +67,15 @@ export default function slotmachine() {
     //         '0'.repeat(30)
     //     : '6'.repeat(100)
     // );
-    const weight = !admin ?
-                    '6'.repeat(1) +
-                    '5'.repeat(3) +
-                    '4'.repeat(7) +
-                    '3'.repeat(14) +
-                    '2'.repeat(20) +
-                    '1'.repeat(25) +
-                    '0'.repeat(30)
-                    : '6'.repeat(100);
+    const weight = !admin
+        ? '6'.repeat(1) +
+          '5'.repeat(3) +
+          '4'.repeat(7) +
+          '3'.repeat(14) +
+          '2'.repeat(20) +
+          '1'.repeat(25) +
+          '0'.repeat(30)
+        : '6'.repeat(100);
     const emojis: emojiState = {
         0: '🥢',
         1: '🥮',
@@ -88,10 +88,10 @@ export default function slotmachine() {
 
     useEffect(() => {
         if (user) {
-          setbalance(user.balance);
-          if (user.username === "TungDude") {
-            setAdmin(true);
-          }
+            setbalance(user.balance);
+            if (user.username === 'TungDude') {
+                setAdmin(true);
+            }
         }
     }, [user]);
     // useEffect(() => {
@@ -147,15 +147,14 @@ export default function slotmachine() {
     const updateGamblerBalance = async (newBalance: number) => {
         try {
             const response = await axios.patch(`/users`, {
-                updatingUser : {
+                updatingUser: {
                     balance: newBalance,
-                }
+                },
             });
-        }
-        catch (exception) {
+        } catch (exception) {
             console.log(exception);
         }
-    }
+    };
 
     const spinSlot = () => {
         if (balance <= 0) {
@@ -168,20 +167,20 @@ export default function slotmachine() {
             ...{ spinAnimation: true, buttonDisable: true },
         });
 
-        setSpinStart(prev => ({
+        setSpinStart((prev) => ({
             ...prev,
             slot1: true,
         }));
 
         setTimeout(() => {
-            setSpinStart(prev => ({
+            setSpinStart((prev) => ({
                 ...prev,
                 slot2: true,
             }));
         }, 600);
-    
+
         setTimeout(() => {
-            setSpinStart(prev => ({
+            setSpinStart((prev) => ({
                 ...prev,
                 slot3: true,
             }));
@@ -205,7 +204,7 @@ export default function slotmachine() {
 
         setTimeout(() => {
             setemojiSlots((prevSlots) => ({ ...prevSlots, 1: emojis[slot1]! }));
-            setSpinStart(prev => ({
+            setSpinStart((prev) => ({
                 ...prev,
                 slot1: false,
             }));
@@ -213,7 +212,7 @@ export default function slotmachine() {
 
         setTimeout(() => {
             setemojiSlots((prevSlots) => ({ ...prevSlots, 2: emojis[slot2]! }));
-            setSpinStart(prev => ({
+            setSpinStart((prev) => ({
                 ...prev,
                 slot2: false,
             }));
@@ -221,7 +220,7 @@ export default function slotmachine() {
 
         setTimeout(() => {
             setemojiSlots((prevSlots) => ({ ...prevSlots, 3: emojis[slot3]! }));
-            setSpinStart(prev => ({
+            setSpinStart((prev) => ({
                 ...prev,
                 slot3: false,
             }));
@@ -301,23 +300,25 @@ export default function slotmachine() {
                         className='text-center font-semibold'
                         style={{ color: '#FFEDDF', marginTop: '24px' }}
                     >
-                        Each spin costs <span style={{ color: '#EE964B' }}>$ 20</span>
+                        Each spin costs{' '}
+                        <span style={{ color: '#EE964B' }}>$ 20</span>
                     </p>
                     {/* <p className="text-center">Welcome... Let's make money</p> */}
                     <p
                         className='text-center font-semibold'
                         style={{ color: '#FFEDDF', marginTop: '24px' }}
                     >
-                        Your balance: <span style={{ color: '#C5D86D' }}>$ {balance}</span>
+                        Your balance:{' '}
+                        <span style={{ color: '#C5D86D' }}>$ {balance}</span>
                     </p>
                     <br></br>
                     <div className='grid w-full grid-cols-3 justify-items-center'>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff] overflow-hidden'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
                             id='slot-1'
                         >
                             <p
-                                className={`${(visual['spinAnimation'] && spinStart["slot1"]) ? 'animate-spinSlot' : ''} cursor-pointer`}
+                                className={`${visual['spinAnimation'] && spinStart['slot1'] ? 'animate-spinSlot' : ''} cursor-pointer`}
                                 onMouseEnter={() => {
                                     sethoverSlot1(true);
                                 }}
@@ -329,11 +330,11 @@ export default function slotmachine() {
                             </p>
                         </div>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff] overflow-hidden'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
                             id='slot-2'
                         >
                             <p
-                                className={`${(visual['spinAnimation'] && spinStart["slot2"]) ? 'animate-spinSlot' : ''} cursor-pointer`}
+                                className={`${visual['spinAnimation'] && spinStart['slot2'] ? 'animate-spinSlot' : ''} cursor-pointer`}
                                 onMouseEnter={() => {
                                     sethoverSlot2(true);
                                 }}
@@ -345,11 +346,11 @@ export default function slotmachine() {
                             </p>
                         </div>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff] overflow-hidden'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
                             id='slot-3'
                         >
                             <p
-                                className={`${(visual['spinAnimation'] && spinStart["slot3"]) ? 'animate-spinSlot' : ''} cursor-pointer`}
+                                className={`${visual['spinAnimation'] && spinStart['slot3'] ? 'animate-spinSlot' : ''} cursor-pointer`}
                                 onMouseEnter={() => {
                                     sethoverSlot3(true);
                                 }}
@@ -366,7 +367,8 @@ export default function slotmachine() {
                         className='text-center font-semibold'
                         style={{ color: '#FFEDDF' }}
                     >
-                        You've gained: <span style={{ color: '#AFE0CE' }}>$ {gained}</span>
+                        You've gained:{' '}
+                        <span style={{ color: '#AFE0CE' }}>$ {gained}</span>
                     </p>
                     <br></br>
                     <div className={'text-center'}>

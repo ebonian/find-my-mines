@@ -26,21 +26,6 @@ export default function Page() {
             <div className='absolute left-0 top-10'>
                 {user ? <CoinButton>{user?.balance}</CoinButton> : <></>}
             </div>
-            {/* <Link href='/shop' className='absolute left-0 top-10'>
-                <ShopButton />
-            </Link>
-            <Link href='/leaderboard' className='absolute right-0 top-10'>
-                <ScoreboardButton />
-            </Link>
-            <Link href='/skin' className='absolute bottom-10 left-0'>
-                <MySkinButton />
-            </Link>
-            <div className='absolute bottom-10 right-0'>
-                <LocaleButton />
-            </div>
-            <div className='absolute bottom-10 left-1/2 -translate-x-1/2'>
-                <HelpButton />
-            </div> */}
 
             <div className='flex flex-col items-center space-y-10'>
                 <h1 className='space-x-4 text-7xl font-bold'>
@@ -75,12 +60,10 @@ export default function Page() {
                         <GoogleLoginButton />
                     )}
                 </div>
-                <div className='flex justify-center'>
-                    <div className='grid grid-cols-3 gap-4'>
-                        <MySkinButton />
-                        <ScoreboardButton />
-                        <SlotMachineButton />
-                    </div>
+                <div className='grid max-w-2xl grid-cols-3 gap-8'>
+                    <MySkinButton />
+                    <ScoreboardButton />
+                    <SlotMachineButton />
                 </div>
             </div>
         </Layout>

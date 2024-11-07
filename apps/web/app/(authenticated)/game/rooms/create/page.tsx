@@ -11,7 +11,7 @@ import { Radio } from '../../../../_components/ui/radio';
 import { CardCheckbox } from '../../../../_components/ui/card';
 import { useAuthContext } from '../../../../_contexts/auth';
 
-export default function Create() {
+export default function Page() {
     const router = useRouter();
     const { user } = useAuthContext();
     const { createRoom } = useGameContext();

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import BackButton from '../_components/common/back-button';
+import BackButton from '../../_components/common/back-button';
 
-export default function leaderboard() {
+export default function Page() {
     type returnMyData = {
         rank: string;
         playerName: string;

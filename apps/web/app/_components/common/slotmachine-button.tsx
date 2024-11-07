@@ -2,24 +2,15 @@
 
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import Link from 'next/link';
-import { env } from 'next-runtime-env';
-import { useAuthContext } from '../../_contexts/auth';
+import AuthLink from './auth-link';
 
 type SlotmachineButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function SlotMachineButton({
     ...props
 }: SlotmachineButtonProps) {
-    const { user } = useAuthContext();
     return (
-        <Link
-            href={
-                user
-                    ? '/slotmachine'
-                    : `${env('NEXT_PUBLIC_SERVER_URL')}/auth/google`
-            }
-        >
+        <AuthLink href='/slotmachine'>
             <Button
                 {...props}
                 color='brown'
@@ -35,6 +26,6 @@ export default function SlotMachineButton({
                 </div>
                 <span>Slot Machine</span>
             </Button>
-        </Link>
+        </AuthLink>
     );
 }
