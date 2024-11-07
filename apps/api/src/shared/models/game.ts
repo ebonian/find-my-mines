@@ -11,7 +11,7 @@ const GameSchema = new Schema({
         {
             id: { type: Number, required: true },
             userId: { type: String, required: true },
-            cellId: { type: Number, required: true },
+            cellId: { type: String, required: true },
             bombFound: { type: Boolean, required: true },
         },
     ],
