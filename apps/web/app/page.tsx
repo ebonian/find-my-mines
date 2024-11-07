@@ -57,7 +57,7 @@ export default function Page() {
                                     logout();
                                 }}
                             >
-                                <span>Logout</span>
+                                Logout
                             </button>
                         </>
                     ) : (
