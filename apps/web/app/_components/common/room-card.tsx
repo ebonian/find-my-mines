@@ -13,12 +13,12 @@ interface RoomCardProps {
 
 export default function RoomCard({ _id, name, creator, type }: RoomCardProps) {
     const { joinRoom } = useGameContext();
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState('');
 
     const fetchUser = async (uid: string) => {
         const { data } = await axios.get(`/users/${uid}`);
         setUsername(data.username);
-    }
+    };
 
     useEffect(() => {
         fetchUser(creator);
@@ -29,7 +29,7 @@ export default function RoomCard({ _id, name, creator, type }: RoomCardProps) {
     }
 
     return (
-        <div className='bg-brown space-y-5 rounded-3xl bg-opacity-10 p-5'>
+        <div className='bg-brown w-full space-y-5 rounded-3xl bg-opacity-10 p-5'>
             <p className='text-center text-2xl font-bold text-white'>{name}</p>
 
             <div className='space-y-1 text-left text-lg font-semibold text-white'>

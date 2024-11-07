@@ -1,17 +1,13 @@
 'use client';
 
 import GoogleLoginButton from './_components/common/google-login-button';
-import ShopButton from './_components/common/shop-button';
 import ScoreboardButton from './_components/common/scoreboard-button';
-import LocaleButton from './_components/common/locale-button';
 import MySkinButton from './_components/common/my-skin';
-import HelpButton from './_components/common/help-button';
 import Layout from './_components/common/layout';
 import Link from 'next/link';
 import { useAuthContext } from './_contexts/auth';
 import { Button } from './_components/ui/button';
 import SlotMachineButton from './_components/common/slotmachine-button';
-import { env } from 'next-runtime-env';
 import UserButton from './_components/common/user-button';
 import CoinButton from './_components/common/coin-button';
 
@@ -21,10 +17,10 @@ export default function Page() {
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <div className='absolute right-0 top-10'>
-                {user ? <UserButton>{user?.username}</UserButton> : <></>}
+                {user ? <UserButton>{user?.username}</UserButton> : null}
             </div>
             <div className='absolute left-0 top-10'>
-                {user ? <CoinButton>{user?.balance}</CoinButton> : <></>}
+                {user ? <CoinButton>{user?.balance}</CoinButton> : null}
             </div>
 
             <div className='flex flex-col items-center space-y-10'>

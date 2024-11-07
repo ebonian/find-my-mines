@@ -4,7 +4,6 @@ import './globals.css';
 import SocketContextProvider from './_contexts/socket';
 import GameContextProvider from './_contexts/game';
 import AuthContextProvider from './_contexts/auth';
-import GameGuard from './_components/common/game-guard';
 import { PublicEnvScript } from 'next-runtime-env';
 
 const monserrat = Montserrat({
@@ -32,9 +31,7 @@ export default function RootLayout({
             <body className={`${monserrat.className} bg-gray text-white`}>
                 <AuthContextProvider>
                     <SocketContextProvider>
-                        <GameContextProvider>
-                            <GameGuard>{children}</GameGuard>
-                        </GameContextProvider>
+                        <GameContextProvider>{children}</GameContextProvider>
                     </SocketContextProvider>
                 </AuthContextProvider>
             </body>

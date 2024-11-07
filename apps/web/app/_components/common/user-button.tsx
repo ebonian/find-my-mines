@@ -8,7 +8,7 @@ export default function UserButton({ ...props }: UserButtonProps) {
         <Button
             {...props}
             color='brown'
-            className='h-12 space-x-4 bg-opacity-10 px-7 py-3'
+            className='h-12 cursor-default space-x-4 bg-opacity-10 px-7 py-3'
         >
             <div className='relative aspect-square h-full'>
                 <Image

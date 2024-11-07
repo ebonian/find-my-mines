@@ -44,7 +44,7 @@ export default function Page() {
                 </>
             }
         >
-            <div className='flex max-w-screen-xl flex-col items-center space-y-16'>
+            <div className='flex w-full max-w-screen-xl flex-col items-center space-y-16'>
                 <div className='space-y-2 text-center font-bold'>
                     <h1 className='text-6xl text-white'>Lobby</h1>
                     <p className='text-purple text-xl'>
