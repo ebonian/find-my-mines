@@ -59,32 +59,18 @@ export default function Play() {
         }
     }, [userFoundedBombs, opponentFoundedBombs]);
 
-    useEffect(() => {
-        if (!game || game.actions.length === 0) {
-            return;
-        }
-
-        const latestAction = game.actions[game.actions.length - 1];
-
-        if (latestAction?.bombFound) {
-            if (latestAction.userId === user?._id) {
-                setuserFoundedBombs((prev) => prev + 1);
-            }
-            if (latestAction.userId !== user?._id) {
-                setopponentFoundedBombs((prev) => prev + 1);
-            }
-        }
-    }, [game?.actions]);
+    // Callback to receive bomb counts from Scoreboard
+    const onBombsUpdate = (userBombs: number, opponentBombs: number) => {
+        setuserFoundedBombs(userBombs);
+        setopponentFoundedBombs(opponentBombs);
+    };
 
     return (
         <Layout
             className='flex flex-col items-center gap-6 py-12'
             leftButton={<MenuButton />}
         >
-            <Scoreboard
-                userFoundedBombs={userFoundedBombs}
-                opponentFoundedBombs={opponentFoundedBombs}
-            />
+            <Scoreboard onBombsUpdate={onBombsUpdate} />
             <Status />
             <GameBoard />
         </Layout>

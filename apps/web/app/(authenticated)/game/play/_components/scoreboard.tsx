@@ -3,17 +3,46 @@
 import Image from 'next/image';
 import { useGameContext } from '../../../../_contexts/game';
 import { cn } from '../../../../_lib/utils';
+import { useState, useEffect } from 'react';
+import { useAuthContext } from '../../../../_contexts/auth';
 
 interface HeaderProps {
-    userFoundedBombs: number;
-    opponentFoundedBombs: number;
+    // userFoundedBombs: number;
+    // opponentFoundedBombs: number;
+    onBombsUpdate: (userBombs: number, opponentBombs: number) => void;
 }
 
 export default function Header({
-    userFoundedBombs,
-    opponentFoundedBombs,
+    // userFoundedBombs,
+    // opponentFoundedBombs,
+    onBombsUpdate,
 }: HeaderProps) {
-    const { turn } = useGameContext();
+    const { game, turn } = useGameContext();
+    const { user } = useAuthContext();
+
+    const [userFoundedBombs, setUserFoundedBombs] = useState(0);
+    const [opponentFoundedBombs, setOpponentFoundedBombs] = useState(0);
+
+    useEffect(() => {
+        if (!game || game.actions.length === 0) {
+            return;
+        }
+
+        const latestAction = game.actions[game.actions.length - 1];
+
+        if (latestAction?.bombFound) {
+            if (latestAction.userId === user?._id) {
+                setUserFoundedBombs((prev) => prev + 1);
+            }
+            if (latestAction.userId !== user?._id) {
+                setOpponentFoundedBombs((prev) => prev + 1);
+            }
+        }
+    }, [game?.actions, user]);
+
+    useEffect(() => {
+        onBombsUpdate(userFoundedBombs, opponentFoundedBombs);
+    }, [userFoundedBombs, opponentFoundedBombs, onBombsUpdate]);
 
     return (
         <div className='grid w-full max-w-2xl grid-cols-3'>
