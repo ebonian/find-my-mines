@@ -25,6 +25,10 @@ export default function Play() {
     const router = useRouter();
 
     const handleEnd = async () => {
+        let result = 'lose';
+        if (userFoundedBombs > opponentFoundedBombs && user !== null) {
+            result = 'win';
+        }
         try {
             // TODO: use game action to calculate the score or do it server side
             // if (userFoundedBombs > opponentFoundedBombs && user !== null) {
@@ -40,7 +44,7 @@ export default function Play() {
         }
         if (joinedGameRoom) {
             updateRoomState(joinedGameRoom, 'end');
-            router.push('/game/end');
+            router.push(`/game/end?result=${result}`);
         }
     };
 

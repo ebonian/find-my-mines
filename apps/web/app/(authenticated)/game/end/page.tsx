@@ -4,13 +4,14 @@ import { Button } from '../../../_components/ui/button';
 import { useEffect } from 'react';
 import { useGameContext } from '../../../_contexts/game';
 import { useAuthContext } from '../../../_contexts/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Page({ result }: { result: 'win' | 'lose' }) {
+export default function Page(/*{ result }: { result: 'win' | 'lose' }*/) {
     const router = useRouter();
-    // const searchParams = useSearchParams();
+    const searchParams = useSearchParams();
     const { user } = useAuthContext();
     const { resetJoinedRoom, joinedGameRoom } = useGameContext();
+    const result = searchParams.get('result');
     // const score = searchParams.get("score");
 
     useEffect(() => {
