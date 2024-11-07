@@ -6,14 +6,18 @@ import Link from 'next/link';
 import { env } from 'next-runtime-env';
 import { useAuthContext } from '../../_contexts/auth';
 
-type MySkinButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type SlotmachineButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function MySkinButton({ ...props }: MySkinButtonProps) {
+export default function SlotMachineButton({
+    ...props
+}: SlotmachineButtonProps) {
     const { user } = useAuthContext();
     return (
         <Link
             href={
-                user ? '/shop' : `${env('NEXT_PUBLIC_SERVER_URL')}/auth/google`
+                user
+                    ? '/slotmachine'
+                    : `${env('NEXT_PUBLIC_SERVER_URL')}/auth/google`
             }
         >
             <Button
@@ -23,13 +27,13 @@ export default function MySkinButton({ ...props }: MySkinButtonProps) {
             >
                 <div className='relative aspect-square h-full'>
                     <Image
-                        src='/my-skin.svg'
-                        alt='my-skin'
+                        src='/slotmachine.svg'
+                        alt='slotmachine'
                         fill
                         className='object-contain'
                     />
                 </div>
-                <span>Skin Shop</span>
+                <span>Slot Machine</span>
             </Button>
         </Link>
     );

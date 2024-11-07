@@ -10,13 +10,23 @@ import Layout from './_components/common/layout';
 import Link from 'next/link';
 import { useAuthContext } from './_contexts/auth';
 import { Button } from './_components/ui/button';
+import SlotMachineButton from './_components/common/slotmachine-button';
+import { env } from 'next-runtime-env';
+import UserButton from './_components/common/user-button';
+import CoinButton from './_components/common/coin-button';
 
 export default function Page() {
     const { user, logout } = useAuthContext();
 
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
-            <Link href='/shop' className='absolute left-0 top-10'>
+            <div className='absolute right-0 top-10'>
+                {user ? <UserButton>{user?.username}</UserButton> : <></>}
+            </div>
+            <div className='absolute left-0 top-10'>
+                {user ? <CoinButton>{user?.balance}</CoinButton> : <></>}
+            </div>
+            {/* <Link href='/shop' className='absolute left-0 top-10'>
                 <ShopButton />
             </Link>
             <Link href='/leaderboard' className='absolute right-0 top-10'>
@@ -30,7 +40,7 @@ export default function Page() {
             </div>
             <div className='absolute bottom-10 left-1/2 -translate-x-1/2'>
                 <HelpButton />
-            </div>
+            </div> */}
 
             <div className='flex flex-col items-center space-y-10'>
                 <h1 className='space-x-4 text-7xl font-bold'>
@@ -64,15 +74,13 @@ export default function Page() {
                     ) : (
                         <GoogleLoginButton />
                     )}
-                    {/* <p className='text-center text-lg font-bold text-white'>
-                        OR
-                    </p>
-                    <div className='flex w-full flex-col items-center'>
-                        <Input placeholder='Enter a Nickname' />
-                        <p className='text-red text-center font-light italic'>
-                            Progress will not be saved
-                        </p>
-                    </div> */}
+                </div>
+                <div className='flex justify-center'>
+                    <div className='grid grid-cols-3 gap-4'>
+                        <MySkinButton />
+                        <ScoreboardButton />
+                        <SlotMachineButton />
+                    </div>
                 </div>
             </div>
         </Layout>
