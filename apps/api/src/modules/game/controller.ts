@@ -89,7 +89,7 @@ export default async function gameController(socket: Socket) {
 
                 new Promise((resolve) => setTimeout(resolve, 1000));
 
-                if (foundedBombs === (room.type === 'normal' ? 11 : 20)) {
+                if (foundedBombs === (room.type === 'normal' ? 11 : 25)) {
                     const updatedRoom = await roomService.updateRoomById(
                         room.id,
                         {

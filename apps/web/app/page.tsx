@@ -23,9 +23,9 @@ export default function Page() {
                 {user ? <CoinButton>{user?.balance}</CoinButton> : null}
             </div>
 
-            <div className='flex flex-col items-center space-y-10'>
-                <h1 className='space-x-4 text-7xl font-bold'>
-                    <span className='text-white'>Find My</span>
+            <div className='flex flex-col items-center space-y-10 text-center'>
+                <h1 className='text-7xl font-bold'>
+                    <span className='text-white'>Find My </span>
                     <span className='text-red'>Mines</span>
                 </h1>
                 <div className='text-purple text-center font-bold'>

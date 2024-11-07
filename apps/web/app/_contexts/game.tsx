@@ -17,7 +17,6 @@ interface GameContextValue {
     rooms: Room[];
     createRoom: (room: Omit<Room, '_id'>) => void;
     timer: number;
-    resetTimer: () => void;
     turn: null | 'user' | 'opponent';
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
     joinRoom: (roomId: string) => void;
@@ -29,6 +28,7 @@ interface GameContextValue {
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
     setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
+    leaveRoom: (roomId: string) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -36,7 +36,6 @@ const GameContext = createContext<GameContextValue>({
     createRoom: () => {},
     joinRoom: () => {},
     timer: 0,
-    resetTimer: () => {},
     turn: 'user',
     setTurn: () => {},
     room: null,
@@ -47,6 +46,7 @@ const GameContext = createContext<GameContextValue>({
     getGame: () => {},
     setActionHandler: () => {},
     setTurnHandler: () => {},
+    leaveRoom: () => {},
 });
 
 interface GameContextProviderProps {
@@ -119,22 +119,21 @@ export default function GameContextProvider({
     };
 
     const setActionHandler = ({
+        userId = user?._id,
         cellId,
         bombFound,
     }: {
+        userId?: string;
         cellId: string;
         bombFound: boolean;
     }) => {
-        if (turn !== 'user') {
-            return;
-        }
-        if (!game || !user) {
+        if (!game) {
             return;
         }
 
         send('send-action', {
             gameId: game._id,
-            userId: user._id,
+            userId: userId,
             cellId: cellId,
             bombFound: bombFound,
         });
@@ -142,32 +141,39 @@ export default function GameContextProvider({
 
     const setTurnHandler = (settingTurn: 'user' | 'opponent' | null) => {
         setTurn(settingTurn);
-        resetTimer();
+        setTimer(10);
     };
 
     const timeoutHandler = () => {
+        if (!user || !room) {
+            return;
+        }
+
+        const opponentUserId = room.players.find(
+            (player) => player !== user._id
+        );
+
+        if (!opponentUserId) {
+            return;
+        }
+
         setActionHandler({
+            userId: turn === 'user' ? user._id : opponentUserId,
             cellId: '',
             bombFound: false,
         });
     };
 
-    const resetTimer = () => {
-        setTimer(10);
-    };
-
     useEffect(() => {
-        if (timer > 0) {
+        if (timer > 0 && room?.state === 'playing') {
             const countdown = setInterval(() => {
                 setTimer((prev) => prev - 1);
             }, 1000);
             return () => clearInterval(countdown);
         } else {
-            if (turn === 'user') {
-                timeoutHandler();
-            }
+            timeoutHandler();
         }
-    }, [timer, turn]);
+    }, [timer]);
 
     const createRoom = async (room: Omit<Room, '_id'>) => {
         const seed = await seedGen({
@@ -189,13 +195,24 @@ export default function GameContextProvider({
         });
     };
 
+    const leaveRoom = (roomId: string) => {
+        if (!user) {
+            return;
+        }
+
+        send('leave-room', {
+            roomId,
+            userId: user._id,
+        });
+    };
+
     useEffect(() => {
         if (!rooms || !user) {
             return;
         }
 
-        const joinedRoom = rooms.find(
-            (room) => room.players.includes(user._id) && room.state !== 'end'
+        const joinedRoom = rooms.find((room) =>
+            room.players.includes(user._id)
         );
         if (!joinedRoom) {
             return;
@@ -239,7 +256,6 @@ export default function GameContextProvider({
                 rooms,
                 createRoom,
                 timer,
-                resetTimer,
                 turn,
                 setTurn,
                 joinRoom,
@@ -251,6 +267,7 @@ export default function GameContextProvider({
                 getGame,
                 setActionHandler,
                 setTurnHandler,
+                leaveRoom,
             }}
         >
             {children}
