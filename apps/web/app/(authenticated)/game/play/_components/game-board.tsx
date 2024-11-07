@@ -16,6 +16,7 @@ import {
 export default function GameBoard() {
     const { user } = useAuthContext();
     const {
+        turn,
         equippedSkin,
         skins,
         setActionHandler,
@@ -45,6 +46,8 @@ export default function GameBoard() {
     }, [room, game, user]);
 
     const clickHandlerComponent = (rowIndex: number, colIndex: number) => {
+        if (turn !== 'user') return;
+
         if (board[rowIndex]![colIndex]!.status !== 'revealed') {
             setActionHandler({
                 cellId: `${rowIndex}-${colIndex}`,

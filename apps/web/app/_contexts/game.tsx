@@ -29,6 +29,7 @@ interface GameContextValue {
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
     setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
     leaveRoom: (roomId: string) => void;
+    handleEndGame: () => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -47,6 +48,7 @@ const GameContext = createContext<GameContextValue>({
     setActionHandler: () => {},
     setTurnHandler: () => {},
     leaveRoom: () => {},
+    handleEndGame: () => {},
 });
 
 interface GameContextProviderProps {
@@ -165,7 +167,7 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
-        if (timer > 0 && room?.state === 'playing') {
+        if (timer > 0) {
             const countdown = setInterval(() => {
                 setTimer((prev) => prev - 1);
             }, 1000);
@@ -204,6 +206,12 @@ export default function GameContextProvider({
             roomId,
             userId: user._id,
         });
+    };
+
+    const handleEndGame = () => {
+        setTurn(null);
+        setRoom(null);
+        setGame(null);
     };
 
     useEffect(() => {
@@ -268,6 +276,7 @@ export default function GameContextProvider({
                 setActionHandler,
                 setTurnHandler,
                 leaveRoom,
+                handleEndGame,
             }}
         >
             {children}

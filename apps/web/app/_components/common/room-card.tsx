@@ -1,32 +1,27 @@
 import type { Room } from '@repo/shared-types';
 import { Button } from '../ui/button';
 import { useGameContext } from '../../_contexts/game';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from '../../_lib/axios';
 
-interface RoomCardProps {
-    _id?: Room['_id'];
-    name: Room['name'];
-    creator: Room['creator'];
-    type: Room['type'];
-}
+type RoomCardProps = Room;
 
 export default function RoomCard({ _id, name, creator, type }: RoomCardProps) {
     const { joinRoom } = useGameContext();
     const [username, setUsername] = useState('');
 
-    const fetchUser = async (uid: string) => {
-        const { data } = await axios.get(`/users/${uid}`);
-        setUsername(data.username);
-    };
+    const fetchUser = useCallback(async (userId: string) => {
+        try {
+            const { data } = await axios.get(`/users/${userId}`);
+            setUsername(data.username);
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
 
     useEffect(() => {
         fetchUser(creator);
     }, []);
-
-    if (!_id) {
-        return null;
-    }
 
     return (
         <div className='bg-brown w-full space-y-5 rounded-3xl bg-opacity-10 p-5'>

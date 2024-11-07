@@ -66,7 +66,9 @@ export default function Page() {
                         size='lg'
                         onClick={() => {
                             joinRoom(
-                                rooms[Math.floor(Math.random() * rooms.length)]
+                                rooms.filter(
+                                    (room) => room.state === 'waiting'
+                                )[Math.floor(Math.random() * rooms.length)]
                                     ?._id ?? ''
                             );
                         }}

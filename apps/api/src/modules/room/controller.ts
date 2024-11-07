@@ -130,11 +130,7 @@ export default async function roomController(socket: Socket) {
         'leave-room',
         async ({ userId, roomId }: { userId: string; roomId: string }) => {
             try {
-                const response = await roomService.removePlayersFromRoom(
-                    userId,
-                    roomId
-                );
-                socket.emit('leave-room', response);
+                await roomService.removePlayersFromRoom(userId, roomId);
             } catch (err) {
                 console.log(err);
                 socket.emit('error leaving');

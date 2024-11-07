@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 export default function Page() {
     const { user } = useAuthContext();
-    const { game, room, leaveRoom } = useGameContext();
+    const { game, room, leaveRoom, handleEndGame } = useGameContext();
     const [win, setWin] = useState(false);
     const [userFoundedBombs, setUserFoundedBombs] = useState(0);
 
@@ -18,7 +18,9 @@ export default function Page() {
         if (!room || !game || !user) {
             return;
         }
+
         leaveRoom(room._id);
+        handleEndGame();
 
         const userFoundedBombs = game.actions.filter(
             (action) => action.userId === user._id && action.bombFound
@@ -27,12 +29,9 @@ export default function Page() {
             (action) => action.userId !== user._id && action.bombFound
         ).length;
 
-        console.log('userFoundedBombs', userFoundedBombs);
-        console.log('opponentFoundedBombs', opponentFoundedBombs);
-
         setUserFoundedBombs(userFoundedBombs);
         setWin(userFoundedBombs > opponentFoundedBombs);
-    }, [room, game, user]);
+    }, [game, user, room]);
 
     return (
         <Layout

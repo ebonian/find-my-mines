@@ -2,12 +2,11 @@
 
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface BackButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    href: string;
+    href?: string;
 }
 
 export default function BackButton({ ...props }: BackButtonProps) {
