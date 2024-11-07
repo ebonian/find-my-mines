@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-// import BackButton from '../_components/ui/BackButton';
+import Layout from '../../_components/common/layout';
 import BackButton from './_components/back-button';
 import { Button } from '../../_components/ui/button';
 import axios from '../../_lib/axios';
@@ -261,20 +261,21 @@ export default function Page() {
 
     return (
         <>
-            {/* <main className="flex min-h-screen flex-col items-center justify-between p-2"> */}
-            <div
-                className='flex min-h-screen flex-grow items-center justify-center'
-                style={{ backgroundColor: '#0D1321' }}
-            >
-                <div
-                    className='container mx-auto py-5'
-                    style={{ marginBottom: '96px' }}
-                >
+            <Layout 
+                className='flex min-h-screen flex-col items-center justify-center'
+                leftButton={
                     <BackButton
                         actionBeforeBack={motivationBeforeQuit}
                         confirmation={true}
                         setShow={setshowMotivation}
-                    />
+                    />}
+            >
+            {/* <main className="flex min-h-screen flex-col items-center justify-between p-2"> */}
+            <div className='flex flex-col items-center space-y-16'>
+                {/* <div
+                    className='container mx-auto py-5'
+                    style={{ marginBottom: '96px' }}
+                > */}
                     <img
                         id='quiteBeforeWinBig'
                         src='/images/quiteBeforeWinBig.png'
@@ -291,30 +292,28 @@ export default function Page() {
                         className='hidden'
                     ></audio>
                     <h1
-                        className='text-center text-3xl font-bold'
-                        style={{ color: '#FFEDDF' }}
+                        className='text-center text-3xl font-bold text-white'
                     >
                         Slot machine of Infinite Wealth 🙏
                     </h1>
                     <p
-                        className='text-center font-semibold'
-                        style={{ color: '#FFEDDF', marginTop: '24px' }}
+                        className='text-center font-semibold text-white'
                     >
                         Each spin costs{' '}
-                        <span style={{ color: '#EE964B' }}>$ 20</span>
+                        <span className='text-orange'>$ 20</span>
                     </p>
                     {/* <p className="text-center">Welcome... Let's make money</p> */}
                     <p
-                        className='text-center font-semibold'
-                        style={{ color: '#FFEDDF', marginTop: '24px' }}
+                        className='text-center font-semibold text-white'
+                        style={{ marginTop: '24px' }}
                     >
                         Your balance:{' '}
-                        <span style={{ color: '#C5D86D' }}>$ {balance}</span>
+                        <span className='text-green'>$ {balance}</span>
                     </p>
                     <br></br>
                     <div className='grid w-full grid-cols-3 justify-items-center'>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-gray bg-white text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
                             id='slot-1'
                         >
                             <p
@@ -326,11 +325,11 @@ export default function Page() {
                                     sethoverSlot1(false);
                                 }}
                             >
-                                {hoverSlot1 ? '🖕' : emojiSlots[1]}
+                                {hoverSlot1 ? '👁️' : emojiSlots[1]}
                             </p>
                         </div>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-gray bg-white text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
                             id='slot-2'
                         >
                             <p
@@ -342,11 +341,11 @@ export default function Page() {
                                     sethoverSlot2(false);
                                 }}
                             >
-                                {hoverSlot2 ? '🖕' : emojiSlots[2]}
+                                {hoverSlot2 ? '👄' : emojiSlots[2]}
                             </p>
                         </div>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-gray bg-white text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
                             id='slot-3'
                         >
                             <p
@@ -358,17 +357,16 @@ export default function Page() {
                                     sethoverSlot3(false);
                                 }}
                             >
-                                {hoverSlot3 ? '🖕' : emojiSlots[3]}
+                                {hoverSlot3 ? '👁️' : emojiSlots[3]}
                             </p>
                         </div>
                     </div>
                     <br></br>
                     <p
-                        className='text-center font-semibold'
-                        style={{ color: '#FFEDDF' }}
+                        className='text-center font-semibold text-white'
                     >
                         You've gained:{' '}
-                        <span style={{ color: '#AFE0CE' }}>$ {gained}</span>
+                        <span className='text-cyan'>$ {gained}</span>
                     </p>
                     <br></br>
                     <div className={'text-center'}>
@@ -382,8 +380,9 @@ export default function Page() {
                             SPIN!!!
                         </Button>
                     </div>
-                </div>
+                {/* </div> */}
             </div>
+            </Layout>
             {/* </main> */}
         </>
     );

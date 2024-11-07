@@ -4,6 +4,10 @@ const getTopNUsers = async (limit: number) => {
     return await UserModel.find().sort({ score: -1 }).limit(limit);
 };
 
+const getAllUsers = async () => {
+    return await UserModel.find().sort({ score: -1 })
+};
+
 const getUserById = async (id: string) => {
     return await UserModel.findById(id);
 };
@@ -16,4 +20,5 @@ export default {
     getTopNUsers,
     getUserById,
     updateUserById,
+    getAllUsers,
 };
