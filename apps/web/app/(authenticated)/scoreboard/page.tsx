@@ -5,6 +5,7 @@ import BackButton from '../../_components/common/back-button';
 import axios from '../../_lib/axios';
 import { User } from '@repo/shared-types';
 import { useAuthContext } from '../../_contexts/auth';
+import Layout from '../../_components/common/layout';
 
 export default function Page() {
     type returnMyData = {
@@ -78,23 +79,22 @@ export default function Page() {
 
     return (
         <>
-            <div
-                className='flex min-h-screen flex-grow items-center justify-center'
-                style={{ backgroundColor: '#252525' }}
+            <Layout 
+                className='flex min-h-screen flex-col items-center justify-center'
+                leftButton={
+                    <BackButton href='/' />}
             >
                 <div
                     className='container mx-auto py-5'
                     style={{ marginBottom: '96px' }}
                 >
-                    <BackButton href='/' />
                     <p
-                        className='mb-14 mt-12 text-center text-6xl font-bold'
-                        style={{ color: '#FFEDDF' }}
+                        className='mb-14 mt-12 text-center text-6xl font-bold text-white'
                     >
                         Leaderboard
                     </p>
                     <div className='flex w-full flex-col items-center overflow-visible'>
-                        <div className='flex w-[60%] gap-[10px] rounded-[36px] border-b-[5px] border-b-[#4a4646] bg-[#252525] text-[#FFEDDF]'>
+                        <div className='flex w-[60%] gap-[10px] rounded-[36px] border-b-[5px] border-b-[#4a4646] bg-gray text-white'>
                             {populateTableByRow({
                                 rank: 'Rank',
                                 playerName: 'Name',
@@ -108,8 +108,8 @@ export default function Page() {
                                     <div
                                         className={
                                             player.username == user?.username
-                                                ? 'mt-[20px] flex w-[60%] gap-[10px] rounded-[36px] bg-[#C5D86D] text-black'
-                                                : 'mt-[20px] flex w-[60%] gap-[10px] rounded-[36px] bg-[#EE964B] text-black'
+                                                ? 'mt-[20px] flex w-[60%] gap-[10px] rounded-[36px] bg-green text-black'
+                                                : 'mt-[20px] flex w-[60%] gap-[10px] rounded-[36px] bg-orange text-black'
                                         }
                                     >
                                         {populateTableByRow({
@@ -123,7 +123,7 @@ export default function Page() {
                             }
                         )}
                         {(!currentPlayerOnTop && thisPlayer) && (
-                            <div className='mt-[20px] flex w-[60%] gap-[10px] rounded-[36px] bg-[#C5D86D] text-black'>
+                            <div className='mt-[20px] flex w-[60%] gap-[10px] rounded-[36px] bg-green text-black'>
                                 {populateTableByRow({
                                     rank: `# ${thisRank}`,
                                     playerName: thisPlayer.username,
@@ -134,7 +134,7 @@ export default function Page() {
                         )}
                     </div>
                 </div>
-            </div>
+            </Layout>
         </>
     );
 }

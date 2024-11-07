@@ -20,16 +20,6 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
     const [isHovered, setisHovered] = useState(false);
     const [confirmBack, setconfirmBack] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
-    // const buttonStyle = {
-    //     backgroundColor: isHovered ? "#FFEDDF" : "#252525",
-    //     color: isHovered ? "#0D1321" : "#FFEDDF",
-    //     borderWidth: "0px",
-    //     borderRadius: "3px",
-    //     padding: "16px 36px 16px 36px",
-    //     position: "relative",
-    //     top: "0px",
-    //     left: "0px",
-    // };
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
@@ -75,7 +65,7 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
         <>
             <button
                 ref={buttonRef}
-                className={`relative left-0 top-0 rounded-full border-0 px-9 py-4 bg-[#86615C] text-[#FFEDDF] bg-opacity-10 ${ isHovered ? "opacity-90" : "" }`}
+                className={`relative left-0 top-0 rounded-full border-0 px-9 py-4 bg-brown text-white bg-opacity-10 ${ isHovered ? "opacity-90" : "" }`}
                 // style={buttonStyle}
                 onMouseEnter={() => setisHovered(true)}
                 onMouseLeave={() => setisHovered(false)}
