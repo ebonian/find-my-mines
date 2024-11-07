@@ -25,8 +25,6 @@ export default function Play() {
     const router = useRouter();
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
-    const [actionId, setActionId] = useState(0);
-    const [actions, setActions] = useState<Action[]>([]);
 
     if (!joinedGameRoom) {
         return <div>Loading...</div>;
