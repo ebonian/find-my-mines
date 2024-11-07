@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState } from 'react';
 import GoogleLoginButton from './_components/common/google-login-button';
 import ScoreboardButton from './_components/common/scoreboard-button';
 import MySkinButton from './_components/common/my-skin';
@@ -13,11 +14,20 @@ import CoinButton from './_components/common/coin-button';
 
 export default function Page() {
     const { user, logout } = useAuthContext();
+    const [hoverLogout, sethoverLogout] = useState(false);
 
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <div className='absolute right-0 top-10'>
-                {user ? <UserButton>{user?.username}</UserButton> : null}
+                {user ? (
+                    <>
+                        <div>
+                            <Link href='/nickname'>
+                                <UserButton>{user?.username}</UserButton>
+                            </Link>
+                        </div>
+                    </>
+                ) : null}
             </div>
             <div className='absolute left-0 top-10'>
                 {user ? <CoinButton>{user?.balance}</CoinButton> : null}
@@ -48,8 +58,16 @@ export default function Page() {
                                     logout();
                                 }}
                                 className='opacity-50'
+                                onMouseEnter={() => {
+                                    sethoverLogout(true);
+                                }}
+                                onMouseLeave={() => sethoverLogout(false)}
                             >
-                                Logout
+                                <span
+                                    className={hoverLogout ? 'underline' : ''}
+                                >
+                                    Logout
+                                </span>
                             </button>
                         </>
                     ) : (
