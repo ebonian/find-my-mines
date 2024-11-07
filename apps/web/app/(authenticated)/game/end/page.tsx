@@ -1,10 +1,23 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { Button } from '../../../_components/ui/button';
+import { useEffect } from 'react';
+import { useGameContext } from '../../../_contexts/game';
+import { useAuthContext } from '../../../_contexts/auth';
+import { useRouter } from 'next/navigation';
 
 export default function End({ result }: { result: 'win' | 'lose' }) {
     const router = useRouter();
+    // const searchParams = useSearchParams();
+    const { user } = useAuthContext();
+    const { resetJoinedRoom, joinedGameRoom } = useGameContext();
+    // const score = searchParams.get("score");
+
+    useEffect(() => {
+        if (user && joinedGameRoom) {
+            resetJoinedRoom(user._id);
+        }
+    }, [resetJoinedRoom]);
 
     const handleClickBack = () => {
         router.push("/");

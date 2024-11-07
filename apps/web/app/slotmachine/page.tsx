@@ -28,6 +28,11 @@ export default function slotmachine() {
         buttonDisable: false,
         imageHidden: true,
     });
+    const [spinStart, setSpinStart] = useState({
+        slot1: false,
+        slot2: false,
+        slot3: false,
+    });
     const [showMotivation, setshowMotivation] = useState(false);
     const [hoverSlot1, sethoverSlot1] = useState(false);
     const [hoverSlot2, sethoverSlot2] = useState(false);
@@ -41,16 +46,36 @@ export default function slotmachine() {
         2: '🇨🇳',
         3: '🎰',
     });
-    const [randomWeight, setrandomWeight] = useState(
-        '6'.repeat(1) +
-            '5'.repeat(3) +
-            '4'.repeat(7) +
-            '3'.repeat(14) +
-            '2'.repeat(20) +
-            '1'.repeat(25) +
-            '0'.repeat(30)
-    );
-    const weight = randomWeight;
+    const [admin, setAdmin] = useState(false);
+    // const randomWeight = !admin ?
+    //                     '6'.repeat(1) +
+    //                     '5'.repeat(3) +
+    //                     '4'.repeat(7) +
+    //                     '3'.repeat(14) +
+    //                     '2'.repeat(20) +
+    //                     '1'.repeat(25) +
+    //                     '0'.repeat(30)
+    //                     : '6'.repeat(100);
+    // const [randomWeight, setrandomWeight] = useState(
+    //     admin ?
+    //         '6'.repeat(1) +
+    //         '5'.repeat(3) +
+    //         '4'.repeat(7) +
+    //         '3'.repeat(14) +
+    //         '2'.repeat(20) +
+    //         '1'.repeat(25) +
+    //         '0'.repeat(30)
+    //     : '6'.repeat(100)
+    // );
+    const weight = !admin ?
+                    '6'.repeat(1) +
+                    '5'.repeat(3) +
+                    '4'.repeat(7) +
+                    '3'.repeat(14) +
+                    '2'.repeat(20) +
+                    '1'.repeat(25) +
+                    '0'.repeat(30)
+                    : '6'.repeat(100);
     const emojis: emojiState = {
         0: '🥢',
         1: '🥮',
@@ -64,6 +89,9 @@ export default function slotmachine() {
     useEffect(() => {
         if (user) {
           setbalance(user.balance);
+          if (user.username === "TungDude") {
+            setAdmin(true);
+          }
         }
     }, [user]);
     // useEffect(() => {
@@ -85,15 +113,15 @@ export default function slotmachine() {
     //     });
     // }
 
-    const setSlotEmojis = (key1: number, key2: number, key3: number) => {
-        const emojiStates: emojiState = {
-            1: emojis[key1]!,
-            2: emojis[key2]!,
-            3: emojis[key3]!,
-        };
+    // const setSlotEmojis = (key1: number, key2: number, key3: number) => {
+    //     const emojiStates: emojiState = {
+    //         1: emojis[key1]!,
+    //         2: emojis[key2]!,
+    //         3: emojis[key3]!,
+    //     };
 
-        setemojiSlots((prevSlots) => ({ ...prevSlots, ...emojiStates }));
-    };
+    //     setemojiSlots((prevSlots) => ({ ...prevSlots, ...emojiStates }));
+    // };
 
     // const setRandomWeight = (weightPairs: WeightPairs) => {
     //     const sum = Object.keys(weightPairs)
@@ -139,22 +167,67 @@ export default function slotmachine() {
             ...visual,
             ...{ spinAnimation: true, buttonDisable: true },
         });
-        const slot2 = parseInt(
-            weight.charAt(Math.floor(Math.random() * totalPercent))
-        );
+
+        setSpinStart(prev => ({
+            ...prev,
+            slot1: true,
+        }));
+
+        setTimeout(() => {
+            setSpinStart(prev => ({
+                ...prev,
+                slot2: true,
+            }));
+        }, 600);
+    
+        setTimeout(() => {
+            setSpinStart(prev => ({
+                ...prev,
+                slot3: true,
+            }));
+        }, 1200);
+
         const slot1 = parseInt(
             weight.charAt(Math.floor(Math.random() * totalPercent))
         );
-        var slot3 = slot1 + Math.floor(Math.random() * 3) - 1;
-        if (slot3 > 6) {
-            slot3 = (slot3 % 6) - 1;
-        }
-        if (slot3 < 0) {
-            slot3 += 7;
+        const slot2 = parseInt(
+            weight.charAt(Math.floor(Math.random() * totalPercent))
+        );
+        var slot3 = admin ? 6 : slot1 + Math.floor(Math.random() * 3) - 1;
+        if (!admin) {
+            if (slot3 > 6) {
+                slot3 = (slot3 % 6) - 1;
+            }
+            if (slot3 < 0) {
+                slot3 += 7;
+            }
         }
 
         setTimeout(() => {
-            setSlotEmojis(slot1, slot2, slot3);
+            setemojiSlots((prevSlots) => ({ ...prevSlots, 1: emojis[slot1]! }));
+            setSpinStart(prev => ({
+                ...prev,
+                slot1: false,
+            }));
+        }, 1800);
+
+        setTimeout(() => {
+            setemojiSlots((prevSlots) => ({ ...prevSlots, 2: emojis[slot2]! }));
+            setSpinStart(prev => ({
+                ...prev,
+                slot2: false,
+            }));
+        }, 2400);
+
+        setTimeout(() => {
+            setemojiSlots((prevSlots) => ({ ...prevSlots, 3: emojis[slot3]! }));
+            setSpinStart(prev => ({
+                ...prev,
+                slot3: false,
+            }));
+        }, 3000);
+
+        setTimeout(() => {
             if (slot1 == slot2 && slot1 == slot3) {
                 visual.imageHidden = false;
                 const audio = document.getElementById(
@@ -180,7 +253,7 @@ export default function slotmachine() {
                 ...visual,
                 ...{ spinAnimation: false, buttonDisable: false },
             });
-        }, 800);
+        }, 3000);
     };
 
     const motivationBeforeQuit = () => {
@@ -224,21 +297,27 @@ export default function slotmachine() {
                     >
                         Slot machine of Infinite Wealth 🙏
                     </h1>
+                    <p
+                        className='text-center font-semibold'
+                        style={{ color: '#FFEDDF', marginTop: '24px' }}
+                    >
+                        Each spin costs <span style={{ color: '#EE964B' }}>$ 20</span>
+                    </p>
                     {/* <p className="text-center">Welcome... Let's make money</p> */}
                     <p
                         className='text-center font-semibold'
                         style={{ color: '#FFEDDF', marginTop: '24px' }}
                     >
-                        Your balance: ${balance}
+                        Your balance: <span style={{ color: '#C5D86D' }}>$ {balance}</span>
                     </p>
                     <br></br>
                     <div className='grid w-full grid-cols-3 justify-items-center'>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff] overflow-hidden'
                             id='slot-1'
                         >
                             <p
-                                className={`${visual['spinAnimation'] ? 'animate-spinFast' : ''} cursor-pointer`}
+                                className={`${(visual['spinAnimation'] && spinStart["slot1"]) ? 'animate-spinSlot' : ''} cursor-pointer`}
                                 onMouseEnter={() => {
                                     sethoverSlot1(true);
                                 }}
@@ -250,11 +329,11 @@ export default function slotmachine() {
                             </p>
                         </div>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff] overflow-hidden'
                             id='slot-2'
                         >
                             <p
-                                className={`${visual['spinAnimation'] ? 'animate-spinFast' : ''} cursor-pointer`}
+                                className={`${(visual['spinAnimation'] && spinStart["slot2"]) ? 'animate-spinSlot' : ''} cursor-pointer`}
                                 onMouseEnter={() => {
                                     sethoverSlot2(true);
                                 }}
@@ -266,11 +345,11 @@ export default function slotmachine() {
                             </p>
                         </div>
                         <div
-                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
+                            className='card flex h-full min-h-[144px] w-[90%] items-center justify-center rounded border-2 border-[#252525] bg-[#FFEDDF] text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff] overflow-hidden'
                             id='slot-3'
                         >
                             <p
-                                className={`${visual['spinAnimation'] ? 'animate-spinFast' : ''} cursor-pointer`}
+                                className={`${(visual['spinAnimation'] && spinStart["slot3"]) ? 'animate-spinSlot' : ''} cursor-pointer`}
                                 onMouseEnter={() => {
                                     sethoverSlot3(true);
                                 }}
@@ -287,7 +366,7 @@ export default function slotmachine() {
                         className='text-center font-semibold'
                         style={{ color: '#FFEDDF' }}
                     >
-                        You've gained: ${gained}
+                        You've gained: <span style={{ color: '#AFE0CE' }}>$ {gained}</span>
                     </p>
                     <br></br>
                     <div className={'text-center'}>

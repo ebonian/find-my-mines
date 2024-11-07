@@ -37,6 +37,13 @@ const updateRoomById = async (roomId: string, room: any) => {
     return await RoomModel.findByIdAndUpdate(roomId, room, { new: true });
 };
 
+const removePlayersFromRoom = async (userId: string, roomId: string) => {
+    const update = {
+        $pull: { players: userId },
+    };
+    return await updateRoomById(roomId, update);
+}
+
 export default {
     createRoom,
     getRooms,
@@ -44,4 +51,5 @@ export default {
     getUserJoinedRoom,
     getUserJoinedStartingRoom,
     updateRoomById,
+    removePlayersFromRoom,
 };
