@@ -26,6 +26,7 @@ interface GameContextValue {
     skins: Skin[];
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
+    resetJoinedRoom: (userId: string) => void;
     game: Game | null;
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
@@ -45,6 +46,7 @@ const GameContext = createContext<GameContextValue>({
     skins: [],
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
+    resetJoinedRoom: () => {},
     game: null,
     getGame: () => {},
     setActionHandler: () => {},
@@ -175,14 +177,26 @@ export default function GameContextProvider({
         send('create-room', roomWithSeed);
     };
 
-    const updateRoomState = (
+    const updateRoomState = async (
         room: Room,
-        state: 'waiting' | 'playing' | 'end'
+        state: 'waiting' | 'playing' | 'end',
     ) => {
         send('update-room-state', {
             roomId: room._id,
             state: state,
-        });
+        }); 
+        // if (user !== null) {
+        //     send('leave-joined-room', {
+        //         userId: user._id,
+        //         roomId: room._id,
+        //     })
+        // }
+    };
+
+    const resetJoinedRoom = (userId: string) => {
+        send('get-joined-room', {
+            userId: userId,
+        })
     };
 
     const joinRoom = (roomId: string) => {
@@ -250,6 +264,7 @@ export default function GameContextProvider({
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,
+                resetJoinedRoom,
                 game,
                 getGame,
                 setActionHandler,

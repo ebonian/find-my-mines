@@ -40,7 +40,6 @@ export default function Play() {
         type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
 
-    //for game end
     const handleEnd = async () => {
         try {
             if (userFoundedBombs > opponentFoundedBombs && user !== null) {
@@ -96,13 +95,6 @@ export default function Play() {
             className='flex flex-col items-center gap-6 py-12'
             leftButton={<MenuButton />}
         >
-            {/* <button
-                onClick={() => {
-                    setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
-                }}
-            >
-                Set to {turn !== 'user' ? 'User' : 'Opponent'} turn
-            </button> */}
             <Scoreboard
                 userFoundedBombs={userFoundedBombs}
                 opponentFoundedBombs={opponentFoundedBombs}
