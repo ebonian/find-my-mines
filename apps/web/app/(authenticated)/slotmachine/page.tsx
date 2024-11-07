@@ -12,16 +12,6 @@ export default function Page() {
         [key: number]: string;
     };
 
-    // type WeightPairs = {
-    //     r6: number;
-    //     r5: number;
-    //     r4: number;
-    //     r3: number;
-    //     r2: number;
-    //     r1: number;
-    //     r0: number;
-    // };
-
     const { user } = useAuthContext();
     const [visual, setvisual] = useState({
         spinAnimation: false,
@@ -47,26 +37,6 @@ export default function Page() {
         3: '🎰',
     });
     const [admin, setAdmin] = useState(false);
-    // const randomWeight = !admin ?
-    //                     '6'.repeat(1) +
-    //                     '5'.repeat(3) +
-    //                     '4'.repeat(7) +
-    //                     '3'.repeat(14) +
-    //                     '2'.repeat(20) +
-    //                     '1'.repeat(25) +
-    //                     '0'.repeat(30)
-    //                     : '6'.repeat(100);
-    // const [randomWeight, setrandomWeight] = useState(
-    //     admin ?
-    //         '6'.repeat(1) +
-    //         '5'.repeat(3) +
-    //         '4'.repeat(7) +
-    //         '3'.repeat(14) +
-    //         '2'.repeat(20) +
-    //         '1'.repeat(25) +
-    //         '0'.repeat(30)
-    //     : '6'.repeat(100)
-    // );
     const weight = !admin
         ? '6'.repeat(1) +
           '5'.repeat(3) +
@@ -94,55 +64,6 @@ export default function Page() {
             }
         }
     }, [user]);
-    // useEffect(() => {
-    //     if (session) {
-    //         initComponent();
-    //     }
-    // }, [session]);
-
-    // const initComponent = async () => {
-    //     setSlotEmojis(2, 5, 6);
-    //     setRandomWeight({
-    //         r6: 1,
-    //         r5: 3,
-    //         r4: 7,
-    //         r3: 14,
-    //         r2: 20,
-    //         r1: 25,
-    //         r0: 30,
-    //     });
-    // }
-
-    // const setSlotEmojis = (key1: number, key2: number, key3: number) => {
-    //     const emojiStates: emojiState = {
-    //         1: emojis[key1]!,
-    //         2: emojis[key2]!,
-    //         3: emojis[key3]!,
-    //     };
-
-    //     setemojiSlots((prevSlots) => ({ ...prevSlots, ...emojiStates }));
-    // };
-
-    // const setRandomWeight = (weightPairs: WeightPairs) => {
-    //     const sum = Object.keys(weightPairs)
-    //     .map(key => weightPairs[key as keyof WeightPairs])
-    //     .reduce((cur, val) => cur + val, 0);
-
-    //     if (sum !== totalPercent) {
-    //       weightPairs["r0"] += totalPercent - sum;
-    //     }
-
-    //     const { r6, r5, r4, r3, r2, r1, r0 } = weightPairs;
-    //     setrandomWeight(prevWeight =>
-    //         "6".repeat(r6) +
-    //         "5".repeat(r5) +
-    //         "4".repeat(r4) +
-    //         "3".repeat(r3) +
-    //         "2".repeat(r2) +
-    //         "1".repeat(r1) +
-    //         "0".repeat(r0)
-    //     );
-    // }
 
     const updateGamblerBalance = async (newBalance: number) => {
         try {
@@ -177,14 +98,14 @@ export default function Page() {
                 ...prev,
                 slot2: true,
             }));
-        }, 600);
+        }, 400);
 
         setTimeout(() => {
             setSpinStart((prev) => ({
                 ...prev,
                 slot3: true,
             }));
-        }, 1200);
+        }, 800);
 
         const slot1 = parseInt(
             weight.charAt(Math.floor(Math.random() * totalPercent))
@@ -238,8 +159,8 @@ export default function Page() {
                 setTimeout(() => {
                     audio.pause();
                     audio.currentTime = 0;
-                    setvisual({ ...visual, ...{ imageHidden: true } });
-                }, 6500);
+                    setvisual({ ...visual, ...{ imageHidden: true, buttonDisable: false } });
+                }, 7500);
                 setgained(gain);
                 setbalance(bal);
                 updateGamblerBalance(bal);
@@ -250,7 +171,7 @@ export default function Page() {
             }
             setvisual({
                 ...visual,
-                ...{ spinAnimation: false, buttonDisable: false },
+                ...{ spinAnimation: false },
             });
         }, 3000);
     };
@@ -277,9 +198,14 @@ export default function Page() {
                     style={{ marginBottom: '96px' }}
                 > */}
                     <img
+                        id="goldenDragon"
+                        src="/images/Dragon.gif"
+                        className={`absolute left-0 top-0 h-full w-auto ${visual['imageHidden']? "hidden" : ""}`}
+                    ></img>
+                    <img
                         id='quiteBeforeWinBig'
                         src='/images/quiteBeforeWinBig.png'
-                        className={`absolute left-1/2 top-0 h-full w-auto -translate-x-1/2 ${showMotivation ? '' : 'hidden'}`}
+                        className={`absolute left-1/2 top-0 h-[80%] w-auto translate-y-10 -translate-x-1/2 ${showMotivation ? '' : 'hidden'}`}
                     ></img>
                     <img
                         id='slotsWin'
@@ -295,6 +221,8 @@ export default function Page() {
                         className='text-center text-3xl font-bold text-white'
                     >
                         Slot machine of Infinite Wealth 🙏
+                        <br/>
+                        无限财富老虎机 🙏
                     </h1>
                     <p
                         className='text-center font-semibold text-white'
@@ -310,7 +238,6 @@ export default function Page() {
                         Your balance:{' '}
                         <span className='text-green'>$ {balance}</span>
                     </p>
-                    <br></br>
                     <div className='grid w-full grid-cols-3 justify-items-center'>
                         <div
                             className='card flex h-full min-h-[144px] w-[90%] items-center justify-center overflow-hidden rounded border-2 border-gray bg-white text-6xl shadow-md transition duration-300 hover:shadow-[0_0_12px_#fff]'
@@ -361,21 +288,23 @@ export default function Page() {
                             </p>
                         </div>
                     </div>
-                    <br></br>
                     <p
                         className='text-center font-semibold text-white'
+                        style={{
+                            marginTop: "24px",
+                        }}
                     >
-                        You've gained:{' '}
+                        You've WON:{' '}
                         <span className='text-cyan'>$ {gained}</span>
                     </p>
-                    <br></br>
                     <div className={'text-center'}>
                         <Button
                             variant='default'
                             color='green'
                             size='lg'
-                            disabled={visual['buttonDisable']}
+                            disabled={visual['buttonDisable'] || !visual['imageHidden']}
                             onClick={spinSlot}
+                            className={`${visual['buttonDisable'] || !visual['imageHidden'] ? "" : "animate-slowBounce"}`}
                         >
                             SPIN!!!
                         </Button>

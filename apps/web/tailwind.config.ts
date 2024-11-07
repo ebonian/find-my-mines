@@ -16,6 +16,10 @@ const config: Config = {
                 red: '#C33432',
             },
             keyframes: {
+                bounce: {
+                    '0%, 100%': { transform: 'translateY(0%)' },
+                    '50%': { transform: 'translateY(0%) scale(1.1)' },
+                },
                 spinSlot: {
                     '0%': { transform: 'translateY(-300%) scale(1)', opacity: "0" },
                     '50%': { transform: 'translateY(0) scale(1.5)', opacity: "1" },
@@ -23,7 +27,8 @@ const config: Config = {
                 },
               },
               animation: {
-                spinSlot: 'spinSlot 0.2s ease-in-out infinite',
+                spinSlot: 'spinSlot 0.1s ease-in-out infinite',
+                slowBounce: 'bounce 2s infinite',
             },
         },
     },
