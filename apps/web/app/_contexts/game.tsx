@@ -14,7 +14,7 @@ import { seedGen } from '../_lib/seed';
 import axios from '../_lib/axios';
 
 interface GameContextValue {
-    gameRooms: Room[];
+    rooms: Room[];
     createRoom: (room: Omit<Room, '_id'>) => void;
     timer: number;
     resetTimer: () => void;
@@ -22,7 +22,7 @@ interface GameContextValue {
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
     updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
     joinRoom: (roomId: string) => void;
-    joinedGameRoom: Room | null;
+    room: Room | null;
     skins: Skin[];
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
@@ -34,7 +34,7 @@ interface GameContextValue {
 }
 
 const GameContext = createContext<GameContextValue>({
-    gameRooms: [],
+    rooms: [],
     createRoom: () => {},
     joinRoom: () => {},
     timer: 0,
@@ -42,7 +42,7 @@ const GameContext = createContext<GameContextValue>({
     turn: 'user',
     setTurn: () => {},
     updateRoomState: () => {},
-    joinedGameRoom: null,
+    room: null,
     skins: [],
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
@@ -107,12 +107,12 @@ export default function GameContextProvider({
             return;
         }
         send('get-rooms', null);
-        send('get-joined-room', { userId: user._id });
+        send('get-room', { userId: user._id });
     }, [user]);
 
     // GAME LOGIC
-    const [gameRooms, setGameRooms] = useState<Room[]>([]);
-    const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
+    const [rooms, setRooms] = useState<Room[]>([]);
+    const [room, setRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
     const [game, setGame] = useState<Game | null>(null);
@@ -192,7 +192,7 @@ export default function GameContextProvider({
             state: state,
         });
         // if (user !== null) {
-        //     send('leave-joined-room', {
+        //     send('leave-room', {
         //         userId: user._id,
         //         roomId: room._id,
         //     })
@@ -200,7 +200,7 @@ export default function GameContextProvider({
     };
 
     const resetJoinedRoom = (userId: string) => {
-        send('get-joined-room', {
+        send('get-room', {
             userId: userId,
         });
     };
@@ -217,45 +217,50 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
-        if (!broadcastedGame || !joinedGameRoom) {
+        if (!broadcastedGame || !room) {
             return;
         }
 
-        if (broadcastedGame.roomId === joinedGameRoom._id) {
+        if (broadcastedGame.roomId === room._id) {
             setGame(broadcastedGame);
         }
     }, [broadcastedGame]);
 
     useEffect(() => {
-        if (!games) {
+        if (!games || !room) {
             return;
         }
 
-        const currentGame = games.find(
-            (game) => game.roomId === joinedGameRoom?._id
-        );
+        const currentGame = games.find((game) => game.roomId === room._id);
 
-        setGame(currentGame!);
+        if (!currentGame) {
+            return;
+        }
+
+        setGame(currentGame);
     }, [games]);
 
     useEffect(() => {
-        if (!user) {
+        if (!rooms || !user) {
             return;
         }
-        send('get-rooms', null);
-        send('get-joined-room', { userId: user._id });
-    }, [user]);
+
+        const joinedRoom = rooms.find((room) =>
+            room.players.includes(user._id)
+        );
+        if (!joinedRoom) {
+            return;
+        }
+
+        setRoom(joinedRoom);
+    }, [rooms]);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
-            setGameRooms(rooms);
+            setRooms(rooms);
         });
-        subscribe('joined-room', (room: Room) => {
-            if (!room) {
-                return;
-            }
-            setJoinedGameRoom(room);
-            getGame(room._id);
+        subscribe('room', (room: Room) => {
+            setRoom(room);
         });
         subscribe('game', (game: Game) => {
             setGame(game);
@@ -271,7 +276,7 @@ export default function GameContextProvider({
     return (
         <GameContext.Provider
             value={{
-                gameRooms,
+                rooms,
                 createRoom,
                 timer,
                 resetTimer,
@@ -279,7 +284,7 @@ export default function GameContextProvider({
                 setTurn,
                 updateRoomState,
                 joinRoom,
-                joinedGameRoom,
+                room,
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,

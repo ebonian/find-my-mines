@@ -10,13 +10,15 @@ interface GameGuardProps {
 
 export default function GameGuard({ children }: GameGuardProps) {
     const router = useRouter();
-    const { joinedGameRoom } = useGameContext();
+    const { room } = useGameContext();
 
     useEffect(() => {
-        if (joinedGameRoom) {
+        if (room?.state === 'waiting' || room?.state === 'playing') {
             router.push('/game/play');
+        } else if (room?.state === 'end') {
+            router.push('/game/end');
         }
-    }, [joinedGameRoom]);
+    }, [room]);
 
     return <>{children}</>;
 }

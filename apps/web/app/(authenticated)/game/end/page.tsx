@@ -10,7 +10,7 @@ export default function Page(/*{ result }: { result: 'win' | 'lose' }*/) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user } = useAuthContext();
-    const { resetJoinedRoom, joinedGameRoom } = useGameContext();
+    const { resetJoinedRoom, room } = useGameContext();
     const result = searchParams.get('result');
     const userFoundedBombs = parseInt(
         searchParams.get('userFoundedBombs') || '0'
@@ -18,7 +18,7 @@ export default function Page(/*{ result }: { result: 'win' | 'lose' }*/) {
     // const score = searchParams.get("score");
 
     useEffect(() => {
-        if (user && joinedGameRoom) {
+        if (user && room) {
             resetJoinedRoom(user._id);
         }
     }, [resetJoinedRoom]);

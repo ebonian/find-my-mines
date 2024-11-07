@@ -10,7 +10,7 @@ import { AppStats } from '@repo/shared-types';
 
 export default function Page() {
     const { subscribe, send } = useSocket();
-    const { gameRooms } = useGameContext();
+    const { rooms } = useGameContext();
 
     const [stats, setStats] = useState<AppStats>({
         connectedSessions: [],
@@ -27,7 +27,7 @@ export default function Page() {
         });
     }, [subscribe]);
 
-    const activeRooms = gameRooms.filter((room) => room.state === 'playing');
+    const activeRooms = rooms.filter((room) => room.state === 'playing');
 
     return (
         <Layout className='flex min-h-screen flex-col items-center py-16'>
