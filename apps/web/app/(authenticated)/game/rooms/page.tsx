@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Page() {
     const router = useRouter();
-    const { rooms, room } = useGameContext();
+    const { room, rooms, joinRoom } = useGameContext();
 
     const availableRooms = rooms.filter((room) => room.state === 'waiting');
 
@@ -64,6 +64,12 @@ export default function Page() {
                         variant='outline'
                         color='purple'
                         size='lg'
+                        onClick={() => {
+                            joinRoom(
+                                rooms[Math.floor(Math.random() * rooms.length)]
+                                    ?._id ?? ''
+                            );
+                        }}
                     >
                         Quick Join
                         <Image
