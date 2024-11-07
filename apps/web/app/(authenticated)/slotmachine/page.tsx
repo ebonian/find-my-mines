@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../../_components/common/layout';
 import BackButton from './_components/back-button';
 import { Button } from '../../_components/ui/button';
@@ -11,16 +11,6 @@ export default function Page() {
     type emojiState = {
         [key: number]: string;
     };
-
-    // type WeightPairs = {
-    //     r6: number;
-    //     r5: number;
-    //     r4: number;
-    //     r3: number;
-    //     r2: number;
-    //     r1: number;
-    //     r0: number;
-    // };
 
     const { user } = useAuthContext();
     const [visual, setvisual] = useState({
@@ -47,26 +37,6 @@ export default function Page() {
         3: '🎰',
     });
     const [admin, setAdmin] = useState(false);
-    // const randomWeight = !admin ?
-    //                     '6'.repeat(1) +
-    //                     '5'.repeat(3) +
-    //                     '4'.repeat(7) +
-    //                     '3'.repeat(14) +
-    //                     '2'.repeat(20) +
-    //                     '1'.repeat(25) +
-    //                     '0'.repeat(30)
-    //                     : '6'.repeat(100);
-    // const [randomWeight, setrandomWeight] = useState(
-    //     admin ?
-    //         '6'.repeat(1) +
-    //         '5'.repeat(3) +
-    //         '4'.repeat(7) +
-    //         '3'.repeat(14) +
-    //         '2'.repeat(20) +
-    //         '1'.repeat(25) +
-    //         '0'.repeat(30)
-    //     : '6'.repeat(100)
-    // );
     const weight = !admin
         ? '6'.repeat(1) +
           '5'.repeat(3) +
@@ -94,55 +64,6 @@ export default function Page() {
             }
         }
     }, [user]);
-    // useEffect(() => {
-    //     if (session) {
-    //         initComponent();
-    //     }
-    // }, [session]);
-
-    // const initComponent = async () => {
-    //     setSlotEmojis(2, 5, 6);
-    //     setRandomWeight({
-    //         r6: 1,
-    //         r5: 3,
-    //         r4: 7,
-    //         r3: 14,
-    //         r2: 20,
-    //         r1: 25,
-    //         r0: 30,
-    //     });
-    // }
-
-    // const setSlotEmojis = (key1: number, key2: number, key3: number) => {
-    //     const emojiStates: emojiState = {
-    //         1: emojis[key1]!,
-    //         2: emojis[key2]!,
-    //         3: emojis[key3]!,
-    //     };
-
-    //     setemojiSlots((prevSlots) => ({ ...prevSlots, ...emojiStates }));
-    // };
-
-    // const setRandomWeight = (weightPairs: WeightPairs) => {
-    //     const sum = Object.keys(weightPairs)
-    //     .map(key => weightPairs[key as keyof WeightPairs])
-    //     .reduce((cur, val) => cur + val, 0);
-
-    //     if (sum !== totalPercent) {
-    //       weightPairs["r0"] += totalPercent - sum;
-    //     }
-
-    //     const { r6, r5, r4, r3, r2, r1, r0 } = weightPairs;
-    //     setrandomWeight(prevWeight =>
-    //         "6".repeat(r6) +
-    //         "5".repeat(r5) +
-    //         "4".repeat(r4) +
-    //         "3".repeat(r3) +
-    //         "2".repeat(r2) +
-    //         "1".repeat(r1) +
-    //         "0".repeat(r0)
-    //     );
-    // }
 
     const updateGamblerBalance = async (newBalance: number) => {
         try {
