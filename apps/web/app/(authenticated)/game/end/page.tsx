@@ -12,6 +12,9 @@ export default function Page(/*{ result }: { result: 'win' | 'lose' }*/) {
     const { user } = useAuthContext();
     const { resetJoinedRoom, joinedGameRoom } = useGameContext();
     const result = searchParams.get('result');
+    const userFoundedBombs = parseInt(
+        searchParams.get('userFoundedBombs') || '0'
+    );
     // const score = searchParams.get("score");
 
     useEffect(() => {
@@ -90,7 +93,7 @@ export default function Page(/*{ result }: { result: 'win' | 'lose' }*/) {
 
                 <div className='font-Montserrat mt-8 text-center text-3xl font-bold text-[#FFEDDF]'>
                     {result === 'win'
-                        ? 'You Found X out of 11 Bombs'
+                        ? `You Found ${userFoundedBombs} out of 11 Bombs`
                         : 'Better Luck Next Time!'}
                 </div>
 

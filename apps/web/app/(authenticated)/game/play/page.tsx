@@ -44,7 +44,9 @@ export default function Play() {
         }
         if (joinedGameRoom) {
             updateRoomState(joinedGameRoom, 'end');
-            router.push(`/game/end?result=${result}`);
+            router.push(
+                `/game/end?result=${result}&userFoundedBombs=${userFoundedBombs}`
+            );
         }
     };
 
