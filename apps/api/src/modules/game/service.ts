@@ -28,7 +28,8 @@ const updateGameByRoomId = async (roomId: string, game: any) => {
 };
 
 const updateAllGames = async (game: any) => {
-    return await GameModel.updateMany({}, game, { new: true });
+    await GameModel.updateMany({}, game, { new: true });
+    return GameModel.find();
 };
 
 const randomFirstPlayer = async (roomId: string, players: string[]) => {

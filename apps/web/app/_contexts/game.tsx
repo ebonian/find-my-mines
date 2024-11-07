@@ -143,6 +143,7 @@ export default function GameContextProvider({
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
     const [game, setGame] = useState<Game | null>(null);
+    const [games, setGames] = useState<Game[] | null>(null);
     const [broadcastedGame, setBroadcastedGame] = useState<Game | null>(null);
 
     const getGame = (roomId: string) => {
@@ -237,11 +238,7 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
-<<<<<<< HEAD
         if (!broadcastedGame || !joinedGameRoom) {
-=======
-        if (!broadcastedGame) {
->>>>>>> 16575fd (fix: admin logic)
             return;
         }
 
@@ -249,6 +246,26 @@ export default function GameContextProvider({
             setGame(broadcastedGame);
         }
     }, [broadcastedGame]);
+
+    useEffect(() => {
+        if (!games) {
+            return;
+        }
+
+        const currentGame = games.find(
+            (game) => game.roomId === joinedGameRoom?._id
+        );
+
+        setGame(currentGame!);
+    }, [games]);
+
+    useEffect(() => {
+        if (!user) {
+            return;
+        }
+        send('get-rooms', null);
+        send('get-joined-room', { userId: user._id });
+    }, [user]);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
@@ -267,11 +284,8 @@ export default function GameContextProvider({
         subscribe('broadcast-game', (game: Game) => {
             setBroadcastedGame(game);
         });
-        subscribe('reset-game', (game: Game) => {
-            setGame(game);
-        });
-        subscribe('broadcast-reset-game', (game: Game) => {
-            setBroadcastedGame(game);
+        subscribe('games', (games: Game[]) => {
+            setGames(games);
         });
     }, [subscribe]);
 
