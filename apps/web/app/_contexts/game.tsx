@@ -31,8 +31,6 @@ interface GameContextValue {
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
     setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
-    actions: Action[];
-    updateActions: (action: Action) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
@@ -53,8 +51,6 @@ const GameContext = createContext<GameContextValue>({
     getGame: () => {},
     setActionHandler: () => {},
     setTurnHandler: () => {},
-    actions: [],
-    updateActions: () => {},
 });
 
 interface GameContextProviderProps {
@@ -71,25 +67,6 @@ export default function GameContextProvider({
     // GAME SKIN
     const [skins, setSkins] = useState<Skin[]>([]);
     const [equippedSkin, setEquippedSkin] = useState<string>('Default');
-    const [actions, setActions] = useState<Action[]>([]);
-
-    const fetchActions = useCallback(async () => {
-        try {
-            const { data } = await axios.get('/game');
-            setActions(data.actions);
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
-
-    const updateActions = useCallback(async (action: Action) => {
-        try {
-            const { data } = await axios.get('game');
-            data.actions = { ...action, action };
-        } catch (error) {
-            console.error(error);
-        }
-    }, []);
 
     const fetchSkins = useCallback(async () => {
         try {
@@ -116,10 +93,6 @@ export default function GameContextProvider({
 
     useEffect(() => {
         fetchSkins();
-    }, []);
-
-    useEffect(() => {
-        fetchActions();
     }, []);
 
     useEffect(() => {
@@ -315,8 +288,6 @@ export default function GameContextProvider({
                 getGame,
                 setActionHandler,
                 setTurnHandler,
-                actions,
-                updateActions,
             }}
         >
             {children}

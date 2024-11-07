@@ -26,10 +26,6 @@ export default function Play() {
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
 
-    if (!joinedGameRoom) {
-        return <div>Loading...</div>;
-    }
-
     const handleEnd = async () => {
         try {
             if (userFoundedBombs > opponentFoundedBombs && user !== null) {
