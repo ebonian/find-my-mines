@@ -14,17 +14,17 @@ import { useRouter } from 'next/navigation';
 
 export default function Page() {
     const router = useRouter();
-    const { gameRooms, joinedGameRoom } = useGameContext();
+    const { rooms, room } = useGameContext();
 
-    const rooms = gameRooms.filter((room) => room.state === 'waiting');
+    const availableRooms = rooms.filter((room) => room.state === 'waiting');
 
     const [isShowModal, setIsShowModal] = useState(false);
 
     useEffect(() => {
-        if (joinedGameRoom) {
+        if (room) {
             router.push('/game/play');
         }
-    }, [joinedGameRoom]);
+    }, [room]);
 
     return (
         <Layout
@@ -53,7 +53,7 @@ export default function Page() {
                 </div>
 
                 <div className='grid w-full grid-cols-3 gap-12'>
-                    {rooms.map((room) => (
+                    {availableRooms.map((room) => (
                         <RoomCard key={room._id} {...room} />
                     ))}
                 </div>

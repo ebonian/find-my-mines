@@ -109,7 +109,7 @@ export default async function roomController(socket: Socket) {
                         }
                     }
 
-                    socket.emit('joined-room', joinRoom);
+                    socket.emit('room', joinRoom);
                     const gameRooms = await roomService.getRooms();
                     socket.broadcast.emit('rooms', gameRooms);
                 } else if (joinRoom.state === 'end') {
@@ -126,23 +126,26 @@ export default async function roomController(socket: Socket) {
         }
     );
 
-    socket.on('leave-joined-room', async ({ userId, roomId }: { userId: string, roomId: string }) => {
-        try {
-            const response = await roomService.removePlayersFromRoom(
-                userId,
-                roomId,
-            );
-            socket.emit("leave-room", response);
-        } catch (err) {
-            console.log(err);
-            socket.emit("error leaving");
+    socket.on(
+        'leave-room',
+        async ({ userId, roomId }: { userId: string; roomId: string }) => {
+            try {
+                const response = await roomService.removePlayersFromRoom(
+                    userId,
+                    roomId
+                );
+                socket.emit('leave-room', response);
+            } catch (err) {
+                console.log(err);
+                socket.emit('error leaving');
+            }
         }
-    });
+    );
 
-    socket.on('get-joined-room', async ({ userId }: { userId: string }) => {
+    socket.on('get-room', async ({ userId }: { userId: string }) => {
         try {
             const joinedRoom = await roomService.getUserJoinedRoom(userId);
-            socket.emit('joined-room', joinedRoom);
+            socket.emit('room', joinedRoom);
         } catch (error) {
             socket.emit('error', error);
         }

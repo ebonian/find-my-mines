@@ -14,43 +14,39 @@ import { seedGen } from '../_lib/seed';
 import axios from '../_lib/axios';
 
 interface GameContextValue {
-    gameRooms: Room[];
+    rooms: Room[];
     createRoom: (room: Omit<Room, '_id'>) => void;
     timer: number;
-    resetTimer: () => void;
     turn: null | 'user' | 'opponent';
     setTurn: React.Dispatch<React.SetStateAction<null | 'user' | 'opponent'>>;
-    updateRoomState: (room: Room, state: 'waiting' | 'playing' | 'end') => void;
     joinRoom: (roomId: string) => void;
-    joinedGameRoom: Room | null;
+    room: Room | null;
     skins: Skin[];
     equippedSkin: string;
     setEquippedSkinHandler: (skin: string) => void;
-    resetJoinedRoom: (userId: string) => void;
     game: Game | null;
     getGame: (roomId: string) => void;
     setActionHandler: (action: { cellId: string; bombFound: boolean }) => void;
     setTurnHandler: (settingTurn: 'user' | 'opponent' | null) => void;
+    leaveRoom: (roomId: string) => void;
 }
 
 const GameContext = createContext<GameContextValue>({
-    gameRooms: [],
+    rooms: [],
     createRoom: () => {},
     joinRoom: () => {},
     timer: 0,
-    resetTimer: () => {},
     turn: 'user',
     setTurn: () => {},
-    updateRoomState: () => {},
-    joinedGameRoom: null,
+    room: null,
     skins: [],
     equippedSkin: 'Default',
     setEquippedSkinHandler: () => {},
-    resetJoinedRoom: () => {},
     game: null,
     getGame: () => {},
     setActionHandler: () => {},
     setTurnHandler: () => {},
+    leaveRoom: () => {},
 });
 
 interface GameContextProviderProps {
@@ -107,39 +103,37 @@ export default function GameContextProvider({
             return;
         }
         send('get-rooms', null);
-        send('get-joined-room', { userId: user._id });
+        send('get-room', { userId: user._id });
     }, [user]);
 
     // GAME LOGIC
-    const [gameRooms, setGameRooms] = useState<Room[]>([]);
-    const [joinedGameRoom, setJoinedGameRoom] = useState<Room | null>(null);
+    const [rooms, setRooms] = useState<Room[]>([]);
+    const [room, setRoom] = useState<Room | null>(null);
     const [timer, setTimer] = useState(0);
     const [turn, setTurn] = useState<null | 'user' | 'opponent'>('user');
     const [game, setGame] = useState<Game | null>(null);
     const [games, setGames] = useState<Game[] | null>(null);
-    const [broadcastedGame, setBroadcastedGame] = useState<Game | null>(null);
 
     const getGame = (roomId: string) => {
         send('get-game', { roomId });
     };
 
     const setActionHandler = ({
+        userId = user?._id,
         cellId,
         bombFound,
     }: {
+        userId?: string;
         cellId: string;
         bombFound: boolean;
     }) => {
-        if (turn !== 'user') {
-            return;
-        }
-        if (!game || !user) {
+        if (!game) {
             return;
         }
 
         send('send-action', {
             gameId: game._id,
-            userId: user._id,
+            userId: userId,
             cellId: cellId,
             bombFound: bombFound,
         });
@@ -147,32 +141,39 @@ export default function GameContextProvider({
 
     const setTurnHandler = (settingTurn: 'user' | 'opponent' | null) => {
         setTurn(settingTurn);
-        resetTimer();
+        setTimer(10);
     };
 
     const timeoutHandler = () => {
+        if (!user || !room) {
+            return;
+        }
+
+        const opponentUserId = room.players.find(
+            (player) => player !== user._id
+        );
+
+        if (!opponentUserId) {
+            return;
+        }
+
         setActionHandler({
+            userId: turn === 'user' ? user._id : opponentUserId,
             cellId: '',
             bombFound: false,
         });
     };
 
-    const resetTimer = () => {
-        setTimer(10);
-    };
-
     useEffect(() => {
-        if (timer > 0) {
+        if (timer > 0 && room?.state === 'playing') {
             const countdown = setInterval(() => {
                 setTimer((prev) => prev - 1);
             }, 1000);
             return () => clearInterval(countdown);
         } else {
-            if (turn === 'user') {
-                timeoutHandler();
-            }
+            timeoutHandler();
         }
-    }, [timer, turn]);
+    }, [timer]);
 
     const createRoom = async (room: Omit<Room, '_id'>) => {
         const seed = await seedGen({
@@ -181,28 +182,6 @@ export default function GameContextProvider({
         });
         const roomWithSeed = { ...room, seed: seed };
         send('create-room', roomWithSeed);
-    };
-
-    const updateRoomState = async (
-        room: Room,
-        state: 'waiting' | 'playing' | 'end'
-    ) => {
-        send('update-room-state', {
-            roomId: room._id,
-            state: state,
-        });
-        // if (user !== null) {
-        //     send('leave-joined-room', {
-        //         userId: user._id,
-        //         roomId: room._id,
-        //     })
-        // }
-    };
-
-    const resetJoinedRoom = (userId: string) => {
-        send('get-joined-room', {
-            userId: userId,
-        });
     };
 
     const joinRoom = (roomId: string) => {
@@ -216,78 +195,79 @@ export default function GameContextProvider({
         });
     };
 
-    useEffect(() => {
-        if (!broadcastedGame || !joinedGameRoom) {
-            return;
-        }
-
-        if (broadcastedGame.roomId === joinedGameRoom._id) {
-            setGame(broadcastedGame);
-        }
-    }, [broadcastedGame]);
-
-    useEffect(() => {
-        if (!games) {
-            return;
-        }
-
-        const currentGame = games.find(
-            (game) => game.roomId === joinedGameRoom?._id
-        );
-
-        setGame(currentGame!);
-    }, [games]);
-
-    useEffect(() => {
+    const leaveRoom = (roomId: string) => {
         if (!user) {
             return;
         }
-        send('get-rooms', null);
-        send('get-joined-room', { userId: user._id });
-    }, [user]);
+
+        send('leave-room', {
+            roomId,
+            userId: user._id,
+        });
+    };
+
+    useEffect(() => {
+        if (!rooms || !user) {
+            return;
+        }
+
+        const joinedRoom = rooms.find((room) =>
+            room.players.includes(user._id)
+        );
+        if (!joinedRoom) {
+            return;
+        }
+
+        setRoom(joinedRoom);
+    }, [rooms]);
+
+    useEffect(() => {
+        if (!games || !room) {
+            return;
+        }
+
+        const currentGame = games.find((game) => game.roomId === room._id);
+
+        if (!currentGame) {
+            return;
+        }
+
+        setGame(currentGame);
+    }, [games]);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
-            setGameRooms(rooms);
+            setRooms(rooms);
         });
-        subscribe('joined-room', (room: Room) => {
-            if (!room) {
-                return;
-            }
-            setJoinedGameRoom(room);
-            getGame(room._id);
-        });
-        subscribe('game', (game: Game) => {
-            setGame(game);
-        });
-        subscribe('broadcast-game', (game: Game) => {
-            setBroadcastedGame(game);
+        subscribe('room', (room: Room) => {
+            setRoom(room);
         });
         subscribe('games', (games: Game[]) => {
             setGames(games);
+        });
+        subscribe('game', (game: Game) => {
+            setGame(game);
         });
     }, [subscribe]);
 
     return (
         <GameContext.Provider
             value={{
-                gameRooms,
+                rooms,
                 createRoom,
                 timer,
-                resetTimer,
                 turn,
                 setTurn,
-                updateRoomState,
                 joinRoom,
-                joinedGameRoom,
+                room,
                 skins,
                 equippedSkin,
                 setEquippedSkinHandler,
-                resetJoinedRoom,
                 game,
                 getGame,
                 setActionHandler,
                 setTurnHandler,
+                leaveRoom,
             }}
         >
             {children}

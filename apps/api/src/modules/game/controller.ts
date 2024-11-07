@@ -1,6 +1,7 @@
 import type { Socket } from 'socket.io';
 import gameService from '../game/service';
 import roomService from '../room/service';
+import usersService from '../users/service';
 import { Action } from '@repo/shared-types';
 
 export default async function gameController(socket: Socket) {
@@ -74,8 +75,44 @@ export default async function gameController(socket: Socket) {
                     throw new Error('Failed to update game.');
                 }
 
+                const foundedBombs = updatedGame.actions.filter(
+                    (action) => action.bombFound
+                ).length;
+
+                const room = await roomService.getRoomById(updatedGame.roomId);
+                if (!room) {
+                    throw new Error('Room not found.');
+                }
+
                 socket.emit('game', updatedGame);
-                socket.broadcast.emit('broadcast-game', updatedGame);
+                socket.broadcast.emit('games', [updatedGame]);
+
+                new Promise((resolve) => setTimeout(resolve, 1000));
+
+                if (foundedBombs === (room.type === 'normal' ? 11 : 25)) {
+                    const updatedRoom = await roomService.updateRoomById(
+                        room.id,
+                        {
+                            state: 'end',
+                        }
+                    );
+                    if (!updatedRoom) {
+                        throw new Error('Failed to update room.');
+                    }
+
+                    const updatedUser = await usersService.updateUserById(
+                        userId,
+                        {
+                            $inc: { score: 1, balance: 20 },
+                        }
+                    );
+                    if (!updatedUser) {
+                        throw new Error('Failed to update user.');
+                    }
+
+                    socket.emit('rooms', [updatedRoom]);
+                    socket.broadcast.emit('rooms', [updatedRoom]);
+                }
             } catch (error) {
                 socket.emit(
                     'error',

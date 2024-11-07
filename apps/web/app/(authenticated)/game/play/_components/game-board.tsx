@@ -21,20 +21,20 @@ export default function GameBoard() {
         setActionHandler,
         game,
         setTurnHandler,
-        joinedGameRoom,
+        room,
     } = useGameContext();
 
     const [board, setBoard] = useState<Cell[][]>([[]]);
     const activeSkin = skins.find((skin) => skin.name === equippedSkin)!;
 
     useEffect(() => {
-        if (!joinedGameRoom || !game || !user) {
+        if (!room || !game || !user) {
             return;
         }
 
         const coordinates = coordinatesGen({
-            seed: joinedGameRoom.seed,
-            type: joinedGameRoom.type,
+            seed: room.seed,
+            type: room.type,
         });
         const generatedBoard = createBoard(6, 11, coordinates);
         const appliedActionsBoard = applyActions(generatedBoard, game.actions);
@@ -42,7 +42,7 @@ export default function GameBoard() {
 
         const gameTurn = setGameTurnHandler(game, user._id!);
         setTurnHandler(gameTurn);
-    }, [joinedGameRoom, game, user]);
+    }, [room, game, user]);
 
     const clickHandlerComponent = (rowIndex: number, colIndex: number) => {
         if (board[rowIndex]![colIndex]!.status !== 'revealed') {
