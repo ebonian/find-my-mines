@@ -1,5 +1,7 @@
 import AuthGuard from '../_components/common/auth-guard';
 import GameGuard from '../_components/common/game-guard';
+import GameContextProvider from '../_contexts/game';
+import SocketContextProvider from '../_contexts/socket';
 
 export default function Layout({
     children,
@@ -7,8 +9,12 @@ export default function Layout({
     children: React.ReactNode;
 }>) {
     return (
-        <AuthGuard>
-            <GameGuard>{children}</GameGuard>
-        </AuthGuard>
+        <SocketContextProvider>
+            <GameContextProvider>
+                <AuthGuard>
+                    <GameGuard>{children}</GameGuard>
+                </AuthGuard>
+            </GameContextProvider>
+        </SocketContextProvider>
     );
 }

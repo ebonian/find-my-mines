@@ -29,11 +29,7 @@ export default function RootLayout({
                 <PublicEnvScript />
             </head>
             <body className={`${monserrat.className} bg-gray text-white`}>
-                <AuthContextProvider>
-                    <SocketContextProvider>
-                        <GameContextProvider>{children}</GameContextProvider>
-                    </SocketContextProvider>
-                </AuthContextProvider>
+                <AuthContextProvider>{children}</AuthContextProvider>
             </body>
         </html>
     );

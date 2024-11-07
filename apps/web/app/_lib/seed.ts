@@ -85,26 +85,26 @@ export const seedGen = async ({
 };
 
 export const coordinatesGen = ({
-    seed = '',
+    seed,
     type,
 }: {
-    seed?: string;
+    seed: string;
     type: 'normal' | 'extreme';
 }): { x: number; y: number }[] => {
-    const bombSeedLength = type === 'normal' ? 11 : 35;
-    const gridMax = type === 'normal' ? 6 : 9;
+    const coordAmount = type === 'normal' ? 11 : 35;
+    const coordMax = type === 'normal' ? 6 : 9;
     const coordinates = new Set<string>();
     let jumper = 0;
     let runner = 0;
 
-    while (coordinates.size < bombSeedLength) {
+    while (coordinates.size < coordAmount) {
         const segmentX = seed.substring(
             runner * 4,
-            (runner * 4 + 1 + jumper) % bombSeedLength
+            (runner * 4 + 1 + jumper) % coordAmount
         );
         const segmentY = seed.substring(
             runner * 4 + 2,
-            (runner * 4 + 3 + jumper) % bombSeedLength
+            (runner * 4 + 3 + jumper) % coordAmount
         );
         const numCodeX = Array.from(segmentX).reduce(
             (acc, char) => acc + char.charCodeAt(0),
@@ -114,13 +114,13 @@ export const coordinatesGen = ({
             (acc, char) => acc + char.charCodeAt(0),
             0
         );
-        const coorX = Math.floor(numCodeX) % gridMax;
-        const coorY = Math.floor(numCodeY) % gridMax;
+        const coorX = Math.floor(numCodeX) % coordMax;
+        const coorY = Math.floor(numCodeY) % coordMax;
         const coordKey = `${coorX},${coorY}`;
 
         coordinates.add(coordKey);
         runner += 1;
-        if (runner === bombSeedLength) {
+        if (runner === coordAmount) {
             runner = 0;
             jumper += 1;
         }
@@ -128,8 +128,12 @@ export const coordinatesGen = ({
 
     const coordinatesArray = Array.from(coordinates).map((coord: string) => {
         const [x, y] = coord.split(',').map(Number);
-        return { x: x as number, y: y as number };
+        if (x !== undefined && y !== undefined) {
+            return { x, y };
+        } else {
+            throw new Error(`Invalid coordinate generated: ${coord}`);
+        }
     });
 
-    return coordinatesArray; // TODO: fix type error @Tung
+    return coordinatesArray;
 };

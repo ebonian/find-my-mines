@@ -91,7 +91,7 @@ export default function SocketContextProvider({
     }, [socket, subscribe]);
 
     if (!socket) {
-        return <div>Loading...</div>; // TODO: Add a loading screen
+        return <div>Connecting...</div>;
     }
 
     return (

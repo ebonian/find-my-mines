@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Minesweeper } from './_components/minesweeper';
+import GameBoard from './_components/game-board';
 import Layout from '../../../_components/common/layout';
 import MenuButton from '../../../_components/common/menu-button';
 import Scoreboard from './_components/scoreboard';
@@ -9,36 +9,22 @@ import Status from './_components/status';
 import axios from '../../../_lib/axios';
 import { useAuthContext } from '../../../_contexts/auth';
 import { useRouter } from '../../../../node_modules/next/navigation';
-import { Action } from '@repo/shared-types';
 import { useGameContext } from '../../../_contexts/game';
 
 export default function Play() {
     const { user } = useAuthContext();
-    const {
-        resetTimer,
-        turn,
-        setTurn,
-        joinedGameRoom,
-        updateRoomState,
-        getGame,
-        game,
-    } = useGameContext();
+    const { joinedGameRoom, updateRoomState, getGame, game } = useGameContext();
 
     useEffect(() => {
+        if (!joinedGameRoom) {
+            return;
+        }
         getGame(joinedGameRoom?._id!);
-    }, []);
+    }, [joinedGameRoom]);
 
     const router = useRouter();
     const [userFoundedBombs, setuserFoundedBombs] = useState(0);
     const [opponentFoundedBombs, setopponentFoundedBombs] = useState(0);
-
-    if (!joinedGameRoom || !user) {
-        return <div>Loading...</div>;
-    }
-    const seedAndType = {
-        seed: joinedGameRoom !== null ? joinedGameRoom.seed : '',
-        type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
-    };
 
     const handleEnd = async () => {
         try {
@@ -81,10 +67,10 @@ export default function Play() {
         const latestAction = game.actions[game.actions.length - 1];
 
         if (latestAction?.bombFound) {
-            if (latestAction.userId === user._id) {
+            if (latestAction.userId === user?._id) {
                 setuserFoundedBombs((prev) => prev + 1);
             }
-            if (latestAction.userId !== user._id) {
+            if (latestAction.userId !== user?._id) {
                 setopponentFoundedBombs((prev) => prev + 1);
             }
         }
@@ -100,7 +86,7 @@ export default function Play() {
                 opponentFoundedBombs={opponentFoundedBombs}
             />
             <Status />
-            <Minesweeper seedAndType={seedAndType} />
+            <GameBoard />
         </Layout>
     );
 }

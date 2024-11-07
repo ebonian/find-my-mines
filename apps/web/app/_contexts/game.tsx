@@ -102,6 +102,12 @@ export default function GameContextProvider({
         } else {
             setEquippedSkinHandler('Default');
         }
+
+        if (!user) {
+            return;
+        }
+        send('get-rooms', null);
+        send('get-joined-room', { userId: user._id });
     }, [user]);
 
     // GAME LOGIC
@@ -167,7 +173,6 @@ export default function GameContextProvider({
         }
     }, [timer, turn]);
 
-    // METHODS
     const createRoom = async (room: Omit<Room, '_id'>) => {
         const seed = await seedGen({
             seed: room.seed,
@@ -179,24 +184,18 @@ export default function GameContextProvider({
 
     const updateRoomState = async (
         room: Room,
-        state: 'waiting' | 'playing' | 'end',
+        state: 'waiting' | 'playing' | 'end'
     ) => {
         send('update-room-state', {
             roomId: room._id,
             state: state,
-        }); 
-        // if (user !== null) {
-        //     send('leave-joined-room', {
-        //         userId: user._id,
-        //         roomId: room._id,
-        //     })
-        // }
+        });
     };
 
     const resetJoinedRoom = (userId: string) => {
         send('get-joined-room', {
             userId: userId,
-        })
+        });
     };
 
     const joinRoom = (roomId: string) => {
@@ -211,24 +210,14 @@ export default function GameContextProvider({
     };
 
     useEffect(() => {
-        console.log(broadcastedGame, joinedGameRoom);
-
-        if (!broadcastedGame) {
+        if (!broadcastedGame || !joinedGameRoom) {
             return;
         }
 
-        if (broadcastedGame.roomId === joinedGameRoom?._id) {
+        if (broadcastedGame.roomId === joinedGameRoom._id) {
             setGame(broadcastedGame);
         }
     }, [broadcastedGame]);
-
-    useEffect(() => {
-        if (!user) {
-            return;
-        }
-        send('get-rooms', null);
-        send('get-joined-room', { userId: user._id });
-    }, [user]);
 
     useEffect(() => {
         subscribe('rooms', (rooms: Room[]) => {
