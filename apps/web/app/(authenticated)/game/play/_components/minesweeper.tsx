@@ -110,10 +110,12 @@ const Minesweeper: React.FC<MinesweeperProps> = ({ seedAndType }) => {
     );
 
     const clickHandlerComponent = (rowIndex: number, colIndex: number) => {
-        setActionHandler({
-            cellId: `${rowIndex}-${colIndex}`,
-            bombFound: board[rowIndex]![colIndex]!.hasMine,
-        });
+        if (board[rowIndex]![colIndex]!.status !== 'revealed') {
+            setActionHandler({
+                cellId: `${rowIndex}-${colIndex}`,
+                bombFound: board[rowIndex]![colIndex]!.hasMine,
+            });
+        }
     };
 
     // apply actions to board

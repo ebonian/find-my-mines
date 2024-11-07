@@ -40,24 +40,38 @@ export default function Play() {
         type: joinedGameRoom !== null ? joinedGameRoom.type : 'normal',
     };
 
-    // const handleEnd = async () => {
-    //     try {
-    //         if (userFoundedBombs > opponentFoundedBombs && user !== null) {
-    //             const response = await axios.patch('/users', {
-    //                 updatingUser: {
-    //                     balance: user.balance + 20,
-    //                     score: user.score + userFoundedBombs,
-    //                 }
-    //             });
-    //         }
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    //     if (joinedGameRoom && user) {
-    //         updateRoomState(joinedGameRoom, "end");
-    //         router.push(`/game/end?score=${userFoundedBombs.toString()}`);
-    //     }
-    // };
+    const handleEnd = async () => {
+        try {
+            if (userFoundedBombs > opponentFoundedBombs && user !== null) {
+                await axios.patch('/users', {
+                    updatingUser: {
+                        balance: user.balance + 20,
+                        score: user.score + userFoundedBombs,
+                    },
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        if (joinedGameRoom) {
+            updateRoomState(joinedGameRoom, 'end');
+            router.push('/game/end');
+        }
+    };
+
+    useEffect(() => {
+        if (!joinedGameRoom) {
+            return;
+        }
+        if (
+            (userFoundedBombs + opponentFoundedBombs === 11 &&
+                joinedGameRoom.type === 'normal') ||
+            (userFoundedBombs + opponentFoundedBombs === 35 &&
+                joinedGameRoom.type === 'extreme')
+        ) {
+            handleEnd();
+        }
+    }, [userFoundedBombs, opponentFoundedBombs]);
 
     useEffect(() => {
         if (!game || game.actions.length === 0) {
@@ -81,13 +95,6 @@ export default function Play() {
             className='flex flex-col items-center gap-6 py-12'
             leftButton={<MenuButton />}
         >
-            {/* <button
-                onClick={() => {
-                    setTurn((prev) => (prev === 'user' ? 'opponent' : 'user'));
-                }}
-            >
-                Set to {turn !== 'user' ? 'User' : 'Opponent'} turn
-            </button> */}
             <Scoreboard
                 userFoundedBombs={userFoundedBombs}
                 opponentFoundedBombs={opponentFoundedBombs}
