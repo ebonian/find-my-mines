@@ -194,8 +194,8 @@ export default function GameContextProvider({
             return;
         }
 
-        const joinedRoom = rooms.find((room) =>
-            room.players.includes(user._id)
+        const joinedRoom = rooms.find(
+            (room) => room.players.includes(user._id) && room.state !== 'end'
         );
         if (!joinedRoom) {
             return;
