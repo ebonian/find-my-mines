@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 // import { useNavigate } from "../../../node_modules/react-router-dom/dist/index";
-import { useRouter } from '../../../node_modules/next/navigation';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useRouter } from 'next/navigation';
 
 type CustomBackButtonProps = {
     actionBeforeBack?: () => void;
@@ -59,14 +59,14 @@ const CustomBackButton: React.FC<CustomBackButtonProps> = ({
                     actionBeforeBack();
                 }
             } else {
-                router.push("/");
+                router.push('/');
             }
         } else {
             if (actionBeforeBack) {
                 actionBeforeBack();
             }
 
-            router.push("/");
+            router.push('/');
         }
     };
 
