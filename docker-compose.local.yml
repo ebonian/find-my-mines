@@ -38,9 +38,12 @@ services:
         ports:
             - 27017:27017
         volumes:
-            - ./data:/data/db
+            - mongodb_data:/data/db
         networks:
             - app_network
+
+volumes:
+    mongodb_data:
 
 networks:
     app_network:
