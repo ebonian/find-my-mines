@@ -12,7 +12,7 @@ export default function Page() {
         [key: number]: string;
     };
 
-    const { user } = useAuthContext();
+    const { user, fetchUser } = useAuthContext();
     const [visual, setvisual] = useState({
         spinAnimation: false,
         buttonDisable: false,
@@ -72,6 +72,7 @@ export default function Page() {
                     balance: newBalance,
                 },
             });
+            fetchUser();
         } catch (exception) {
             console.log(exception);
         }
