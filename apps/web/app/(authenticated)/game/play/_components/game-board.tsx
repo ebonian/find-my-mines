@@ -37,7 +37,10 @@ export default function GameBoard() {
             seed: room.seed,
             type: room.type,
         });
-        const generatedBoard = createBoard(6, 11, coordinates);
+        const generatedBoard =
+            room.type === 'normal'
+                ? createBoard(6, 11, coordinates)
+                : createBoard(9, 25, coordinates);
         const appliedActionsBoard = applyActions(generatedBoard, game.actions);
         setBoard(appliedActionsBoard);
 

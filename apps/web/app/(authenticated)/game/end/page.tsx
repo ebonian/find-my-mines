@@ -13,6 +13,8 @@ export default function Page() {
     const { game, room, leaveRoom, handleEndGame } = useGameContext();
     const [win, setWin] = useState(false);
     const [userFoundedBombs, setUserFoundedBombs] = useState(0);
+    const [totalBombs, setTotalBombs] = useState(0);
+    const [reward, setReward] = useState(0);
 
     useEffect(() => {
         if (!room || !game || !user) {
@@ -30,7 +32,9 @@ export default function Page() {
         ).length;
 
         setUserFoundedBombs(userFoundedBombs);
+        setTotalBombs(room.type === 'normal' ? 11 : 25);
         setWin(userFoundedBombs > opponentFoundedBombs);
+        setReward(room.type === 'normal' ? 20 : 40);
     }, [game, user, room]);
 
     return (
@@ -47,7 +51,7 @@ export default function Page() {
 
                 <div className='font-Montserrat mt-8 text-center text-3xl font-bold text-[#FFEDDF]'>
                     {win
-                        ? `You Found ${userFoundedBombs} out of ${room?.type === 'normal' ? 11 : 25} Bombs!`
+                        ? `You Found ${userFoundedBombs} out of ${totalBombs} Bombs!`
                         : 'Better Luck Next Time!'}
                 </div>
 
@@ -57,7 +61,7 @@ export default function Page() {
                         className='h-12 w-12 pr-2'
                         alt='Coin'
                     />
-                    <span>{win ? '+ 20' : '+ 0'}</span>
+                    <span>{win ? `+ ${reward}` : '+ 0'}</span>
                 </div>
             </div>
 

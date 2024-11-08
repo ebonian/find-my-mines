@@ -100,10 +100,31 @@ export default async function gameController(socket: Socket) {
                         throw new Error('Failed to update room.');
                     }
 
+                    const balance = updatedRoom.type === 'normal' ? 20 : 40;
+
+                    const userFoundedBombs = updatedGame.actions.filter(
+                        (action) => action.userId === userId && action.bombFound
+                    ).length;
+                    const opponentFoundedBombs = updatedGame.actions.filter(
+                        (action) => action.userId !== userId && action.bombFound
+                    ).length;
+                    const isUserWin = userFoundedBombs > opponentFoundedBombs;
+                    const opponentUserId = room.players.find(
+                        (player) => player !== userId
+                    );
+                    if (!opponentUserId) {
+                        throw new Error('Opponent not found.');
+                    }
+
                     const updatedUser = await usersService.updateUserById(
-                        userId,
+                        isUserWin ? userId : opponentUserId,
                         {
-                            $inc: { score: 1, balance: 20 },
+                            $inc: {
+                                score: isUserWin
+                                    ? userFoundedBombs
+                                    : opponentFoundedBombs,
+                                balance,
+                            },
                         }
                     );
                     if (!updatedUser) {
