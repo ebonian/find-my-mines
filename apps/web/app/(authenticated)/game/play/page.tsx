@@ -20,12 +20,14 @@ export default function Play() {
 
     return (
         <Layout
-            className='flex flex-col items-center gap-6 py-12'
+            className='flex flex-col items-center py-12'
             leftButton={<BackButton href='/' />}
         >
             <Scoreboard />
-            <Status />
-            <GameBoard />
+            <div className='flex flex-col items-center gap-6'>
+                <Status />
+                <GameBoard />
+            </div>
         </Layout>
     );
 }
