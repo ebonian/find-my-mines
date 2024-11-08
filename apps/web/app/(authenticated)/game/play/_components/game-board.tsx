@@ -12,6 +12,7 @@ import {
     createBoard,
     setGameTurnHandler,
 } from '../../../../_lib/game';
+import Bomb from '../../../../../public/bomb.svg';
 
 export default function GameBoard() {
     const { user } = useAuthContext();
@@ -69,13 +70,15 @@ export default function GameBoard() {
                             className={cn(
                                 'relative h-24 w-24',
                                 cell.status === 'revealed'
-                                    ? 'border-rgba(255, 237, 223,0.65) border-opacity-0.2 border-2'
+                                    ? 'border border-white outline outline-1'
                                     : ''
                             )}
                             style={{
                                 background:
                                     cell.status === 'revealed'
-                                        ? activeSkin.colors[0]
+                                        ? (rowIndex + colIndex) % 2 === 0
+                                            ? activeSkin.colors[1] + '25'
+                                            : activeSkin.colors[0] + '25'
                                         : (rowIndex + colIndex) % 2 === 0
                                           ? activeSkin.colors[1]
                                           : activeSkin.colors[0],
@@ -84,18 +87,10 @@ export default function GameBoard() {
                                 clickHandlerComponent(rowIndex, colIndex);
                             }}
                         >
-                            {cell.status === 'flagged' ? (
-                                <Image
-                                    src='/flag.svg'
-                                    alt='flag'
-                                    fill
-                                    className='object-contain'
-                                />
-                            ) : null}
                             {cell.status === 'revealed' &&
                                 (cell.hasMine ? (
                                     <Image
-                                        src='/bomb.svg'
+                                        src={Bomb}
                                         alt='bomb'
                                         fill
                                         className='object-contain'
