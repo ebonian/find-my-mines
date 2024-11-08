@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import X from '../../../public/x.svg';
 
 interface HowToPlayModalProps {
     onClose: () => void;
@@ -18,7 +17,7 @@ export default function HowToPlayModal({ onClose }: HowToPlayModalProps) {
         <div className='fixed inset-0 flex items-center justify-center bg-black/50 p-4'>
             <div className='relative flex h-[640px] w-[640px] flex-col overflow-clip rounded-3xl'>
                 <Image
-                    src={X}
+                    src='/icon/x.svg'
                     onClick={onClose}
                     alt='close'
                     width={32}

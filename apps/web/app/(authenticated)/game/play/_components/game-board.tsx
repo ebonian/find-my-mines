@@ -12,7 +12,6 @@ import {
     createBoard,
     setGameTurnHandler,
 } from '../../../../_lib/game';
-import Bomb from '../../../../../public/bomb.svg';
 
 export default function GameBoard() {
     const { user } = useAuthContext();
@@ -90,7 +89,7 @@ export default function GameBoard() {
                             {cell.status === 'revealed' &&
                                 (cell.hasMine ? (
                                     <Image
-                                        src={Bomb}
+                                        src='/icon/bomb.svg'
                                         alt='bomb'
                                         fill
                                         className='object-contain'
