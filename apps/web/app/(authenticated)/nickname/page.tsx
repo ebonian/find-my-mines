@@ -1,7 +1,8 @@
 'use client';
 
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import Layout from '../../_components/common/layout';
 import { Button } from '../../_components/ui/button';
 import { Input } from '../../_components/ui/input';
@@ -13,6 +14,22 @@ export default function Page() {
     const { user, fetchUser } = useAuthContext();
     const [nickname, setNickname] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (user?.username) {
+            setNickname(user?.username);
+        }
+    }, [user]);
+
+    // useEffect(() => {
+    //     if (
+    //         localStorage.getItem('nickname') !== user?.username ||
+    //         localStorage.getItem('nickname')
+    //     ) {
+    //         console.log('nickname already set');
+    //         router.push('/');
+    //     }
+    // }, [router]);
 
     const updateUsername = async (newNickname: string) => {
         try {
@@ -32,22 +49,21 @@ export default function Page() {
             return alert('Not authenticated.');
         }
 
-        if (isLoading) return;
-
         if (!nickname.trim()) {
             return alert('Nickname is required.');
         }
 
         setIsLoading(true);
         await updateUsername(nickname);
+        // localStorage.setItem('setNickname', 'true');
         router.push('/');
     };
     return (
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <div className='flex flex-col items-center space-y-16'>
                 <div className='text-center font-bold'>
-                    <h1 className='text-6xl text-cyan'>Enter Your Name</h1>
-                    <p className='text-purple mt-8 text-3xl font-bold'>
+                    <h1 className='text-green text-6xl'>Enter Your Name</h1>
+                    <p className='mt-8 text-2xl font-bold text-white'>
                         Eg. poonisnotconcrete, Tungdude, ...
                     </p>
                 </div>
