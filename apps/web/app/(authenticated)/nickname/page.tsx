@@ -62,8 +62,8 @@ export default function Page() {
         <Layout className='flex min-h-screen flex-col items-center justify-center'>
             <div className='flex flex-col items-center space-y-16'>
                 <div className='text-center font-bold'>
-                    <h1 className='text-cyan text-6xl'>Enter Your Name</h1>
-                    <p className='text-purple mt-8 text-3xl font-bold'>
+                    <h1 className='text-green text-6xl'>Enter Your Name</h1>
+                    <p className='mt-8 text-2xl font-bold text-white'>
                         Eg. poonisnotconcrete, Tungdude, ...
                     </p>
                 </div>
