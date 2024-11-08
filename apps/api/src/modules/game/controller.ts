@@ -47,16 +47,16 @@ export default async function gameController(socket: Socket) {
                     throw new Error('Game is not ready yet.');
                 }
 
-                if (
-                    game.actions.length === 0 &&
-                    game.firstPlayerId !== userId
-                ) {
-                    throw new Error('It is not your turn.');
-                } else if (
-                    game.actions[game.actions.length - 1]?.userId === userId
-                ) {
-                    throw new Error('It is not your turn.');
-                }
+                // if (
+                //     game.actions.length === 0 &&
+                //     game.firstPlayerId !== userId
+                // ) {
+                //     throw new Error('It is not your turn.');
+                // } else if (
+                //     game.actions[game.actions.length - 1]?.userId === userId
+                // ) {
+                //     throw new Error('It is not your turn.');
+                // }
 
                 const newActions = [
                     ...game.actions,
