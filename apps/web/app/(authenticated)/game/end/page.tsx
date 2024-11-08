@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
-    const { user } = useAuthContext();
+    const { user, fetchUser } = useAuthContext();
     const { game, room, leaveRoom, handleEndGame } = useGameContext();
     const [win, setWin] = useState(false);
     const [userFoundedBombs, setUserFoundedBombs] = useState(0);
@@ -35,6 +35,8 @@ export default function Page() {
         setTotalBombs(room.type === 'normal' ? 11 : 25);
         setWin(userFoundedBombs > opponentFoundedBombs);
         setReward(room.type === 'normal' ? 20 : 40);
+
+        fetchUser();
     }, [game, user, room]);
 
     return (
